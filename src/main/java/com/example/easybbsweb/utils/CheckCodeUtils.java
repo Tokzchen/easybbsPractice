@@ -44,6 +44,12 @@ public class CheckCodeUtils {
         return result;
     }
 
+    public static boolean verifyCheckCode(String checkCode,String sessionCodeP){
+        String userInput=DigestUtils.md5DigestAsHex(checkCode.trim().getBytes(StandardCharsets.UTF_8));
+        boolean result=userInput.equalsIgnoreCase(sessionCodeP);
+        return result;
+    }
+
     public static boolean verifyEmailCode(HttpServletRequest req,String emailCode) throws Exception{
         String userInput=DigestUtils.md5DigestAsHex(emailCode.getBytes(StandardCharsets.UTF_8));
         String emailCode1 = (String) req.getSession().getAttribute("emailCode");

@@ -28,7 +28,7 @@ class EasybbsWebApplicationTests {
     void testMapper_insert(){
         Date date = new Date();
         //一般在于注册时
-        UserInfo userInfo1 = new UserInfo(GenerateIdUtils.generateID(), "testInterface", "18506675882@163.com", "1234", Sex.MALE, null, date, date, "127.0.0.1", "广州", 0, 0, LoginStatus.NORMAL,null);
+        UserInfo userInfo1 = new UserInfo(GenerateIdUtils.generateID(), "testInterface", "18506675882@163.com", "1234", Sex.MALE, null, date, date, "127.0.0.1", "广州", 0, 0, LoginStatus.NORMAL,null,null   );
         Integer integer = userInfoMapper.insertUser(userInfo1);
         List<UserInfo> userInfos = userInfoMapper.selectAll();
         System.out.println(userInfos);

@@ -27,4 +27,5 @@ public class UserInfo {
     private Integer currentIntegral;
     private Integer status;//0-禁用 1-正常
     private String emailCode;
+    private String checkCode;
 }

@@ -6,4 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface AccountService {
     boolean resetPwd(UserInfo userInfo, HttpServletRequest req);
+
+    boolean userLogin(UserInfo userInfo);
 }

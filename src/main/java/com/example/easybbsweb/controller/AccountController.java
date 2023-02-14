@@ -4,10 +4,12 @@ import cn.hutool.core.util.RandomUtil;
 import com.example.easybbsweb.domain.MailRequest;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.service.SendMailService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
+import com.example.easybbsweb.utils.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -103,6 +105,25 @@ public class AccountController {
         }
         else{
             return new ResultInfo(false,"修改失败，请稍后重试",null);
+        }
+
+    }
+
+    @PostMapping("/login")
+    public ResultInfo userLogin(@RequestBody UserInfo userInfo,HttpServletRequest req){
+        String sessionP = (String) req.getSession().getAttribute("checkCode");
+        boolean b = CheckCodeUtils.verifyCheckCode(userInfo.getCheckCode(), sessionP);
+        if(!b){
+            throw new IncorrectInfoException("验证码错误!");
+        }else {
+            boolean b1 = accountService.userLogin(userInfo);
+            if(b1){
+                String token = TokenUtil.sign(userInfo);
+                return new ResultInfo(true,"登录成功",token);
+            }else{
+                return new ResultInfo(false,"用户名或密码错误",null);
+            }
+
         }
 
     }

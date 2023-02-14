@@ -7,6 +7,7 @@ import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 @Service
 public class RegistryServiceImpl implements RegistryService {
@@ -24,6 +25,8 @@ public class RegistryServiceImpl implements RegistryService {
         try {
             checkUser(userInfo);
             userInfo.setUserId(GenerateIdUtils.generateID());
+            //密码md5加密
+            userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
             Integer integer = userInfoMapper.insertUser(userInfo);
             if(integer>0){
                 return true;
