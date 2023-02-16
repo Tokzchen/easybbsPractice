@@ -24,7 +24,7 @@ public class TokenUtil {
             Date expiresAt = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             token = JWT.create()
                     .withIssuer("auth0")
-                    .withClaim("username", staff.getNickName())
+                    .withClaim("username", staff.getEmail())
 //                    .withAudience(staff.getUsername())
                     .withExpiresAt(expiresAt)
                     // 使用了HMAC256加密算法。

@@ -46,4 +46,11 @@ public class AccountServiceImpl implements AccountService {
                 DigestUtils.md5DigestAsHex( userInfo.getPassword().trim()
                         .getBytes(StandardCharsets.UTF_8)));
     }
+
+
+    public UserInfo getUserInfoByEmail(String email){
+        UserInfo userInfo = userInfoMapper.selectUserByEmail(email);
+        userInfo.removeSentiveInfo();
+        return userInfo;
+    }
 }

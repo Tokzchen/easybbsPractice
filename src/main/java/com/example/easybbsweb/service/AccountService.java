@@ -8,4 +8,7 @@ public interface AccountService {
     boolean resetPwd(UserInfo userInfo, HttpServletRequest req);
 
     boolean userLogin(UserInfo userInfo);
+
+
+    UserInfo getUserInfoByEmail(String email);
 }
