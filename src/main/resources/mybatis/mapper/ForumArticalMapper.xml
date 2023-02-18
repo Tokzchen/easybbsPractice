@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easybbsweb.mapper.ForumArticalMapper">
+    <insert id="insertArtical">
+        insert into forum_article (article_id, p_board_id, p_board_name, user_id, nick_name, user_ip_address, title, cover, content, markdown_content, editor_type,summary, post_time, last_update_time, attachment_type, status)
+value (#{articalId},#{pBoardId},#{pBoardName},
+       #{userId},#{nickName},#{userIpAddress},
+       #{title},#{cover},#{content},#{markDownContent},#{editorType},#{summary},#{postTime},
+      #{lastUpdateTime},#{attachmentType},#{status}
+        )
+    </insert>
+
+    <update id="updateArticalByArticalId">
+        update forum_article
+    <set>
+        <if test="pBoardId!=null and pBoardId!=''">
+            ,p_board_id=#{pBoardId}
+        </if><if test="pBoardName!=null and pBoardName!=''">
+            ,p_board_name=#{pBoardName}
+        </if><if test="title!=null and title!=''">
+            ,title=#{title}
+        </if><if test="cover!=null and cover!=''">
+            ,cover=#{cover}
+        </if><if test="content!=null and content!=''">
+            ,content=#{content}
+        </if><if test="markDownContent!=null and markDownContent!=''">
+            ,mark_down_content=#{markDownContent}
+        </if>
+        <if test="editorType!=null ">
+            ,editor_type=#{editorType}
+        </if>
+        <if test="summary!=null and summary!=''">
+            ,summary=#{summary}
+        </if>
+        <if test="lastUpdateTime!=null">
+            ,last_update_time=#{lastUpdateTime}
+        </if><if test="attachmentType!=null">
+            ,attachment_type=#{attachmentType}
+        </if><if test="status!=null">
+            ,status=#{status}
+        </if>
+    </set>
+    </update>
+
+
+</mapper>

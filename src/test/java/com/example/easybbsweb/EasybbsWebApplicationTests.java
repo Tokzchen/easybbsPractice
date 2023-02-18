@@ -6,6 +6,7 @@ import com.example.easybbsweb.domain.others.Sex;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import org.apache.catalina.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,12 +45,6 @@ class EasybbsWebApplicationTests {
         }
     }
 
-    @Test void testUpdate(){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setEmail("18506675882@163.com");
-//        userInfo.setPassword(DigestUtils.md5DigestAsHex("1234".getBytes()));
-        userInfoMapper.updateUserByEmail(userInfo);
-    }
 
     @Test
     void testSelectCertain(){
@@ -59,5 +54,7 @@ class EasybbsWebApplicationTests {
         List<UserInfo> password1 = userInfoMapper.selectCertainInfo(userInfo);
         System.out.println(password1);
     }
+
+
 
 }
