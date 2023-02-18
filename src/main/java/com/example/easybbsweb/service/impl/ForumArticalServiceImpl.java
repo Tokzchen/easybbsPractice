@@ -2,6 +2,7 @@ package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.others.ArticleStatus;
+import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
@@ -40,16 +41,20 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     }
 
     @Override
-    public List<Article> selectArticalAll(Integer page) {
+    public PageInfo selectArticalAll(Integer page) {
+        PageInfo pageInfo = new PageInfo();
         //查出来了所有的文章
         List<Article> articles = forumArticalMapper.selectAllModules();
+        pageInfo.setPageNo(page);
+        pageInfo.setTotalCnt(articles.size());
         //下面进行分页
         List<Article> returnArticles=new ArrayList<>();
         Integer index=(page-1)*4;
         for(int i=index;i<=index+3;i++){
             returnArticles.add(articles.get(i));
         }
-        return returnArticles;
+        pageInfo.setList(returnArticles);
+        return pageInfo;
     }
 
     @Override
