@@ -38,5 +38,22 @@ public class Article {
     private Integer orderType;
     private Integer pageNo;
 
+    public String getpBoardName(){
+        return pBoardName;
+    }
+
+    public Integer getpBoardId(){
+        return pBoardId;
+    }
+
+    public void setpBoardId(Integer id){
+        this.pBoardId=id;
+    }
+
+
+    public void setpBoardName(String name){
+        this.pBoardName=name;
+    }
+
 
 }

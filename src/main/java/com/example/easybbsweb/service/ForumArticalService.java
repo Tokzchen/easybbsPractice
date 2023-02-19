@@ -13,7 +13,7 @@ public interface ForumArticalService {
 
     public PageInfo selectArticalAll(Integer page);
 
-    public List<Article> selectArticalBoard(Integer page, String board);
+    public PageInfo selectArticalBoard(Integer page, String board);
 
 
     public boolean banArtical(Article article);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/forum")
@@ -18,7 +19,9 @@ public class ForumController {
 
     @PostMapping("/loadArticle")
     public ResultInfo loadArtical(@RequestBody Article article){
-        if(article.getPBoardName()==null||article.getPBoardName().equals("")||article.getArticleId().equals("0")){
+        System.out.println(article);
+        if(article.getpBoardId()==null||article.getpBoardId().equals("")||article.getpBoardId().equals(0)
+                &&article.getpBoardName()==null||article.getpBoardName().equals("")){
             //加载所有文章也就是首页
             PageInfo pageInfo =
                     forumArticalService.selectArticalAll(
@@ -26,8 +29,8 @@ public class ForumController {
             return new ResultInfo(true,"响应成功",pageInfo);
         }else{
             //这里是加载其他板块的文章
-            List<Article> articles = forumArticalService.selectArticalBoard(article.getPageNo() == null ? 1 : article.getPageNo(), article.getPBoardName());
-            return new ResultInfo(true,"响应成功",articles);
+            PageInfo pageInfo = forumArticalService.selectArticalBoard(article.getPageNo() == null ? 1 : article.getPageNo(), article.getpBoardName());
+            return new ResultInfo(true,"响应成功",pageInfo);
         }
     }
 }

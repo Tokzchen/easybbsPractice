@@ -56,6 +56,7 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/resetPwd")
                 .excludePathPatterns("/registry")
                 .excludePathPatterns("/board/**")
+                .excludePathPatterns("/forum/loadArticle")
                 .excludePathPatterns("/login");//这个路径下直接放行不需要拦截器token验证
 //                .excludePathPatterns("/picture/**");//放行动态资源
 

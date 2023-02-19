@@ -51,6 +51,10 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         List<Article> returnArticles=new ArrayList<>();
         Integer index=(page-1)*4;
         for(int i=index;i<=index+3;i++){
+            //处理最后一页的数据可能不够一页
+            if(i>articles.size()-1){
+                break;
+            }
             returnArticles.add(articles.get(i));
         }
         pageInfo.setList(returnArticles);
@@ -58,16 +62,24 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     }
 
     @Override
-    public List<Article> selectArticalBoard(Integer page, String board) {
+    public PageInfo selectArticalBoard(Integer page, String board) {
+        PageInfo pageInfo = new PageInfo();
         Integer row=(page-1)*4;
         //这里是查出了这个模块的所有文章
         List<Article> articles = forumArticalMapper.selectBoards(board);
+        pageInfo.setPageNo(page);
+        pageInfo.setTotalCnt(articles.size());
         List<Article> returnArticles=new ArrayList<>();
         //下面进行分页
         for(int i=row;i<=row+3;i++){
+            //处理最后一页的数据可能不够一页
+            if(i>articles.size()-1){
+                break;
+            }
             returnArticles.add(articles.get(i));
         }
-        return returnArticles;
+        pageInfo.setList(returnArticles);
+        return pageInfo;
     }
 
     @Override
