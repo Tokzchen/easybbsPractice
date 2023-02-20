@@ -78,6 +78,10 @@ public class ForumArticalServiceImpl implements ForumArticalService {
             }
             returnArticles.add(articles.get(i));
         }
+        //对文章的content进行抹除瘦身，加快传递速度
+        for(Article a:returnArticles){
+            a.loseWeight();
+        }
         pageInfo.setList(returnArticles);
         return pageInfo;
     }
@@ -94,5 +98,11 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public Article getArticleDetail(String articleId) {
+        Article article = forumArticalMapper.selectSingle(articleId);
+        return article;
     }
 }

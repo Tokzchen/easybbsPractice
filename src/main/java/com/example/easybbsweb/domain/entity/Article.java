@@ -55,5 +55,9 @@ public class Article {
         this.pBoardName=name;
     }
 
+    public void loseWeight(){
+        this.content=null;
+    }
+
 
 }

@@ -5,11 +5,12 @@ import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.service.ForumArticalService;
+import com.example.easybbsweb.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/forum")
@@ -33,4 +34,16 @@ public class ForumController {
             return new ResultInfo(true,"响应成功",pageInfo);
         }
     }
+
+    @PostMapping("/getArticleDetail")
+    public ResultInfo getArticleInfo(@RequestBody Map map){
+        String articleId= (String) map.get("articleId");
+        if(articleId==null||articleId.equals("")){
+            return new ResultInfo(false,"文章的id不得为空!",null);
+        }else{
+            Article articleDetail = forumArticalService.getArticleDetail(articleId);
+            return new ResultInfo(true,"响应成功",articleDetail);
+        }
+    }
+
 }

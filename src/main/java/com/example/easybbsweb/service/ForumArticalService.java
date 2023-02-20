@@ -17,4 +17,6 @@ public interface ForumArticalService {
 
 
     public boolean banArtical(Article article);
+
+    public Article getArticleDetail(String articleId);
 }
