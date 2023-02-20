@@ -1,6 +1,7 @@
 package com.example.easybbsweb.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,10 @@ public class Article {
     private String markDownContent;
     private String summary;
     private String editorType;//0-富文本编辑器，1-markDown编辑器
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date postTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastUpdateTime;
     private Integer readCount;
     private Integer goodCount;
