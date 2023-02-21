@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easybbsweb.mapper.ForumCommentMapper">
+
+
+    <select id="selectCommentsByArticleId" resultType="com.example.easybbsweb.domain.entity.Comment">
+        select * from forum_comment where article_id=#{articleId} and p_comment_id=0;
+    </select>
+
+    <select id="selectSecondCommentsBypBoardId" resultType="com.example.easybbsweb.domain.entity.Comment">
+        select * from forum_comment where article_id=#{articleId} and p_comment_id=#{pCommentId};
+    </select>
+
+</mapper>
