@@ -50,6 +50,7 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")//让拦截器进行token验证
+                .excludePathPatterns("/userInfo/userNickName")
                 .excludePathPatterns("/checkCode")
                 .excludePathPatterns("/sendEmailCode")
                 .excludePathPatterns("/send-mail/**")

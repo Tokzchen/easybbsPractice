@@ -7,10 +7,7 @@ import com.example.easybbsweb.utils.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -28,6 +25,16 @@ public class InfoController {
         String currentEmail= TokenUtil.getCurrentUserName(token);
         UserInfo userInfoByEmail = accountService.getUserInfoByEmail(currentEmail);
         return new ResultInfo(true,"响应成功",userInfoByEmail);
+    }
+
+    @PostMapping("/userNickName")
+    public ResultInfo getUserNickName(@RequestBody UserInfo userInfo){
+        if(userInfo.getUserId()==null||userInfo.getUserId().equals("")){
+            return new ResultInfo(false,"用户不存在",null);
+        }else{
+            UserInfo userNickNameByUserId = accountService.getUserNickNameByUserId(userInfo.getUserId());
+            return new ResultInfo(true,"响应成功",userInfo.getNickName());
+        }
     }
 
 }

@@ -11,4 +11,6 @@ public interface AccountService {
 
 
     UserInfo getUserInfoByEmail(String email);
+
+    UserInfo getUserNickNameByUserId(String userId);
 }

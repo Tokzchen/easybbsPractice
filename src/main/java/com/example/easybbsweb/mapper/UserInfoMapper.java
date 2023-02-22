@@ -2,6 +2,7 @@ package com.example.easybbsweb.mapper;
 
 
 import com.example.easybbsweb.domain.entity.UserInfo;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -38,6 +39,8 @@ public interface UserInfoMapper {
     @Select("select * from user_info where nick_name=#{username}")
      UserInfo selectByUsername(String username);
 
+    @Select("select nick_name from user_info where user_id=#{userId}")
+    UserInfo selectUserNickNameById(String userId);
     @Select("select * from user_info where email=#{email}")
      UserInfo selectUserByEmail(String email);
 

@@ -53,4 +53,14 @@ public class AccountServiceImpl implements AccountService {
         userInfo.removeSentiveInfo();
         return userInfo;
     }
+
+    @Override
+    public UserInfo getUserNickNameByUserId(String userId) {
+        UserInfo userInfo = userInfoMapper.selectUserNickNameById(userId);
+        if(userInfo==null){
+            throw new BusinessException("用户不存在");
+        }else{
+            return userInfo;
+        }
+    }
 }

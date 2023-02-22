@@ -6,11 +6,12 @@
 
 
     <select id="selectCommentsByArticleId" resultType="com.example.easybbsweb.domain.entity.Comment">
-        select * from forum_comment where article_id=#{articleId} and p_comment_id=0;
+        select *
+        from forum_comment where article_id=#{articleId} and p_comment_id=0;
     </select>
 
     <select id="selectSecondCommentsBypBoardId" resultType="com.example.easybbsweb.domain.entity.Comment">
-        select * from forum_comment where article_id=#{articleId} and p_comment_id=#{pCommentId};
+        select * from forum_comment where article_id=#{articleId} and p_comment_id=#{commentId};
     </select>
 
 </mapper>
