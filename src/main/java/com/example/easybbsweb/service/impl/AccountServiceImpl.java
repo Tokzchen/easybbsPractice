@@ -42,6 +42,7 @@ public class AccountServiceImpl implements AccountService {
         if(realUser==null){
             return false;
         }
+        userInfo.setUserId(realUser.getUserId());
         return realUser.getPassword().equalsIgnoreCase(
                 DigestUtils.md5DigestAsHex( userInfo.getPassword().trim()
                         .getBytes(StandardCharsets.UTF_8)));
@@ -51,6 +52,12 @@ public class AccountServiceImpl implements AccountService {
     public UserInfo getUserInfoByEmail(String email){
         UserInfo userInfo = userInfoMapper.selectUserByEmail(email);
         userInfo.removeSentiveInfo();
+        return userInfo;
+    }
+
+    @Override
+    public UserInfo getUserInfoByUserId(String userId) {
+        UserInfo userInfo = userInfoMapper.selectByUserId(userId);
         return userInfo;
     }
 

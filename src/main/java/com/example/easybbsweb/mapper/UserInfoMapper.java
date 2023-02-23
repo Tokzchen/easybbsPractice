@@ -39,6 +39,9 @@ public interface UserInfoMapper {
     @Select("select * from user_info where nick_name=#{username}")
      UserInfo selectByUsername(String username);
 
+    @Select("select * from user_info where user_id=#{userId}")
+    UserInfo selectByUserId(String userId);
+
     @Select("select nick_name from user_info where user_id=#{userId}")
     UserInfo selectUserNickNameById(String userId);
     @Select("select * from user_info where email=#{email}")

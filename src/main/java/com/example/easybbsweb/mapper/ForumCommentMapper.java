@@ -14,4 +14,6 @@ public interface ForumCommentMapper {
 
   List<Comment> selectSecondCommentsBypBoardId(Comment comment);
 
+  Integer insertIntoComment(Comment comment);
+
 }

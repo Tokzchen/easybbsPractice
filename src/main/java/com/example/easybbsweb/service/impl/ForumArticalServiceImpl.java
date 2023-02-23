@@ -103,6 +103,20 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     @Override
     public Article getArticleDetail(String articleId) {
         Article article = forumArticalMapper.selectSingle(articleId);
+        //修改article的点击率readCount
+        Integer integer = forumArticalMapper.increaseReadCountByOne(articleId);
+        if(integer<=0){
+            throw new BusinessException("似乎发生了一些错误");
+        }
         return article;
+    }
+
+    @Override
+    public boolean articleDoLike(String articleId) {
+        Integer integer = forumArticalMapper.increaseGoodCountByOne(articleId);
+        if(integer<=0){
+            throw new BusinessException("文章不存在或出现了异常，请稍后重试");
+        }
+        return true;
     }
 }

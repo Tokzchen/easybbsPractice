@@ -4,6 +4,7 @@ package com.example.easybbsweb.controller;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.others.PageInfo;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.service.ForumArticalService;
 import com.example.easybbsweb.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,19 @@ public class ForumController {
         }else{
             Article articleDetail = forumArticalService.getArticleDetail(articleId);
             return new ResultInfo(true,"响应成功",articleDetail);
+        }
+    }
+
+    @PostMapping("/doLike")
+    public ResultInfo articleDoLike(@RequestBody Article article){
+        if(article.getArticleId()==null||article.getArticleId().equals("")){
+            throw new BusinessException("点赞的文章不得为空!");
+        }
+        boolean b = forumArticalService.articleDoLike(article.getArticleId());
+        if(b){
+            return new ResultInfo(true,"点赞成功",null);
+        }else{
+            return new ResultInfo(false,"点赞失败",null);
         }
     }
 

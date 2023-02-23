@@ -4,6 +4,7 @@ import com.example.easybbsweb.domain.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,5 +25,11 @@ public interface ForumArticalMapper {
     public Integer insertArtical(Article article);
 
     public Integer updateArticalByArticalId(Article article);
+
+    @Update("update forum_article set read_count=read_count+1 where article_id=#{articleId}")
+    public Integer increaseReadCountByOne(String articleId);
+
+    @Update("update forum_article set good_count=good_count+1 where article_id=#{articleId}")
+    public Integer increaseGoodCountByOne(String articleId);
 
 }

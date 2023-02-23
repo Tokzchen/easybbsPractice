@@ -16,4 +16,11 @@ public class GenerateIdUtils {
         String id=String.valueOf(millis).substring(0,10);
         return id;
     }
+    public static Integer generateIDInteger(){
+        long millis = System.currentTimeMillis();
+        String id=String.valueOf(millis).substring(0,10);
+        return Integer.parseInt(id);
+    }
+
+
 }

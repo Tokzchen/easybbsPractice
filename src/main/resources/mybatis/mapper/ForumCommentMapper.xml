@@ -10,6 +10,14 @@
         from forum_comment where article_id=#{articleId} and p_comment_id=0;
     </select>
 
+    <insert id="insertIntoComment">
+        insert into forum_comment value
+            (#{commentId},#{pCommentId},#{articleId}
+            ,#{content},#{imgPath},#{userId},#{nickName},#{userIpAddress}
+            ,#{replyUserId},#{replyNickName},#{topType},#{postTime},
+            #{goodCount},#{status})
+    </insert>
+
     <select id="selectSecondCommentsBypBoardId" resultType="com.example.easybbsweb.domain.entity.Comment">
         select * from forum_comment where article_id=#{articleId} and p_comment_id=#{commentId};
     </select>
