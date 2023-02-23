@@ -8,6 +8,7 @@ import com.example.easybbsweb.mapper.ForumCommentMapper;
 import com.example.easybbsweb.service.CommentService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,6 +19,9 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
     @Autowired
     ForumCommentMapper forumCommentMapper;
+
+    @Value("${commentConfig.countPerArticle}")
+    Integer countPerArticle;
     @Override
     public List<Comment> getArticleCommentByArticleId(Article article) {
         String articleId=article.getArticleId();
@@ -36,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
         Integer pageNo = article.getPageNo();
         List<Comment> returnComments=new ArrayList<>();
         //这里约定一页评论最多25条
-        Integer startIndex=(pageNo-1)*25;
+        Integer startIndex=(pageNo-1)*countPerArticle;
         for(int i=startIndex;i<startIndex+25;i++){
             if(i>comments.size()-1){
                 break;

@@ -8,6 +8,7 @@ import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ import java.util.List;
 public class ForumArticalServiceImpl implements ForumArticalService {
     @Autowired
     ForumArticalMapper forumArticalMapper;
+
+    @Value("${articleConfig.countPerPage}")
+    Integer countPerPage;
     @Override
     public boolean addArtical(Article article) {
         article.setArticleId(GenerateIdUtils.generateID());
@@ -49,8 +53,8 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         pageInfo.setTotalCnt(articles.size());
         //下面进行分页
         List<Article> returnArticles=new ArrayList<>();
-        Integer index=(page-1)*4;
-        for(int i=index;i<=index+3;i++){
+        Integer index=(page-1)*countPerPage;
+        for(int i=index;i<=index+countPerPage-1;i++){
             //处理最后一页的数据可能不够一页
             if(i>articles.size()-1){
                 break;
@@ -64,14 +68,14 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     @Override
     public PageInfo selectArticalBoard(Integer page, String board) {
         PageInfo pageInfo = new PageInfo();
-        Integer row=(page-1)*4;
+        Integer row=(page-1)*countPerPage;
         //这里是查出了这个模块的所有文章
         List<Article> articles = forumArticalMapper.selectBoards(board);
         pageInfo.setPageNo(page);
         pageInfo.setTotalCnt(articles.size());
         List<Article> returnArticles=new ArrayList<>();
         //下面进行分页
-        for(int i=row;i<=row+3;i++){
+        for(int i=row;i<=row+countPerPage-1;i++){
             //处理最后一页的数据可能不够一页
             if(i>articles.size()-1){
                 break;
