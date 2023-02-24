@@ -4,11 +4,13 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.easybbsweb.mapper.ForumArticalMapper">
     <insert id="insertArtical">
-        insert into forum_article (article_id, p_board_id, p_board_name, user_id, nick_name, user_ip_address, title, cover, content, markdown_content, editor_type,summary, post_time, last_update_time, attachment_type, status)
+        insert into forum_article (article_id, p_board_id, p_board_name, user_id, nick_name, user_ip_address, title, cover, content, markdown_content, editor_type,summary, post_time, last_update_time,
+                                   read_count,good_count,comment_count,
+                                   top_type, attachment_type, status)
 value (#{articalId},#{pBoardId},#{pBoardName},
        #{userId},#{nickName},#{userIpAddress},
        #{title},#{cover},#{content},#{markDownContent},#{editorType},#{summary},#{postTime},
-      #{lastUpdateTime},#{attachmentType},#{status}
+      #{lastUpdateTime},#{readCount},#{goodCount},#{commentCount},#{topType},#{attachmentType},#{status}
         )
     </insert>
 
@@ -36,11 +38,27 @@ value (#{articalId},#{pBoardId},#{pBoardName},
         </if>
         <if test="lastUpdateTime!=null">
             ,last_update_time=#{lastUpdateTime}
-        </if><if test="attachmentType!=null">
+        </if>
+        <if test="readCount!=null">
+            ,read_count=#{readCount}
+        </if>
+        <if test="goodCount!=null">
+            ,good_count=#{goodCount}
+        </if>
+        <if test="commentCount!=null">
+            ,comment_count=#{commentCount}
+        </if>
+        <if test="topType!=null">
+            ,top_type=#{topType}
+        </if>
+        <if test="attachmentType!=null">
             ,attachment_type=#{attachmentType}
         </if><if test="status!=null">
             ,status=#{status}
         </if>
+        <where>
+            article_id=#{articleId}
+        </where>
     </set>
     </update>
 

@@ -4,21 +4,29 @@ import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.entity.Comment;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.exception.BusinessException;
+import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.mapper.ForumCommentMapper;
 import com.example.easybbsweb.service.CommentService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CommentServiceImpl implements CommentService {
     @Autowired
     ForumCommentMapper forumCommentMapper;
+
+    @Autowired
+    ForumArticalMapper forumArticalMapper;
 
     @Value("${commentConfig.countPerArticle}")
     Integer countPerArticle;
@@ -69,9 +77,20 @@ public class CommentServiceImpl implements CommentService {
 
         Integer integer = forumCommentMapper.insertIntoComment(comment);
         if(integer>0){
+            //更新该文章的总评论数
+            Integer commentCount = forumCommentMapper.selectArticleCommentCount(comment.getArticleId());
+            log.info("commentCount={}",commentCount);
+            Article article = new Article();
+            article.setArticleId(comment.getArticleId());
+            article.setCommentCount(commentCount);
+            Integer integer1 = forumArticalMapper.updateArticalByArticalId(article);
+            if(integer1>0){
+                log.info("更新了文章的评论数为{}",commentCount);
+            }
             return true;
         }else{
             return false;
         }
     }
+
 }
