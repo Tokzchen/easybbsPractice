@@ -7,6 +7,8 @@ import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.service.ForumArticalService;
 import com.example.easybbsweb.utils.ResultUtil;
+import com.example.easybbsweb.utils.TokenUtil;
+import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,7 @@ public class ForumController {
     public ResultInfo loadArtical(@RequestBody Article article){
         System.out.println(article);
         if(article.getpBoardId()==null||article.getpBoardId().equals("")||article.getpBoardId().equals(0)
-                &&article.getpBoardName()==null||article.getpBoardName().equals("")){
+                &&article.getpBoardName()==null||article.getpBoardName().equals("")||article.getpBoardName().equals("null")){
             //加载所有文章也就是首页
             PageInfo pageInfo =
                     forumArticalService.selectArticalAll(
@@ -48,11 +50,15 @@ public class ForumController {
     }
 
     @PostMapping("/doLike")
-    public ResultInfo articleDoLike(@RequestBody Article article){
+    public ResultInfo articleDoLike(@RequestBody Article article,@RequestHeader("token") String token){
         if(article.getArticleId()==null||article.getArticleId().equals("")){
             throw new BusinessException("点赞的文章不得为空!");
         }
-        boolean b = forumArticalService.articleDoLike(article.getArticleId());
+        String userIdClickLike = TokenUtil.getCurrentUserId(token);
+        Article article1 = new Article();
+        article1.setArticleId(article.getArticleId());
+        article1.setUserIdClickLike(userIdClickLike);
+        boolean b = forumArticalService.articleDoLike(article1);
         if(b){
             return new ResultInfo(true,"点赞成功",null);
         }else{

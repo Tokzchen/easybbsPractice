@@ -1,23 +1,29 @@
 package com.example.easybbsweb.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.example.easybbsweb.domain.entity.Article;
+import com.example.easybbsweb.domain.entity.LikeRecord;
 import com.example.easybbsweb.domain.others.ArticleStatus;
 import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
+import com.example.easybbsweb.service.LikeService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class ForumArticalServiceImpl implements ForumArticalService {
     @Autowired
     ForumArticalMapper forumArticalMapper;
+    @Autowired
+    LikeService likeService;
 
     @Value("${articleConfig.countPerPage}")
     Integer countPerPage;
@@ -106,21 +112,35 @@ public class ForumArticalServiceImpl implements ForumArticalService {
 
     @Override
     public Article getArticleDetail(String articleId) {
-        Article article = forumArticalMapper.selectSingle(articleId);
+        Article article1 = new Article();
+        article1.setArticleId(articleId);
         //修改article的点击率readCount
         Integer integer = forumArticalMapper.increaseReadCountByOne(articleId);
-        if(integer<=0){
+        //刷新article的点赞数
+        Integer articleLikeCnt = likeService.getArticleLikeCnt(article1);
+        article1.setGoodCount(articleLikeCnt);
+        Integer integer1 = forumArticalMapper.updateArticalByArticalId(article1);
+        Article article = forumArticalMapper.selectSingle(articleId);
+        if(integer<=0||integer1<=0){
             throw new BusinessException("似乎发生了一些错误");
         }
         return article;
     }
 
     @Override
-    public boolean articleDoLike(String articleId) {
-        Integer integer = forumArticalMapper.increaseGoodCountByOne(articleId);
+    public boolean articleDoLike(Article article) {
+        Integer integer = forumArticalMapper.increaseGoodCountByOne(article.getArticleId());
         if(integer<=0){
             throw new BusinessException("文章不存在或出现了异常，请稍后重试");
         }
-        return true;
+        //点赞成功，添加likeRecord
+        LikeRecord likeRecord = new LikeRecord();
+        likeRecord.setOpType(0);
+        likeRecord.setUserId(article.getUserIdClickLike());
+        likeRecord.setCreateTime(new Date());
+        likeRecord.setObjectId(article.getArticleId());
+        likeRecord.setAuthorUserId(article.getUserId());
+        boolean b = likeService.addLikeRecord(likeRecord);
+        return b;
     }
 }

@@ -20,5 +20,5 @@ public interface ForumArticalService {
 
     public Article getArticleDetail(String articleId);
 
-    public boolean articleDoLike(String articleId);
+    public boolean articleDoLike(Article article);
 }

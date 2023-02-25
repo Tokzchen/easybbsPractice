@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 //这个包主要是封装数据库相关的实体类
@@ -28,6 +30,10 @@ public class UserInfo {
     private Integer status;//0-禁用 1-正常
     private String emailCode;
     private String checkCode;
+
+
+    //一下字段为配合前端的字段，数据库没有
+    private List<LikeRecord> likeRecords;
 
 
 

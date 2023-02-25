@@ -27,6 +27,7 @@ public class Article {
     private String summary;
     private String editorType;//0-富文本编辑器，1-markDown编辑器
 
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date postTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -41,6 +42,7 @@ public class Article {
     //这些是前端可以给出的参数，数据库表不一定有
     private Integer orderType;
     private Integer pageNo;
+    private String userIdClickLike;
 
     public String getpBoardName(){
         return pBoardName;
