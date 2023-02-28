@@ -16,6 +16,8 @@ public interface ForumArticalMapper {
     //第一页0,第二页4,第三页8
     @Select("select * from forum_article")
     public List<Article> selectAllModules();
+
+    public List<Article> selectAllModulesOrdered(Article article);
     @Select("select * from forum_article where article_id=#{articleId}")
     public Article selectSingle(String articleId);
 

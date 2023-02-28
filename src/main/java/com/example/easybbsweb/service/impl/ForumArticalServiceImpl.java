@@ -1,24 +1,29 @@
 package com.example.easybbsweb.service.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.http.HtmlUtil;
 import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.entity.LikeRecord;
 import com.example.easybbsweb.domain.others.ArticleStatus;
+import com.example.easybbsweb.domain.others.OrderType;
 import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
 import com.example.easybbsweb.service.LikeService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ForumArticalServiceImpl implements ForumArticalService {
     @Autowired
     ForumArticalMapper forumArticalMapper;
@@ -51,10 +56,15 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     }
 
     @Override
-    public PageInfo selectArticalAll(Integer page) {
+    public PageInfo selectArticalAll(Integer page,Integer orderType) {
         PageInfo pageInfo = new PageInfo();
-        //查出来了所有的文章
-        List<Article> articles = forumArticalMapper.selectAllModules();
+        //查出来了所有的文章,最新
+        List<Article> articles =null;
+        if(orderType.equals(OrderType.LATEST)){
+            articles = forumArticalMapper.selectAllModules();
+        }else if(orderType.equals(OrderType.POST_TIME_LATEST)){
+
+        }
         pageInfo.setPageNo(page);
         pageInfo.setTotalCnt(articles.size());
         //下面进行分页
@@ -142,5 +152,25 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         likeRecord.setAuthorUserId(article.getUserId());
         boolean b = likeService.addLikeRecord(likeRecord);
         return b;
+    }
+
+    @Override
+    public boolean postArticle(Article article) {
+        //先对article进行一定的处理
+        if(article.getSummary()==null||article.getSummary().equals("")){
+            //用户没有传简介，则将内容的前面部分作为简介
+            String contentSum = article.getContent().substring(0, article.getContent().length() >= 80 ? 80 : article.getContent().length());
+            article.setSummary(HtmlUtil.cleanHtmlTag(contentSum));
+        }
+        log.info("service层获得的article是{}",article);
+        //为发布的文章生成id
+        article.setArticleId(GenerateIdUtils.generateID());
+        article.setPostTime(new Date());
+        article.setLastUpdateTime(new Date());
+        article.setCommentCount(0);
+        article.setGoodCount(0);
+        article.setReadCount(0);
+        Integer integer = forumArticalMapper.insertArtical(article);
+        return integer>0;
     }
 }

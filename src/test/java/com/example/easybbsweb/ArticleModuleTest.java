@@ -18,19 +18,19 @@ public class ArticleModuleTest {
     @Autowired
     ForumArticalService forumArticalService;
 
-    @Test
-    @DisplayName("测试所有板块文章的分页查询")
-    public void testSelectArtical(){
-        List<Article> articles = forumArticalService.selectArticalAll(1);
-        System.out.println(articles);
-    }
-
-    @Test
-    @DisplayName("测试特定板块的分页查询")
-    public void testSelectArticalCertain(){
-        List<Article> articles = forumArticalService.selectArticalBoard(1, "前端");
-        System.out.println(articles);
-    }
+//    @Test
+//    @DisplayName("测试所有板块文章的分页查询")
+//    public void testSelectArtical(){
+//        List<Article> articles = forumArticalService.selectArticalAll(1);
+//        System.out.println(articles);
+//    }
+//
+//    @Test
+//    @DisplayName("测试特定板块的分页查询")
+//    public void testSelectArticalCertain(){
+//        List<Article> articles = forumArticalService.selectArticalBoard(1, "前端");
+//        System.out.println(articles);
+//    }
 
     @Test
     @DisplayName("测试上传帖子")

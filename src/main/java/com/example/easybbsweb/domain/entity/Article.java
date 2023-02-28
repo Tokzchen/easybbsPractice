@@ -1,6 +1,7 @@
 package com.example.easybbsweb.domain.entity;
 
 
+import com.example.easybbsweb.domain.others.TopType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,9 +36,9 @@ public class Article {
     private Integer readCount;
     private Integer goodCount;
     private Integer commentCount;
-    private Integer topType;
+    private Integer topType= TopType.NO_TOP;
     private Integer attachmentType;
-    private Integer status;
+    private Integer status=1;
 
     //这些是前端可以给出的参数，数据库表不一定有
     private Integer orderType;

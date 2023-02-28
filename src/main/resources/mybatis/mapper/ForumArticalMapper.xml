@@ -7,7 +7,7 @@
         insert into forum_article (article_id, p_board_id, p_board_name, user_id, nick_name, user_ip_address, title, cover, content, markdown_content, editor_type,summary, post_time, last_update_time,
                                    read_count,good_count,comment_count,
                                    top_type, attachment_type, status)
-value (#{articalId},#{pBoardId},#{pBoardName},
+    value (#{articleId},#{pBoardId},#{pBoardName},
        #{userId},#{nickName},#{userIpAddress},
        #{title},#{cover},#{content},#{markDownContent},#{editorType},#{summary},#{postTime},
       #{lastUpdateTime},#{readCount},#{goodCount},#{commentCount},#{topType},#{attachmentType},#{status}
@@ -61,6 +61,18 @@ value (#{articalId},#{pBoardId},#{pBoardName},
         </where>
     </set>
     </update>
+
+    <select id="selectAllModulesOrdered" resultType="com.example.easybbsweb.domain.entity.Article">
+        select * from forum_article
+<if test="orderType!=null">
+    <if test="orderType==1">
+        order by post_time;
+    </if>
+    <if test="orderType==2">
+        order by post_time;
+    </if>
+</if>
+    </select>
 
 
 </mapper>

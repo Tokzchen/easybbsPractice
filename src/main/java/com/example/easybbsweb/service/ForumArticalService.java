@@ -11,7 +11,7 @@ public interface ForumArticalService {
     //必须提供文章的id
     public boolean updateArtical(Article article);
 
-    public PageInfo selectArticalAll(Integer page);
+    public PageInfo selectArticalAll(Integer page,Integer orderType);
 
     public PageInfo selectArticalBoard(Integer page, String board);
 
@@ -21,4 +21,6 @@ public interface ForumArticalService {
     public Article getArticleDetail(String articleId);
 
     public boolean articleDoLike(Article article);
+
+    boolean postArticle(Article article);
 }
