@@ -33,6 +33,7 @@ public class ForumController {
     @PostMapping("/loadArticle")
     public ResultInfo loadArtical(@RequestBody Article article){
         Integer orderType = article.getOrderType();
+        log.info("获取到的排序方式是{}",orderType);
         if(orderType==null){
             article.setOrderType(OrderType.HOTTEST);
         }

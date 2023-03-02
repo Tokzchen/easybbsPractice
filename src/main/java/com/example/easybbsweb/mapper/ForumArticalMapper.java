@@ -14,8 +14,14 @@ import java.util.List;
 @Repository
 public interface ForumArticalMapper {
     //第一页0,第二页4,第三页8
-    @Select("select * from forum_article")
+    @Select("select * from forum_article order by last_update_time desc")
     public List<Article> selectAllModules();
+
+    @Select("select * from forum_article order by post_time desc")
+    public List<Article> selectAllOrderedPostTime();
+
+    @Select("select *,(good_count+read_count+comment_count) hot_count from forum_article order by hot_count desc")
+    public List<Article> selectAllOrderedHottest();
 
     public List<Article> selectAllModulesOrdered(Article article);
     @Select("select * from forum_article where article_id=#{articleId}")

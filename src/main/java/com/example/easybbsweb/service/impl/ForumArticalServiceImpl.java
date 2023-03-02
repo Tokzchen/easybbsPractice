@@ -63,7 +63,9 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         if(orderType.equals(OrderType.LATEST)){
             articles = forumArticalMapper.selectAllModules();
         }else if(orderType.equals(OrderType.POST_TIME_LATEST)){
-
+            articles=forumArticalMapper.selectAllOrderedPostTime();
+        }else if(orderType.equals(OrderType.HOTTEST)){
+            articles=forumArticalMapper.selectAllOrderedHottest();
         }
         pageInfo.setPageNo(page);
         pageInfo.setTotalCnt(articles.size());
