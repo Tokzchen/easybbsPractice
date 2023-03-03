@@ -17,6 +17,8 @@ public interface ForumArticalMapper {
     @Select("select * from forum_article order by last_update_time desc")
     public List<Article> selectAllModules();
 
+    public List<Article> searchAllModules(Article article);
+
     @Select("select * from forum_article order by post_time desc")
     public List<Article> selectAllOrderedPostTime();
 
@@ -29,6 +31,8 @@ public interface ForumArticalMapper {
 
     @Select("select * from forum_article where p_board_name=#{board}")
     public List<Article> selectBoards(String board);
+
+    public  List<Article> selectBoardsWithOrder(Article article);
 
     public Integer insertArtical(Article article);
 

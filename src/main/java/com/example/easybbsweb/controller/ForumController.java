@@ -33,7 +33,6 @@ public class ForumController {
     @PostMapping("/loadArticle")
     public ResultInfo loadArtical(@RequestBody Article article){
         Integer orderType = article.getOrderType();
-        log.info("获取到的排序方式是{}",orderType);
         if(orderType==null){
             article.setOrderType(OrderType.HOTTEST);
         }
@@ -46,10 +45,30 @@ public class ForumController {
             return new ResultInfo(true,"响应成功",pageInfo);
         }else{
             //这里是加载其他板块的文章
-            PageInfo pageInfo = forumArticalService.selectArticalBoard(article.getPageNo() == null ? 1 : article.getPageNo(), article.getpBoardName());
+            PageInfo pageInfo = forumArticalService.selectArticleBoardWithOrder(article.getPageNo() == null ? 1 : article.getPageNo(), article);
             return new ResultInfo(true,"响应成功",pageInfo);
         }
     }
+
+   @PostMapping("/loadArticle/search")
+   public ResultInfo loadSearchArticle(@RequestBody Article article){
+       Integer orderType = article.getOrderType();
+       if(orderType==null){
+           article.setOrderType(OrderType.HOTTEST);
+       }
+       if(article.getpBoardId()==null||article.getpBoardId().equals("")||article.getpBoardId().equals(0)
+               &&article.getpBoardName()==null||article.getpBoardName().equals("")||article.getpBoardName().equals("null")){
+           //在首页范围内进行关键词搜索
+           PageInfo pageInfo =
+                   forumArticalService.searchArticleAll(
+                           article.getPageNo() == null ? 1 : article.getPageNo(),article);
+           return new ResultInfo(true,"搜索成功",pageInfo);
+       }else{
+           //这里是加载其他板块范围内进行搜索
+           PageInfo pageInfo = forumArticalService.selectArticleBoardWithOrder(article.getPageNo() == null ? 1 : article.getPageNo(), article);
+           return new ResultInfo(true,"搜索成功成功",pageInfo);
+       }
+   }
 
     @PostMapping("/getArticleDetail")
     public ResultInfo getArticleInfo(@RequestBody Map map){

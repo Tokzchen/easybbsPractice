@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,17 @@ class EasybbsWebApplicationTests {
 //        List<UserInfo> userInfos = userInfoMapper.selectAll();
 //        System.out.println(userInfos);
 //    }
-
+    @Test
+    public void testSearchAll(){
+        Article article = new Article();
+        String keyWord="金庸";
+        StringBuilder stringBuilder = new StringBuilder(keyWord);
+        stringBuilder.append("%");
+        stringBuilder.insert(0,"%");
+        article.setKeyWord(stringBuilder.toString());
+        List<Article> articles = forumArticalMapper.searchAllModules(article);
+        log.info("含有关键字金庸的列表是{}",articles);
+    }
     @Test
     public void testDelete(){
         UserInfo userInfo = new UserInfo();

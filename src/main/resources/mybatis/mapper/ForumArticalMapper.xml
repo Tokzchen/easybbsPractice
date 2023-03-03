@@ -74,5 +74,39 @@
 </if>
     </select>
 
+    <select id="selectBoardsWithOrder" resultType="com.example.easybbsweb.domain.entity.Article">
+        select *,(good_count+read_count+comment_count) hot_count
+        from forum_article
+        <where>
+            <if test="pBoardName!='' and pBoardName!=''">
+                 p_board_name=#{pBoardName}
+            </if>
+        </where>
+            <if test="orderType==0">
+                order by hot_count desc
+            </if>
+            <if test="orderType==1">
+                order by post_time desc
+            </if>
+            <if test="orderType==2">
+                order by last_update_time desc
+            </if>
+
+    </select>
+
+    <select id="searchAllModules" resultType="com.example.easybbsweb.domain.entity.Article">
+        select *,(good_count+read_count+comment_count) hot_count from forum_article where title like #{keyWord} or
+            summary like #{keyWord}
+    <if test="orderType==null or orderType==0">
+        order by  hot_count desc
+    </if>
+    <if test="orderType==1">
+        order by post_time desc
+    </if>
+    <if test="orderType==2">
+        order by last_update_time
+    </if>
+    </select>
+
 
 </mapper>

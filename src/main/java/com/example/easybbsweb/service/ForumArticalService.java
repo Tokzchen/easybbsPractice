@@ -13,8 +13,12 @@ public interface ForumArticalService {
 
     public PageInfo selectArticalAll(Integer page,Integer orderType);
 
+    public PageInfo searchArticleAll(Integer page,Article article);
+
     public PageInfo selectArticalBoard(Integer page, String board);
 
+
+    PageInfo selectArticleBoardWithOrder(Integer page, Article article);
 
     public boolean banArtical(Article article);
 

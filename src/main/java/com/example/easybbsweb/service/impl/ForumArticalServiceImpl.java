@@ -1,6 +1,6 @@
 package com.example.easybbsweb.service.impl;
 
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.db.Page;
 import cn.hutool.http.HtmlUtil;
 import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.entity.LikeRecord;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -84,11 +83,62 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     }
 
     @Override
+    public PageInfo searchArticleAll(Integer page, Article article) {
+        PageInfo pageInfo = new PageInfo();
+        if(article.getKeyWord()==null||article.getKeyWord().equals("")||article.getKeyWord().length()<3){
+            throw new BusinessException("关键词太短!");
+        }
+        StringBuilder stringBuilder = new StringBuilder(article.getKeyWord());
+        stringBuilder.append("%");
+        stringBuilder.insert(0, "%");
+        article.setKeyWord(stringBuilder.toString());
+        List<Article> articles = forumArticalMapper.searchAllModules(article);
+        //下面进行分页
+        List<Article> returnArticles=new ArrayList<>();
+        Integer index=(page-1)*countPerPage;
+        for(int i=index;i<=index+countPerPage-1;i++){
+            //处理最后一页的数据可能不够一页
+            if(i>articles.size()-1){
+                break;
+            }
+            returnArticles.add(articles.get(i));
+        }
+        pageInfo.setList(returnArticles);
+        return pageInfo;
+    }
+
+    @Override
     public PageInfo selectArticalBoard(Integer page, String board) {
         PageInfo pageInfo = new PageInfo();
         Integer row=(page-1)*countPerPage;
         //这里是查出了这个模块的所有文章
         List<Article> articles = forumArticalMapper.selectBoards(board);
+        pageInfo.setPageNo(page);
+        pageInfo.setTotalCnt(articles.size());
+        List<Article> returnArticles=new ArrayList<>();
+        //下面进行分页
+        for(int i=row;i<=row+countPerPage-1;i++){
+            //处理最后一页的数据可能不够一页
+            if(i>articles.size()-1){
+                break;
+            }
+            returnArticles.add(articles.get(i));
+        }
+        //对文章的content进行抹除瘦身，加快传递速度
+        for(Article a:returnArticles){
+            a.loseWeight();
+        }
+        pageInfo.setList(returnArticles);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo selectArticleBoardWithOrder(Integer page, Article article){
+        String board=article.getpBoardName();
+        PageInfo pageInfo = new PageInfo();
+        Integer row=(page-1)*countPerPage;
+        //这里是查出了这个模块的所有文章,并作了排序
+        List<Article> articles = forumArticalMapper.selectBoardsWithOrder(article);
         pageInfo.setPageNo(page);
         pageInfo.setTotalCnt(articles.size());
         List<Article> returnArticles=new ArrayList<>();

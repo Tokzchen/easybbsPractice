@@ -44,6 +44,7 @@ public class Article {
     private Integer orderType;
     private Integer pageNo;
     private String userIdClickLike;
+    private String keyWord;
 
     public String getpBoardName(){
         return pBoardName;
