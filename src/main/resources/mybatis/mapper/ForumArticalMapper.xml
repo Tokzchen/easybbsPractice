@@ -108,5 +108,32 @@
     </if>
     </select>
 
+    <select id="searchArticleBoardsWithOrder" resultType="com.example.easybbsweb.domain.entity.Article">
+        select *,(good_count+read_count+comment_count) hot_count from(
+        select * from forum_article f1
+        <where>
+            <if test="pBoardId!=null and pBoardId!=''">
+                p_board_id=#{pBoardId}
+            </if>
+            <if test="pBoardId==null">
+                <if test="pBoardName!=null">
+                    p_board_name=#{pBoardName}
+                </if>
+            </if>
+        </where>
+        ) f2 where  title like #{keyWord} or
+        title like #{keyWord} or summary like #{keyWord}
+
+        <if test="orderType==null or orderType==0">
+            order by  hot_count desc
+        </if>
+        <if test="orderType==1">
+            order by post_time desc
+        </if>
+        <if test="orderType==2">
+            order by last_update_time
+        </if>
+    </select>
+
 
 </mapper>

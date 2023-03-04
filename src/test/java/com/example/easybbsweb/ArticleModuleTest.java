@@ -2,6 +2,7 @@ package com.example.easybbsweb;
 
 
 import com.example.easybbsweb.domain.entity.Article;
+import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
 import org.junit.jupiter.api.DisplayName;
@@ -31,6 +32,16 @@ public class ArticleModuleTest {
 //        List<Article> articles = forumArticalService.selectArticalBoard(1, "前端");
 //        System.out.println(articles);
 //    }
+
+    @Test
+    @DisplayName("测试在特定模块搜索文章功能")
+    public void testSearch(){
+        Article article = new Article();
+        article.setpBoardName("前端");
+        article.setKeyWord("条件");
+        PageInfo pageInfo = forumArticalService.searchArticleBoardWithOrder(1, article);
+        System.out.println(pageInfo);
+    }
 
     @Test
     @DisplayName("测试上传帖子")

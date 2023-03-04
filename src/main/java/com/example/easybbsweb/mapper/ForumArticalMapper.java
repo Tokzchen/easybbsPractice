@@ -34,6 +34,8 @@ public interface ForumArticalMapper {
 
     public  List<Article> selectBoardsWithOrder(Article article);
 
+    List<Article> searchArticleBoardsWithOrder(Article article);
+
     public Integer insertArtical(Article article);
 
     public Integer updateArticalByArticalId(Article article);

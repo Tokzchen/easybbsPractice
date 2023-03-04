@@ -85,7 +85,7 @@ public class ForumArticalServiceImpl implements ForumArticalService {
     @Override
     public PageInfo searchArticleAll(Integer page, Article article) {
         PageInfo pageInfo = new PageInfo();
-        if(article.getKeyWord()==null||article.getKeyWord().equals("")||article.getKeyWord().length()<3){
+        if(article.getKeyWord()==null||article.getKeyWord().equals("")||article.getKeyWord().length()<2){
             throw new BusinessException("关键词太短!");
         }
         StringBuilder stringBuilder = new StringBuilder(article.getKeyWord());
@@ -93,6 +93,8 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         stringBuilder.insert(0, "%");
         article.setKeyWord(stringBuilder.toString());
         List<Article> articles = forumArticalMapper.searchAllModules(article);
+        pageInfo.setPageNo(page);
+        pageInfo.setTotalCnt(articles.size());
         //下面进行分页
         List<Article> returnArticles=new ArrayList<>();
         Integer index=(page-1)*countPerPage;
@@ -153,6 +155,33 @@ public class ForumArticalServiceImpl implements ForumArticalService {
         //对文章的content进行抹除瘦身，加快传递速度
         for(Article a:returnArticles){
             a.loseWeight();
+        }
+        pageInfo.setList(returnArticles);
+        return pageInfo;
+    }
+
+    @Override
+    public PageInfo searchArticleBoardWithOrder(Integer page, Article article) {
+        PageInfo pageInfo = new PageInfo();
+        if(article.getKeyWord()==null||article.getKeyWord().equals("")||article.getKeyWord().length()<2){
+            throw new BusinessException("关键词太短!");
+        }
+        StringBuilder stringBuilder = new StringBuilder(article.getKeyWord());
+        stringBuilder.append("%");
+        stringBuilder.insert(0, "%");
+        article.setKeyWord(stringBuilder.toString());
+        List<Article> articles = forumArticalMapper.searchArticleBoardsWithOrder(article);
+        pageInfo.setPageNo(page);
+        pageInfo.setTotalCnt(articles.size());
+        //下面进行分页
+        List<Article> returnArticles=new ArrayList<>();
+        Integer index=(page-1)*countPerPage;
+        for(int i=index;i<=index+countPerPage-1;i++){
+            //处理最后一页的数据可能不够一页
+            if(i>articles.size()-1){
+                break;
+            }
+            returnArticles.add(articles.get(i));
         }
         pageInfo.setList(returnArticles);
         return pageInfo;

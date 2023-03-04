@@ -19,6 +19,7 @@ public interface ForumArticalService {
 
 
     PageInfo selectArticleBoardWithOrder(Integer page, Article article);
+    PageInfo searchArticleBoardWithOrder(Integer page,Article article);
 
     public boolean banArtical(Article article);
 

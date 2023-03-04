@@ -64,8 +64,8 @@ public class ForumController {
                            article.getPageNo() == null ? 1 : article.getPageNo(),article);
            return new ResultInfo(true,"搜索成功",pageInfo);
        }else{
-           //这里是加载其他板块范围内进行搜索
-           PageInfo pageInfo = forumArticalService.selectArticleBoardWithOrder(article.getPageNo() == null ? 1 : article.getPageNo(), article);
+           //这里是在其他板块内进行搜索
+           PageInfo pageInfo = forumArticalService.searchArticleBoardWithOrder(article.getPageNo() == null ? 1 : article.getPageNo(), article);
            return new ResultInfo(true,"搜索成功成功",pageInfo);
        }
    }
