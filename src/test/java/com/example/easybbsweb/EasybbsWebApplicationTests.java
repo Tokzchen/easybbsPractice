@@ -1,22 +1,14 @@
 package com.example.easybbsweb;
 
-import com.example.easybbsweb.domain.entity.Article;
-import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.LoginStatus;
 import com.example.easybbsweb.domain.others.Sex;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
-import com.example.easybbsweb.utils.GenerateIdUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.List;
 
 @SpringBootTest

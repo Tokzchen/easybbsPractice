@@ -1,7 +1,6 @@
 package com.example.easybbsweb;
 
 
-import com.example.easybbsweb.domain.entity.Article;
 import com.example.easybbsweb.domain.others.PageInfo;
 import com.example.easybbsweb.mapper.ForumArticalMapper;
 import com.example.easybbsweb.service.ForumArticalService;
@@ -10,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional
 @SpringBootTest
