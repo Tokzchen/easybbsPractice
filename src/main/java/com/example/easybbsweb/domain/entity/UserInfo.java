@@ -13,6 +13,8 @@ public class UserInfo {
     private Integer aidId;
     private Integer lawyerId;
     private Date createTime;
+    private String emailCode;
+    private String checkCode;
     private Date lastUpdateTime;//共有部分
 
     //user_info部分
@@ -25,4 +27,9 @@ public class UserInfo {
     private String city;
     private String issue;
 
+    public void removeSentiveInfo() {
+        password="";
+        checkCode="";
+        emailCode="";
+    }
 }

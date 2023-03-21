@@ -8,6 +8,7 @@ public class GenerateIdUtils {
 
     public static final Snowflake snowflack= IdUtil.getSnowflake(1,1);
     public static String generateIdBySnowFlake(){
+
         return  snowflack.nextIdStr();
     }
 
