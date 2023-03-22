@@ -49,9 +49,19 @@ public class SendMailServiceImpl implements SendMailService {
         message.setSubject(mailRequest.getSubject());
         message.setText(mailRequest.getContent());
         message.setSentDate(new Date());
-        javaMailSender.send(message);
-        log.info("发送邮件成功{}=>{}",mailSender,mailRequest.getSendTo());
 
+        //开启一个线程进行发送邮件
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    javaMailSender.send(message);
+                    log.info("发送邮件成功{}=>{}",mailSender,mailRequest.getSendTo());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     @Override

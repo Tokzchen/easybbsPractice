@@ -50,8 +50,8 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")//让拦截器进行token验证
-                .excludePathPatterns("/user/checkCode")
-                .excludePathPatterns("/user/login")
+                .excludePathPatterns("/user/**")
+
                 //这个路径下直接放行不需要拦截器token验证
                 .excludePathPatterns("/picture/**")
                 .excludePathPatterns("/public/**");//放行动态资源

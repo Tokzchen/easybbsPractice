@@ -99,8 +99,10 @@ public class AccountController {
 
     @PostMapping("/sendEmailCode")
     public Object verifyAndSendMail(HttpServletRequest req, HttpServletResponse res, @RequestBody Map map){
-        boolean checkCode = CheckCodeUtils.verifyCheckCode(req, res, (String) map.get("checkCode"));
-        if(checkCode){
+            if(map.get("email")==null||map.get("email").equals("")){
+                return new ResultInfo(false,"邮箱不得为空",null);
+            }
+
             log.info("验证码验证成功准备发送邮件....");
             //生成邮箱验证码并加密存入到req session当中
             String s = RandomUtil.randomNumbers(5);
@@ -109,9 +111,7 @@ public class AccountController {
             req.setAttribute("email",map.get("email"));
             req.getSession().setAttribute("emailCode",mailCodeP);
             log.info("准备转发实现发送邮件....");
-            return new ModelAndView("forward:/send-mail/simple");
-        }
-        return new ResultInfo(false,"验证码错误",null);
+            return new ModelAndView("forward:/user/send-mail/simple");
     }
 
     @PostMapping("/send-mail/simple")
@@ -123,6 +123,7 @@ public class AccountController {
                 null);
 
         sendMailService.sendSimpleMail(mailRequest);
+        log.info("发送邮箱验证码完毕，即将向页面返回数据");
 
         return new ResultInfo(true,"发送成功！",null);
     }
