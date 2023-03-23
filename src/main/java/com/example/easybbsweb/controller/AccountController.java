@@ -65,12 +65,12 @@ public class AccountController {
     @PostMapping("/registry")
     public ResultInfo registerUser(@RequestBody UserInfo userInfo,HttpServletRequest req){
         if(userInfo.getEmailCode()==null||userInfo.getEmailCode().equals("")){
-            return new ResultInfo(false,"验证码不得为空",null);
+            return new ResultInfo(false,"邮箱验证码不得为空",null);
         }
         try {
             boolean b = CheckCodeUtils.verifyEmailCode(req, userInfo.getEmailCode().trim());
             if(!b){
-                return new ResultInfo(false,"验证码错误",null);
+                return new ResultInfo(false,"邮箱验证码错误",null);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

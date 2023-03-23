@@ -25,7 +25,7 @@ public class TokenUtil {
             token = JWT.create()
                     .withIssuer("auth0")
                     .withClaim("email", staff.getEmail())
-                    .withClaim("userId",staff.getUserId())
+                    .withClaim("userId",staff.getUserId().toString())
 //                    .withAudience(staff.getUsername())
                     .withExpiresAt(expiresAt)
                     // 使用了HMAC256加密算法。

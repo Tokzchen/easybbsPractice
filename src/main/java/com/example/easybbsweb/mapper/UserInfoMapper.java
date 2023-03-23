@@ -1,27 +1,35 @@
 package com.example.easybbsweb.mapper;
 
-
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.entity.UserInfoExample;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Mapper
 @Repository
+@Mapper
 public interface UserInfoMapper {
+    long countByExample(UserInfoExample example);
 
-     UserInfo selectUserByEmail(String email);
+    int deleteByExample(UserInfoExample example);
 
-     Integer updateUserByEmail(UserInfo userInfo);
+    int deleteByPrimaryKey(Long userId);
 
-     @Select("select username from user_info where user_id=#{userId}")
-     UserInfo selectUserNickNameById(String userId);
+    int insert(UserInfo record);
 
-     @Select("SELECT * FROM user_info where username=#{username}")
-     UserInfo selectByUsername(String username);
-     
-     @Select("select * from user_info where user_id=#{userId}")
-     UserInfo selectByUserId(String userId);
+    int insertSelective(UserInfo record);
 
-     Integer insertUser(UserInfo userInfo);
+    List<UserInfo> selectByExample(UserInfoExample example);
+
+    UserInfo selectByPrimaryKey(Long userId);
+
+    int updateByExampleSelective(@Param("record") UserInfo record, @Param("example") UserInfoExample example);
+
+    int updateByExample(@Param("record") UserInfo record, @Param("example") UserInfoExample example);
+
+    int updateByPrimaryKeySelective(UserInfo record);
+
+    int updateByPrimaryKey(UserInfo record);
 }

@@ -1,7 +1,7 @@
 package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.entity.UserInfo;
-import com.example.easybbsweb.exception.BusinessException;
+import com.example.easybbsweb.domain.entity.UserInfoExample;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -27,10 +28,14 @@ public class AccountServiceImpl implements AccountService {
         String emailCode = userInfo.getEmailCode();
         boolean b = CheckCodeUtils.verifyEmailCode(sessionCode, emailCode);
         if(b){
+            UserInfo newPwd = new UserInfo();
+            newPwd.setPassword(userInfo.getPassword());
             //密码加密处理
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
-            Integer integer = userInfoMapper.updateUserByEmail(userInfo);
-            if(integer>0){
+            UserInfoExample userInfoExample = new UserInfoExample();
+            userInfoExample.createCriteria().andEmailEqualTo(userInfo.getEmail());
+            int i = userInfoMapper.updateByExampleSelective(newPwd, userInfoExample);
+            if(i>0){
                 return true;
             }else{
                 return false;
@@ -42,7 +47,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean userLogin(UserInfo userInfo) {
-        UserInfo realUser = userInfoMapper.selectUserByEmail(userInfo.getEmail());
+        UserInfoExample exmple = new UserInfoExample();
+        exmple.createCriteria().andEmailEqualTo(userInfo.getEmail());
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
+        UserInfo realUser =  userInfos.get(0);
         if(realUser==null){
             return false;
         }
@@ -54,24 +62,22 @@ public class AccountServiceImpl implements AccountService {
 
 
     public UserInfo getUserInfoByEmail(String email){
-        UserInfo userInfo = userInfoMapper.selectUserByEmail(email);
-        userInfo.removeSentiveInfo();
+        UserInfoExample exmple = new UserInfoExample();
+        exmple.createCriteria().andEmailEqualTo(email);
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
+        UserInfo userInfo =  userInfos.get(0);
+        userInfo.removeSensitiveInfo();
         return userInfo;
     }
 
     @Override
-    public UserInfo getUserInfoByUserId(String userId) {
-        UserInfo userInfo = userInfoMapper.selectByUserId(userId);
+    public UserInfo getUserInfoByUserId(Long userId) {
+        UserInfoExample exmple = new UserInfoExample();
+        exmple.createCriteria().andUserIdEqualTo(userId);
+        UserInfo userInfo = userInfoMapper.selectByExample(exmple).get(0);
+
         return userInfo;
     }
 
-    @Override
-    public UserInfo getUserNickNameByUserId(String userId) {
-        UserInfo userInfo = userInfoMapper.selectUserNickNameById(userId);
-        if(userInfo==null){
-            throw new BusinessException("用户不存在");
-        }else{
-            return userInfo;
-        }
-    }
+
 }
