@@ -29,9 +29,9 @@ public class AccountServiceImpl implements AccountService {
         boolean b = CheckCodeUtils.verifyEmailCode(sessionCode, emailCode);
         if(b){
             UserInfo newPwd = new UserInfo();
-            newPwd.setPassword(userInfo.getPassword());
             //密码加密处理
-            userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
+            newPwd.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
+
             UserInfoExample userInfoExample = new UserInfoExample();
             userInfoExample.createCriteria().andEmailEqualTo(userInfo.getEmail());
             int i = userInfoMapper.updateByExampleSelective(newPwd, userInfoExample);
