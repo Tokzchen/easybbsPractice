@@ -96,6 +96,18 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
+
+<!--        easyExcel-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>2.0.25</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>3.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>

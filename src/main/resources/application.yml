@@ -1,34 +1,3 @@
 spring:
-
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
-    username: root
-    password: cdz
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.alibaba.druid.pool.DruidDataSource
-  mail:
-    default-encoding: UTF-8
-    host: smtp.qq.com
-    username: 1797213901@qq.com
-    password: gnxfwwamxdeejadi
-    port: 587
-server:
-  port: 7071
-  servlet:
-    encoding:
-      charset: utf-8
-      force: true
-      enabled: true
-    context-path: /api
-    session:
-      timeout: PT30M
-
-#mybatis-plus:
-#  configuration:
-#    map-underscore-to-camel-case: true 默认开启的
-mybatis:
-  config-location: classpath:mybatis/mybatis_config.xml
-  mapper-locations: classpath:mybatis/mapper/*.xml
-#  configuration:
-#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#    map-underscore-to-camel-case: true
+  profiles:
+    active: dev

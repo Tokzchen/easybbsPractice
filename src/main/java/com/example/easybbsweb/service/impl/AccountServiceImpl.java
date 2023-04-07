@@ -26,7 +26,12 @@ public class AccountServiceImpl implements AccountService {
     public boolean resetPwd(UserInfo userInfo, HttpServletRequest req) {
         String sessionCode = (String) req.getSession().getAttribute("emailCode");
         String emailCode = userInfo.getEmailCode();
-        boolean b = CheckCodeUtils.verifyEmailCode(sessionCode, emailCode);
+        boolean b = false;
+        try {
+            b = CheckCodeUtils.verifyEmailCodeByRedis(req, userInfo.getEmailCode());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         if(b){
             UserInfo newPwd = new UserInfo();
             //密码加密处理

@@ -42,7 +42,7 @@
                              type="XMLMAPPER"/>
 
         <!--<table tableName="demo" domainObjectName="Demo"/>-->
-        <!--<table tableName="ebook"/>-->
+<!--        <table tableName="ebook"/>-->
         <!--<table tableName="category"/>-->
         <!--<table tableName="doc"/>-->
         <!--<table tableName="content"/>-->
@@ -50,5 +50,9 @@
         <!--需要生成的数据库表名-->
 <!--        <table tableName="user_info"/>-->
 <!--        <table tableName="user_main"/>-->
+        <table tableName="question"/>
+        <table tableName="answer" />
+        <table tableName="test_record" />
+
     </context>
 </generatorConfiguration>
