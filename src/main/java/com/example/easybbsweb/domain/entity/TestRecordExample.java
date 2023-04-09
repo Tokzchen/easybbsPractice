@@ -2,6 +2,7 @@ package com.example.easybbsweb.domain.entity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TestRecordExample {
@@ -175,62 +176,52 @@ public class TestRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(String value) {
+        public Criteria andUserIdEqualTo(Long value) {
             addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(String value) {
+        public Criteria andUserIdNotEqualTo(Long value) {
             addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(String value) {
+        public Criteria andUserIdGreaterThan(Long value) {
             addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+        public Criteria andUserIdGreaterThanOrEqualTo(Long value) {
             addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(String value) {
+        public Criteria andUserIdLessThan(Long value) {
             addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(String value) {
+        public Criteria andUserIdLessThanOrEqualTo(Long value) {
             addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLike(String value) {
-            addCriterion("user_id like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotLike(String value) {
-            addCriterion("user_id not like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIn(List<String> values) {
+        public Criteria andUserIdIn(List<Long> values) {
             addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<String> values) {
+        public Criteria andUserIdNotIn(List<Long> values) {
             addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(String value1, String value2) {
+        public Criteria andUserIdBetween(Long value1, Long value2) {
             addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(String value1, String value2) {
+        public Criteria andUserIdNotBetween(Long value1, Long value2) {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
@@ -555,63 +546,123 @@ public class TestRecordExample {
             return (Criteria) this;
         }
 
-        public Criteria andPostionIsNull() {
-            addCriterion("postion is null");
+        public Criteria andPortionIsNull() {
+            addCriterion("portion is null");
             return (Criteria) this;
         }
 
-        public Criteria andPostionIsNotNull() {
-            addCriterion("postion is not null");
+        public Criteria andPortionIsNotNull() {
+            addCriterion("portion is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPostionEqualTo(BigDecimal value) {
-            addCriterion("postion =", value, "postion");
+        public Criteria andPortionEqualTo(BigDecimal value) {
+            addCriterion("portion =", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionNotEqualTo(BigDecimal value) {
-            addCriterion("postion <>", value, "postion");
+        public Criteria andPortionNotEqualTo(BigDecimal value) {
+            addCriterion("portion <>", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionGreaterThan(BigDecimal value) {
-            addCriterion("postion >", value, "postion");
+        public Criteria andPortionGreaterThan(BigDecimal value) {
+            addCriterion("portion >", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("postion >=", value, "postion");
+        public Criteria andPortionGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("portion >=", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionLessThan(BigDecimal value) {
-            addCriterion("postion <", value, "postion");
+        public Criteria andPortionLessThan(BigDecimal value) {
+            addCriterion("portion <", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("postion <=", value, "postion");
+        public Criteria andPortionLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("portion <=", value, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionIn(List<BigDecimal> values) {
-            addCriterion("postion in", values, "postion");
+        public Criteria andPortionIn(List<BigDecimal> values) {
+            addCriterion("portion in", values, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionNotIn(List<BigDecimal> values) {
-            addCriterion("postion not in", values, "postion");
+        public Criteria andPortionNotIn(List<BigDecimal> values) {
+            addCriterion("portion not in", values, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("postion between", value1, value2, "postion");
+        public Criteria andPortionBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("portion between", value1, value2, "portion");
             return (Criteria) this;
         }
 
-        public Criteria andPostionNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("postion not between", value1, value2, "postion");
+        public Criteria andPortionNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("portion not between", value1, value2, "portion");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
     }

@@ -1,11 +1,12 @@
 package com.example.easybbsweb.domain.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class TestRecord {
     private Integer id;
 
-    private String userId;
+    private Long userId;
 
     private Integer negCount;
 
@@ -17,7 +18,9 @@ public class TestRecord {
 
     private String reportContent;
 
-    private BigDecimal postion;
+    private BigDecimal portion;
+
+    private Date createTime;
 
     public Integer getId() {
         return id;
@@ -27,11 +30,11 @@ public class TestRecord {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -75,12 +78,20 @@ public class TestRecord {
         this.reportContent = reportContent;
     }
 
-    public BigDecimal getPostion() {
-        return postion;
+    public BigDecimal getPortion() {
+        return portion;
     }
 
-    public void setPostion(BigDecimal postion) {
-        this.postion = postion;
+    public void setPortion(BigDecimal portion) {
+        this.portion = portion;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     @Override
@@ -96,7 +107,8 @@ public class TestRecord {
         sb.append(", posCount=").append(posCount);
         sb.append(", tracePath=").append(tracePath);
         sb.append(", reportContent=").append(reportContent);
-        sb.append(", postion=").append(postion);
+        sb.append(", portion=").append(portion);
+        sb.append(", createTime=").append(createTime);
         sb.append("]");
         return sb.toString();
     }

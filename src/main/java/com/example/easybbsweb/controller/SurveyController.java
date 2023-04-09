@@ -1,6 +1,7 @@
 package com.example.easybbsweb.controller;
 
 import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.domain.entity.TestRecord;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.SurveyPair;
 import com.example.easybbsweb.service.SurveyService;
@@ -29,8 +30,17 @@ public class SurveyController {
         if(surveyPair!=null){
             return new ResultInfo(true,"响应成功!",surveyPair);
         }else{
-            return new ResultInfo(true,"测评已经结束，请访问生成测评记录",null);
+            return new ResultInfo(false,"测评已经结束，请访问生成测评记录",null);
 
         }
+    }
+
+    @GetMapping("/result")
+    public ResultInfo getSurveyRecord(@RequestHeader("token") String token){
+        String currentUserId=TokenUtil.getCurrentUserId(token);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserId(Long.parseLong(currentUserId));
+        TestRecord result= surveyService.generateSurveyResult(userInfo);
+        return new ResultInfo(true,"生成报告成功",result);
     }
 }

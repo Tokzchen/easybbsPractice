@@ -3,8 +3,13 @@ package com.example.easybbsweb.mapper;
 import com.example.easybbsweb.domain.entity.TestRecord;
 import com.example.easybbsweb.domain.entity.TestRecordExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+@Mapper
+@Repository
 public interface TestRecordMapper {
     long countByExample(TestRecordExample example);
 

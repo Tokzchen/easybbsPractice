@@ -3,13 +3,14 @@
 <mapper namespace="com.example.easybbsweb.mapper.TestRecordMapper">
   <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.TestRecord">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="neg_count" jdbcType="INTEGER" property="negCount" />
     <result column="med_count" jdbcType="INTEGER" property="medCount" />
     <result column="pos_count" jdbcType="INTEGER" property="posCount" />
     <result column="trace_path" jdbcType="VARCHAR" property="tracePath" />
     <result column="report_content" jdbcType="VARCHAR" property="reportContent" />
-    <result column="postion" jdbcType="DECIMAL" property="postion" />
+    <result column="portion" jdbcType="DECIMAL" property="portion" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, neg_count, med_count, pos_count, trace_path, report_content, postion
+    id, user_id, neg_count, med_count, pos_count, trace_path, report_content, portion, 
+    create_time
   </sql>
   <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.TestRecordExample" resultMap="BaseResultMap">
     select
@@ -105,10 +107,12 @@
   <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.TestRecord">
     insert into test_record (id, user_id, neg_count, 
       med_count, pos_count, trace_path, 
-      report_content, postion)
-    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{negCount,jdbcType=INTEGER}, 
+      report_content, portion, create_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT}, #{negCount,jdbcType=INTEGER}, 
       #{medCount,jdbcType=INTEGER}, #{posCount,jdbcType=INTEGER}, #{tracePath,jdbcType=VARCHAR}, 
-      #{reportContent,jdbcType=VARCHAR}, #{postion,jdbcType=DECIMAL})
+      #{reportContent,jdbcType=VARCHAR}, #{portion,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.TestRecord">
     insert into test_record
@@ -134,8 +138,11 @@
       <if test="reportContent != null">
         report_content,
       </if>
-      <if test="postion != null">
-        postion,
+      <if test="portion != null">
+        portion,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -143,7 +150,7 @@
         #{id,jdbcType=INTEGER},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="negCount != null">
         #{negCount,jdbcType=INTEGER},
@@ -160,8 +167,11 @@
       <if test="reportContent != null">
         #{reportContent,jdbcType=VARCHAR},
       </if>
-      <if test="postion != null">
-        #{postion,jdbcType=DECIMAL},
+      <if test="portion != null">
+        #{portion,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -178,7 +188,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.negCount != null">
         neg_count = #{record.negCount,jdbcType=INTEGER},
@@ -195,8 +205,11 @@
       <if test="record.reportContent != null">
         report_content = #{record.reportContent,jdbcType=VARCHAR},
       </if>
-      <if test="record.postion != null">
-        postion = #{record.postion,jdbcType=DECIMAL},
+      <if test="record.portion != null">
+        portion = #{record.portion,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -206,13 +219,14 @@
   <update id="updateByExample" parameterType="map">
     update test_record
     set id = #{record.id,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=BIGINT},
       neg_count = #{record.negCount,jdbcType=INTEGER},
       med_count = #{record.medCount,jdbcType=INTEGER},
       pos_count = #{record.posCount,jdbcType=INTEGER},
       trace_path = #{record.tracePath,jdbcType=VARCHAR},
       report_content = #{record.reportContent,jdbcType=VARCHAR},
-      postion = #{record.postion,jdbcType=DECIMAL}
+      portion = #{record.portion,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -221,7 +235,7 @@
     update test_record
     <set>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="negCount != null">
         neg_count = #{negCount,jdbcType=INTEGER},
@@ -238,21 +252,25 @@
       <if test="reportContent != null">
         report_content = #{reportContent,jdbcType=VARCHAR},
       </if>
-      <if test="postion != null">
-        postion = #{postion,jdbcType=DECIMAL},
+      <if test="portion != null">
+        portion = #{portion,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.TestRecord">
     update test_record
-    set user_id = #{userId,jdbcType=VARCHAR},
+    set user_id = #{userId,jdbcType=BIGINT},
       neg_count = #{negCount,jdbcType=INTEGER},
       med_count = #{medCount,jdbcType=INTEGER},
       pos_count = #{posCount,jdbcType=INTEGER},
       trace_path = #{tracePath,jdbcType=VARCHAR},
       report_content = #{reportContent,jdbcType=VARCHAR},
-      postion = #{postion,jdbcType=DECIMAL}
+      portion = #{portion,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

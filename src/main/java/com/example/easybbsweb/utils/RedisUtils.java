@@ -648,5 +648,23 @@ public class RedisUtils {
         }
 
     }
+
+    public static boolean queuePush(String key,Object value){
+        try {
+            redisTemplate.opsForList().rightPush(key,value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static Object queuePop(String key){
+        try {
+            return redisTemplate.opsForList().leftPop(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
 

@@ -50,8 +50,8 @@
         <!--需要生成的数据库表名-->
 <!--        <table tableName="user_info"/>-->
 <!--        <table tableName="user_main"/>-->
-        <table tableName="question"/>
-        <table tableName="answer" />
+<!--        <table tableName="question"/>-->
+<!--        <table tableName="answer" />-->
         <table tableName="test_record" />
 
     </context>
