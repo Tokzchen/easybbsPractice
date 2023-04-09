@@ -1,14 +1,17 @@
 package com.example.easybbsweb.domain.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+
 public class Answer {
+    @ExcelProperty("答案编号")
     private Integer ansId;
-
+    @ExcelProperty("所属问题编号")
     private Integer queId;
-
+    @ExcelProperty("答案内容")
     private String content;
-
+    @ExcelProperty("利或不利（-1,0,1）")
     private Byte effect;
-
+    @ExcelProperty("附加内容")
     private String append;
 
     public Integer getAnsId() {

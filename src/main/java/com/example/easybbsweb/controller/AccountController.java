@@ -23,7 +23,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/user")
 public class AccountController {
     @Autowired
     SendMailService sendMailService;

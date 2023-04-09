@@ -3,9 +3,16 @@ package com.example.easybbsweb.mapper;
 import com.example.easybbsweb.domain.entity.Question;
 import com.example.easybbsweb.domain.entity.QuestionExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+@Mapper
+@Repository
 public interface QuestionMapper {
+
+    int insertMultipleQuestion(List<Question> questionList);
     long countByExample(QuestionExample example);
 
     int deleteByExample(QuestionExample example);

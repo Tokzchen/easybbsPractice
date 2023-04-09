@@ -454,6 +454,41 @@ public class RedisUtils {
         }
     }
 
+    /*该方法主要用于栈元素的压入*/
+    public static boolean stackPush(String key,Object object){
+        try {
+            redisTemplate.opsForList().rightPush(key,object);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 该方法主要用于栈的弹出元素
+     * @param key
+     * @return
+     */
+    public static Object stackPop(String key){
+        try {
+            return redisTemplate.opsForList().rightPop(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Object stackTop(String key){
+        try {
+            Long size = redisTemplate.opsForList().size(key);
+            return redisTemplate.opsForList().range(key,size-1,size);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     /**
      * 获取list缓存的长度
@@ -601,6 +636,17 @@ public class RedisUtils {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    public static boolean stackClear(String key) {
+        try {
+            redisTemplate.opsForList().trim(key,1,0);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }
 

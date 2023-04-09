@@ -29,6 +29,16 @@ public class UserInfo extends UserMain {
 
     private Date lastUpdateTime;
 
+    public Integer getAnsId() {
+        return ansId;
+    }
+
+    public void setAnsId(Integer ansId) {
+        this.ansId = ansId;
+    }
+
+    //用于前端的选项返回
+    private Integer ansId;
     public void removeSensitiveInfo(){
         password="";
         province="";

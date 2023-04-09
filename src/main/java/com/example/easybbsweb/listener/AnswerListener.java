@@ -1,44 +1,48 @@
 package com.example.easybbsweb.listener;
 
-import cn.hutool.json.JSON;
+
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
-import com.alibaba.excel.util.ListUtils;
-import com.example.easybbsweb.domain.others.ExcelQuestion;
+import com.alibaba.fastjson.JSON;
+import com.example.easybbsweb.domain.entity.Answer;
+import com.example.easybbsweb.domain.entity.Question;
+import com.example.easybbsweb.mapper.AnswerMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class DemoDataListener implements ReadListener<ExcelQuestion> {
+public class AnswerListener implements ReadListener<Answer> {
 
     /**
      * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
      */
-    private static final int BATCH_COUNT = 100;
+    private static final int BATCH_COUNT = 10;
     /**
      * 缓存的数据
      */
-    private List<ExcelQuestion> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+//    private List<DemoData> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+    private List<Answer> cachedDataList = new ArrayList<>(BATCH_COUNT);
     /**
      * 假设这个是一个DAO，当然有业务逻辑这个也可以是一个service。当然如果不用存储这个对象没用。
      */
-//    private DemoDAO demoDAO;
+    private AnswerMapper answerMapper;
 //
-//    public DemoDataListener() {
+//    public AnswerListener() {
 //        // 这里是demo，所以随便new一个。实际使用如果到了spring,请使用下面的有参构造函数
-//        demoDAO = new DemoDAO();
+//        log.info("创建Listener成功");
 //    }
+//
+//    /**
+//     * 如果使用了spring,请使用这个构造方法。每次创建Listener的时候需要把spring管理的类传进来
+//     *
+//     * @param demoDAO
+//     */
+    public AnswerListener(AnswerMapper answerMapper) {
+        this.answerMapper=answerMapper;
+    }
 
-    /**
-     * 如果使用了spring,请使用这个构造方法。每次创建Listener的时候需要把spring管理的类传进来
-     *
-     * @param demoDAO
-     */
-//    public DemoDataListener(DemoDAO demoDAO) {
-//        this.demoDAO = demoDAO;
-//    }
 
     /**
      * 这个每一条数据解析都会来调用
@@ -47,14 +51,14 @@ public class DemoDataListener implements ReadListener<ExcelQuestion> {
      * @param context
      */
     @Override
-    public void invoke(ExcelQuestion data, AnalysisContext context) {
-        log.info("解析到一条数据:{}", data.toString());
+    public void invoke(Answer data, AnalysisContext context) {
+        log.info("解析到一条数据:{}", JSON.toJSONString(data));
         cachedDataList.add(data);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
         if (cachedDataList.size() >= BATCH_COUNT) {
             saveData();
             // 存储完成清理 list
-            cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+            cachedDataList = new ArrayList<>(BATCH_COUNT);
         }
     }
 
@@ -70,12 +74,13 @@ public class DemoDataListener implements ReadListener<ExcelQuestion> {
         log.info("所有数据解析完成！");
     }
 
+
     /**
      * 加上存储数据库
      */
     private void saveData() {
         log.info("{}条数据，开始存储数据库！", cachedDataList.size());
-//        demoDAO.save(cachedDataList);
-        log.info("存储数据库成功！");
+        int i = answerMapper.insertMultipleAnswer(cachedDataList);
+        log.warn("存储成功{}条数据，有{}条数据存储失败",i,cachedDataList.size()-i);
     }
 }

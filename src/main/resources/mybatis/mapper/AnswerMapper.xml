@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easybbsweb.mapper.AnswerMapper">
+  <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.Answer">
+    <id column="ans_id" jdbcType="INTEGER" property="ansId" />
+    <result column="que_id" jdbcType="INTEGER" property="queId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="effect" jdbcType="TINYINT" property="effect" />
+    <result column="append" jdbcType="VARCHAR" property="append" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ans_id, que_id, content, effect, append
+  </sql>
+  <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.AnswerExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from answer
+    where ans_id = #{ansId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from answer
+    where ans_id = #{ansId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.easybbsweb.domain.entity.AnswerExample">
+    delete from answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.Answer">
+    insert into answer (ans_id, que_id, content, 
+      effect, append)
+    values (#{ansId,jdbcType=INTEGER}, #{queId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, 
+      #{effect,jdbcType=TINYINT}, #{append,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.Answer">
+    insert into answer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ansId != null">
+        ans_id,
+      </if>
+      <if test="queId != null">
+        que_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="effect != null">
+        effect,
+      </if>
+      <if test="append != null">
+        append,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ansId != null">
+        #{ansId,jdbcType=INTEGER},
+      </if>
+      <if test="queId != null">
+        #{queId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        #{effect,jdbcType=TINYINT},
+      </if>
+      <if test="append != null">
+        #{append,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.easybbsweb.domain.entity.AnswerExample" resultType="java.lang.Long">
+    select count(*) from answer
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update answer
+    <set>
+      <if test="record.ansId != null">
+        ans_id = #{record.ansId,jdbcType=INTEGER},
+      </if>
+      <if test="record.queId != null">
+        que_id = #{record.queId,jdbcType=INTEGER},
+      </if>
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.effect != null">
+        effect = #{record.effect,jdbcType=TINYINT},
+      </if>
+      <if test="record.append != null">
+        append = #{record.append,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update answer
+    set ans_id = #{record.ansId,jdbcType=INTEGER},
+      que_id = #{record.queId,jdbcType=INTEGER},
+      content = #{record.content,jdbcType=VARCHAR},
+      effect = #{record.effect,jdbcType=TINYINT},
+      append = #{record.append,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.easybbsweb.domain.entity.Answer">
+    update answer
+    <set>
+      <if test="queId != null">
+        que_id = #{queId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="effect != null">
+        effect = #{effect,jdbcType=TINYINT},
+      </if>
+      <if test="append != null">
+        append = #{append,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ans_id = #{ansId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.Answer">
+    update answer
+    set que_id = #{queId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      effect = #{effect,jdbcType=TINYINT},
+      append = #{append,jdbcType=VARCHAR}
+    where ans_id = #{ansId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertMultipleAnswer">
+    insert into youfa.answer
+    (
+    que_id,
+    ans_id,
+    content,
+    effect,
+    append
+    )
+    values
+    <foreach collection="list" item="item" index= "index" separator =",">
+      (
+      #{item.queId},
+      #{item.ansId},
+      #{item.content},
+      #{item.effect},
+      #{item.append}
+      )
+    </foreach>
+  </insert>
+</mapper>

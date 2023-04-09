@@ -97,7 +97,20 @@
             <version>2.6</version>
         </dependency>
 
-<!--        easyExcel-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>3.0.4</version>
+        </dependency>
+
+        <!--lettuce 依赖commons-pool-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+
+        <!--        easyExcel-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
