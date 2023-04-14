@@ -1,18 +1,17 @@
 package com.example.easybbsweb.service.impl;
 
-import com.example.easybbsweb.domain.IdSelector;
+
 import com.example.easybbsweb.domain.entity.*;
 import com.example.easybbsweb.domain.others.SurveyPair;
+import com.example.easybbsweb.domain.others.SurveyResult;
 import com.example.easybbsweb.mapper.AnswerMapper;
 import com.example.easybbsweb.mapper.QuestionMapper;
 import com.example.easybbsweb.mapper.TestRecordMapper;
 import com.example.easybbsweb.service.SurveyService;
-import com.example.easybbsweb.utils.GenerateIdUtils;
 import com.example.easybbsweb.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.IdGenerator;
 
 import java.util.Date;
 import java.util.List;
@@ -68,7 +67,7 @@ public class SurveyServiceImpl implements SurveyService {
         SurveyPair surveyPair = (SurveyPair)RedisUtils.stackPop(userInfo.getUserId() + surveyStack);
         //问题栈中已经清空，可以结束测评了
         if(surveyPair==null){
-            log.info("从这结束");
+            log.info("用户{}所有问题已经完成，栈中已经没有元素，测评完成",userInfo.getUserId());
             return null;
         }
         Integer cnt= (Integer)RedisUtils.get(userInfo.getUserId() + surveyCnt);
@@ -119,10 +118,11 @@ public class SurveyServiceImpl implements SurveyService {
     }
 
     @Override
-    public TestRecord generateSurveyResult(UserInfo userInfo) {
+    public SurveyResult generateSurveyResult(UserInfo userInfo) {
         //从结果队列中得到测评结果
         StringBuilder tracePath=new StringBuilder();
         StringBuilder resultContent=new StringBuilder();
+        SurveyResult surveyResult = new SurveyResult();
         resultContent.append("以下是给您的建议:"+"\n");
         TestRecord record = new TestRecord();
         //设置answer effect的初始值
@@ -130,11 +130,17 @@ public class SurveyServiceImpl implements SurveyService {
         record.setMedCount(0);
         record.setNegCount(1);
         List<Object> objects = RedisUtils.lGet(userInfo.getUserId() + surveyRecord, 0, -1);
+        int pathCnt=0;
         while (RedisUtils.lGetListSize(userInfo.getUserId()+surveyRecord)>0){
+            pathCnt++;
+            //记录路径
            Question q= (Question) RedisUtils.queuePop(userInfo.getUserId() + surveyRecord);
             Answer a= (Answer) RedisUtils.queuePop(userInfo.getUserId() + surveyRecord);
             tracePath.append(q.getQueId()+".");
             tracePath.append(a.getAnsId()+".");
+            if(pathCnt==1){
+                surveyResult.setArea(a.getContent());
+            }
             if(a.getEffect()==-1){
                 record.setNegCount(record.getNegCount()+1);
             }else if(a.getEffect()==0){
@@ -144,19 +150,24 @@ public class SurveyServiceImpl implements SurveyService {
             }
             if(q.getAppend()!=null&&!q.getAppend().equals("")){
                 resultContent.append(q.getAppend()+"\n");
+                surveyResult.getAdvice().add(q.getAppend());
             }
             if(a.getAppend()!=null&&!a.getAppend().equals("")){
                 resultContent.append(a.getAppend()+"\n");
+                surveyResult.getAdvice().add(a.getAppend());
             }
         }
         if(record.getPosCount()==0){
             resultContent.append("根据测评结果，您的情况比较复杂。"+"\n");
+            surveyResult.setSummary("建议咨询律师");
         }else {
             double potion=record.getNegCount()/ record.getPosCount();
             if(potion>=1.5){
                 resultContent.append("根据测评结果，您的情况比较复杂。"+"\n");
+                surveyResult.setSummary("建议咨询律师");
             }else{
                 resultContent.append("根据测评结果，您的情况比较乐观。"+"\n");
+                surveyResult.setSummary("建议寻找法援");
             }
         }
         resultContent.append("此外，您还可以通过在优法社区发帖寻求其他求助人的帮助。");
@@ -173,7 +184,8 @@ public class SurveyServiceImpl implements SurveyService {
         //前端不需要这么多的细节，只返回带有result的record即可
         TestRecord returnRecord = new TestRecord();
         returnRecord.setReportContent(record.getReportContent());
-        return returnRecord;
+        surveyResult.getAdvice().add("此外,您也可以通过优法社区寻求进一步的帮助");
+        return surveyResult;
     }
 
     /*

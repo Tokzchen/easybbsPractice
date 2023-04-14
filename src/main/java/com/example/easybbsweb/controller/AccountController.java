@@ -41,20 +41,24 @@ public class AccountController {
     }
     @PostMapping("/sendEmailCode")
     public Object verifyAndSendMail(HttpServletRequest req, HttpServletResponse res, @RequestBody Map map){
-        boolean checkCode = CheckCodeUtils.verifyCheckCodeByRedis(req, res, (String) map.get("checkCode"));
-        if(checkCode){
+
+
             log.info("验证码验证成功准备发送邮件....");
             //生成邮箱验证码并加密存入到req session当中
             String s = RandomUtil.randomNumbers(5);
             //将邮箱验证码缓存进redis
             RedisUtils.set(req.getRemoteAddr()+":emailCode",s);
             RedisUtils.expire(req.getRemoteAddr()+":emailCode",60*15);
-            req.setAttribute("mailCodeN",s);
-            req.setAttribute("email",map.get("email"));
             log.info("准备转发实现发送邮件....");
-            return new ModelAndView("forward:/send-mail/simple");
-        }
-            return new ResultInfo(false,"验证码错误",null);
+            MailRequest mailRequest = new MailRequest(
+                map.get("email").toString(),
+                "邮件验证码",
+                "您的验证码是: " + s + " \n验证码15分钟内有效！",
+                null);
+
+        sendMailService.sendSimpleMail(mailRequest);
+
+        return new ResultInfo(true,"发送成功！邮件可能有延迟，请耐心等待。",null);
     }
 
     @PostMapping("/send-mail/simple")

@@ -4,6 +4,7 @@ import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.TestRecord;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.SurveyPair;
+import com.example.easybbsweb.domain.others.SurveyResult;
 import com.example.easybbsweb.service.SurveyService;
 import com.example.easybbsweb.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class SurveyController {
         String currentUserId=TokenUtil.getCurrentUserId(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(Long.parseLong(currentUserId));
-        TestRecord result= surveyService.generateSurveyResult(userInfo);
+        SurveyResult result= surveyService.generateSurveyResult(userInfo);
         return new ResultInfo(true,"生成报告成功",result);
     }
 }
