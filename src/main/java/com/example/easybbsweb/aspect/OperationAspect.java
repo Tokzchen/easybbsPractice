@@ -99,6 +99,7 @@ public class OperationAspect {
                 checkValue(value,verifyParam);
             }else{
                 //如果传的是对象,则通过反射获取所有属性再进行校验
+                checkObjectValue(value,verifyParam);
             }
 
 
@@ -134,6 +135,10 @@ public class OperationAspect {
                 //设置允许通过反射访问私有变量
                 field.setAccessible(true);
                 VerifyParam ver = field.getAnnotation(VerifyParam.class);
+                //可能某些属性不需要校验
+                if(ver==null){
+                    continue;
+                }
                 //获取字段的值
                 Object filedValue = field.get(value);
                 checkValue(value,ver);

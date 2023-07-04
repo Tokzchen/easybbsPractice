@@ -17,7 +17,7 @@ public class SurveyController {
     SurveyService surveyService;
     @GetMapping("/start")
     public ResultInfo startSurvey(@RequestHeader("token")String token){
-        String currentUserId = TokenUtil.getCurrentUserId(token);
+        String currentUserId = TokenUtil.getCurrentUserOrUniId(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(Long.parseLong(currentUserId));
         SurveyPair surveyPair = surveyService.startSurvey(userInfo);
@@ -25,7 +25,7 @@ public class SurveyController {
     }
     @PostMapping("/continue")
     public ResultInfo continueSurvey(@RequestHeader("token") String token,@RequestBody UserInfo userInfo){
-        String currentUserId = TokenUtil.getCurrentUserId(token);
+        String currentUserId = TokenUtil.getCurrentUserOrUniId(token);
         userInfo.setUserId(Long.parseLong(currentUserId));
         SurveyPair surveyPair = surveyService.continueSurvey(userInfo);
         if(surveyPair!=null){
@@ -38,7 +38,7 @@ public class SurveyController {
 
     @GetMapping("/result")
     public ResultInfo getSurveyRecord(@RequestHeader("token") String token){
-        String currentUserId=TokenUtil.getCurrentUserId(token);
+        String currentUserId=TokenUtil.getCurrentUserOrUniId(token);
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(Long.parseLong(currentUserId));
         SurveyResult result= surveyService.generateSurveyResult(userInfo);

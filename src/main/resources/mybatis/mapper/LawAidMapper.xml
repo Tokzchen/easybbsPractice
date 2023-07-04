@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.easybbsweb.mapper.LawAidMapper">
+  <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.LawAid">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="uni_id" jdbcType="VARCHAR" property="uniId" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="file" jdbcType="VARCHAR" property="file" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.easybbsweb.domain.entity.LawAid">
+    <result column="details" jdbcType="LONGVARCHAR" property="details" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, uni_id, area, `file`, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    details
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.example.easybbsweb.domain.entity.LawAidExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from law_aid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.LawAidExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from law_aid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from law_aid
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from law_aid
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.easybbsweb.domain.entity.LawAidExample">
+    delete from law_aid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.LawAid">
+    insert into law_aid (id, user_id, uni_id, 
+      area, `file`, create_time, 
+      details)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{uniId,jdbcType=VARCHAR}, 
+      #{area,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{details,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.LawAid">
+    insert into law_aid
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="uniId != null">
+        uni_id,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="file != null">
+        `file`,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="details != null">
+        details,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="uniId != null">
+        #{uniId,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null">
+        #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="details != null">
+        #{details,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.easybbsweb.domain.entity.LawAidExample" resultType="java.lang.Long">
+    select count(*) from law_aid
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update law_aid
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uniId != null">
+        uni_id = #{record.uniId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.area != null">
+        area = #{record.area,jdbcType=VARCHAR},
+      </if>
+      <if test="record.file != null">
+        `file` = #{record.file,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.details != null">
+        details = #{record.details,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update law_aid
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      uni_id = #{record.uniId,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=VARCHAR},
+      `file` = #{record.file,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      details = #{record.details,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update law_aid
+    set id = #{record.id,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      uni_id = #{record.uniId,jdbcType=VARCHAR},
+      area = #{record.area,jdbcType=VARCHAR},
+      `file` = #{record.file,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.easybbsweb.domain.entity.LawAid">
+    update law_aid
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="uniId != null">
+        uni_id = #{uniId,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="file != null">
+        `file` = #{file,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="details != null">
+        details = #{details,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.easybbsweb.domain.entity.LawAid">
+    update law_aid
+    set user_id = #{userId,jdbcType=VARCHAR},
+      uni_id = #{uniId,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      `file` = #{file,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      details = #{details,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.LawAid">
+    update law_aid
+    set user_id = #{userId,jdbcType=VARCHAR},
+      uni_id = #{uniId,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      `file` = #{file,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
