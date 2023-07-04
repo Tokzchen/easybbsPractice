@@ -1,5 +1,9 @@
 spring:
-
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      connect-timeout: 10000
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
     username: root

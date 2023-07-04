@@ -52,7 +52,8 @@
 <!--        <table tableName="user_main"/>-->
 <!--        <table tableName="question"/>-->
 <!--        <table tableName="answer" />-->
-        <table tableName="test_record" />
+<!--        <table tableName="test_record" />-->
+        <table tableName="university" />
 
     </context>
 </generatorConfiguration>

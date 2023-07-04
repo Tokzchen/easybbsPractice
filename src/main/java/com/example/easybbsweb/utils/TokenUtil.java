@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,25 @@ public class TokenUtil {
             token = JWT.create()
                     .withIssuer("auth0")
                     .withClaim("email", staff.getEmail())
-                    .withClaim("userId",staff.getUserId().toString())
+                    .withClaim("userOrUniId",staff.getUserId().toString())
+//                    .withAudience(staff.getUsername())
+                    .withExpiresAt(expiresAt)
+                    // 使用了HMAC256加密算法。
+                    .sign(Algorithm.HMAC256(TOKEN_SECRET));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    public static String sign(University staff){
+        String token = null;
+        try {
+            Date expiresAt = new Date(System.currentTimeMillis() + EXPIRE_TIME);
+            token = JWT.create()
+                    .withIssuer("auth0")
+                    .withClaim("email", staff.getEmail())
+                    .withClaim("userOrUniId",staff.getUniId().toString())
 //                    .withAudience(staff.getUsername())
                     .withExpiresAt(expiresAt)
                     // 使用了HMAC256加密算法。
@@ -46,7 +65,7 @@ public class TokenUtil {
             DecodedJWT jwt = verifier.verify(token);
             System.err.println("认证通过：");
             System.err.println("email: " + jwt.getClaim("email").asString());
-            System.err.println("userId: " + jwt.getClaim("userId").asString());
+            System.err.println("userOrUniId: " + jwt.getClaim("userOrUniId").asString());
             System.err.println("过期时间：      " + jwt.getExpiresAt());
             return true;
         } catch (Exception e){
@@ -64,9 +83,9 @@ public class TokenUtil {
     public static String getCurrentEmail(String token){
         DecodedJWT jwt = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build().verify(token);
         return jwt.getClaim("email").asString();
-    }public static String getCurrentUserId(String token){
+    }public static String getCurrentUserOrUniId(String token){
         DecodedJWT jwt = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build().verify(token);
-        return jwt.getClaim("userId").asString();
+        return jwt.getClaim("userOrUniId").asString();
     }
 
 }

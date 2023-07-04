@@ -43,7 +43,7 @@ public class CheckCodeUtils {
     }
 
     public static String generateCheckCodeByRedis(HttpServletRequest req,HttpServletResponse res){
-        //该方法产生一个capture,并将加密后的验证码注入到session当中
+        //该方法产生一个capture,并将加密后的验证码注入到redis当中
         //定义图形验证码的长、宽、验证码字符数、干扰元素个数
 
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 50, 4, 20);

@@ -4,8 +4,9 @@ package com.example.easybbsweb.interceptor;
 import com.example.easybbsweb.utils.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-
+@Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
     //请求进入请求方法之前
@@ -17,6 +18,22 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token"); //前端vue将token添加在请求头中
 
         if(token==null){
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json; charset=utf-8");
+            try{
+//                    JSONObject json = new JSONObject();
+//                    json.put("msg","illegal token");
+//                    json.put("code","50000");
+                String json1="{\"msg\":\"illegal token\",\"code\":\"50000\"}";
+                //发送相应对象
+                response.getWriter().append(json1);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                //告知此时请求失败
+                response.sendError(500);
+                return false;
+            }
             return false;
         }
         else{

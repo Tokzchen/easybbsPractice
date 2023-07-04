@@ -55,8 +55,5 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
                 //这个路径下直接放行不需要拦截器token验证
                 .excludePathPatterns("/picture/**")
                 .excludePathPatterns("/public/**");//放行动态资源
-
-
-
     }
 }

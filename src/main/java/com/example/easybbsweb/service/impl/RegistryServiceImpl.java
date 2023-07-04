@@ -1,9 +1,13 @@
 package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.IdSelector;
+import com.example.easybbsweb.domain.entity.University;
+import com.example.easybbsweb.domain.entity.UniversityExample;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserInfoExample;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
+import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.RegistryService;
@@ -12,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.IdGenerator;
 
 import java.util.List;
 
@@ -22,6 +27,9 @@ public class RegistryServiceImpl implements RegistryService {
     private UserInfoMapper userInfoMapper;
     @Autowired
     private UserMainMapper userMainMapper;
+
+    @Autowired
+    private UniversityMapper universityMapper;
     public void checkUser(UserInfo userInfo) throws Exception{
         UserInfoExample example = new UserInfoExample();
         example.createCriteria().andEmailEqualTo(userInfo.getEmail());
@@ -49,6 +57,26 @@ public class RegistryServiceImpl implements RegistryService {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean registerUniversity(University university) {
+        UniversityExample universityExample = new UniversityExample();
+        universityExample.createCriteria().andEmailEqualTo(university.getEmail());
+        List<University> universities = universityMapper.selectByExample(universityExample);
+        if(universities.size()>0){
+            throw new BusinessException("该邮箱已被注册");
+        }
+        //修改完整信息，生成账号id
+        Long aLong = GenerateIdUtils.generateIdByEntity(IdSelector.USER);
+        university.setUniId(aLong.toString());
+        int i = universityMapper.insertSelective(university);
+        if(i>0){
+            return true;
+        }else{
+            return false;
+
         }
     }
 }

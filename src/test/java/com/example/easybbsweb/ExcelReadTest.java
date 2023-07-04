@@ -31,17 +31,17 @@ public class ExcelReadTest {
     @Autowired
     AnswerMapper answerMapper;
 
-    @Test
-    void loadExcelTest1() throws IOException {
-        File file = resourceLoader.getResource("classpath:excel/seg1_q_1.xls").getFile();
-        String filepath=file.getPath();
-        EasyExcel.read(filepath, Question.class, new QuestionListener(questionMapper)).sheet().doRead();
-    }
-
-    @Test
-    void loadExcelTest2() throws IOException {
-        File file=resourceLoader.getResource("classpath:excel/seg1_a_1.xls").getFile();
-        String filePath=file.getPath();
-        EasyExcel.read(filePath, Answer.class,new AnswerListener(answerMapper)).sheet().doRead();
-    }
+//    @Test
+//    void loadExcelTest1() throws IOException {
+//        File file = resourceLoader.getResource("classpath:excel/seg1_q_1.xls").getFile();
+//        String filepath=file.getPath();
+//        EasyExcel.read(filepath, Question.class, new QuestionListener(questionMapper)).sheet().doRead();
+//    }
+//
+//    @Test
+//    void loadExcelTest2() throws IOException {
+//        File file=resourceLoader.getResource("classpath:excel/seg1_a_1.xls").getFile();
+//        String filePath=file.getPath();
+//        EasyExcel.read(filePath, Answer.class,new AnswerListener(answerMapper)).sheet().doRead();
+//    }
 }

@@ -1,15 +1,20 @@
 package com.example.easybbsweb.controller;
 
 import cn.hutool.core.util.RandomUtil;
+import com.example.easybbsweb.anotation.GlobalInterceptor;
+import com.example.easybbsweb.anotation.VerifyParam;
 import com.example.easybbsweb.domain.MailRequest;
 import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.service.SendMailService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
 import com.example.easybbsweb.utils.RedisUtils;
+import com.example.easybbsweb.utils.ResultUtil;
 import com.example.easybbsweb.utils.TokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @RestController
@@ -132,4 +138,33 @@ public class AccountController {
         }
 
     }
+
+
+    @PostMapping("/uniRegistry")
+    public ResultUtil universityRegistry(@RequestBody  University university,HttpServletRequest req){
+        //先check一下验证码
+        if(university.getEmailCode()==null||university.getEmailCode().equals("")){
+            throw new BusinessException("邮箱验证码不得为空");
+        }
+
+        try {
+            boolean b = CheckCodeUtils.verifyEmailCodeByRedis(req, university.getEmailCode());
+            if(!b){
+                throw new BusinessException("验证码错误");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        boolean b = registryService.registerUniversity(university);
+        if(b){
+            //注册成功的下一步是上传资料，此时已经属于已登录的状态
+            //到这一步我们就算登录成功，因此需要注册token,将token返回给前端
+            String token = TokenUtil.sign(university);
+            return ResultUtil.build(0,"注册普通账号成功",token);
+        }else{
+            return ResultUtil.build(1,"似乎发生了一些问题");
+        }
+    }
+
+
 }
