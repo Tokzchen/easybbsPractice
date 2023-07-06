@@ -1,7 +1,7 @@
 package com.example.easybbsweb.controller;
 
 
-import com.example.easybbsweb.anotation.GlobalInterceptor;
+
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.exception.SystemException;
@@ -53,7 +53,6 @@ public class LawAidController {
     }
 
     @PostMapping("/verify")
-    @GlobalInterceptor(checkIsLogin = true)
     public ResultInfo universityVerify(MultipartFile file, @RequestHeader("token") String token,HttpServletRequest req){
         //处理文件上传逻辑
 
@@ -96,8 +95,8 @@ public class LawAidController {
         String url="";
         try {
             file.transferTo(new File(dir,newName));
-            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/universityVerify/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+ newName;
-            //文件存储成功后要在数据库中保存所存储的路径
+            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityVerify/"+TokenUtil.getCurrentUserOrUniId(token)+"/";
+            //文件存储成功后要在数据库中保存所存储的文件夹的路径
             University university = new University();
             university.setUniId(TokenUtil.getCurrentUserOrUniId(token));
             university.setFile(url);

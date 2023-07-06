@@ -141,7 +141,7 @@ public class AccountController {
 
 
     @PostMapping("/uniRegistry")
-    public ResultUtil universityRegistry(@RequestBody  University university,HttpServletRequest req){
+    public ResultInfo universityRegistry(@RequestBody  University university,HttpServletRequest req){
         //先check一下验证码
         if(university.getEmailCode()==null||university.getEmailCode().equals("")){
             throw new BusinessException("邮箱验证码不得为空");
@@ -160,9 +160,9 @@ public class AccountController {
             //注册成功的下一步是上传资料，此时已经属于已登录的状态
             //到这一步我们就算登录成功，因此需要注册token,将token返回给前端
             String token = TokenUtil.sign(university);
-            return ResultUtil.build(0,"注册普通账号成功",token);
+            return new ResultInfo(true,"注册成功",token);
         }else{
-            return ResultUtil.build(1,"似乎发生了一些问题");
+            return new ResultInfo(false,"注册失败",null);
         }
     }
 

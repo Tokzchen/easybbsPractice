@@ -11,13 +11,14 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     //请求进入请求方法之前
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,Object handler)throws Exception{
-        if(request.getMethod().equals("OPTIONS")){
+        if(request.getMethod().equals("OPTIONS")) {
             return true;
         }
         response.setCharacterEncoding("utf-8");
         String token = request.getHeader("token"); //前端vue将token添加在请求头中
 
         if(token==null){
+            log.info("token is NULL");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             try{
@@ -37,6 +38,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         else{
+            log.info("tokenIsNotNull...");
             boolean result = TokenUtil.verify(token);
             if(result){
                 return true;//放行

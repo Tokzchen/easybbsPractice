@@ -7,6 +7,7 @@ import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.utils.TokenUtil;
 import com.example.easybbsweb.utils.VerifyParamUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,6 +23,7 @@ import java.util.Arrays;
 
 @Aspect
 @Component
+@Slf4j
 public class OperationAspect {
 
     private static final String[] TYPE_ARR={"java.lang.String","java.lang.Integer","java.lang.Long"};
@@ -47,6 +49,7 @@ public class OperationAspect {
             Method method = target.getClass().getMethod(methodName, parameterTypes);
             GlobalInterceptor interceptor = method.getAnnotation(GlobalInterceptor.class);
             if(interceptor.checkIsLogin()){
+                log.info("检测到需要检测token");
                 //检测token
                 int tokenIndex=-1;
                 Parameter[] parameters = method.getParameters();
