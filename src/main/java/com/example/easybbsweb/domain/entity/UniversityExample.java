@@ -783,6 +783,146 @@ public class UniversityExample {
             addCriterion("`file` not between", value1, value2, "file");
             return (Criteria) this;
         }
+
+        public Criteria andAvatarIsNull() {
+            addCriterion("avatar is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarIsNotNull() {
+            addCriterion("avatar is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarEqualTo(String value) {
+            addCriterion("avatar =", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarNotEqualTo(String value) {
+            addCriterion("avatar <>", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarGreaterThan(String value) {
+            addCriterion("avatar >", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarGreaterThanOrEqualTo(String value) {
+            addCriterion("avatar >=", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarLessThan(String value) {
+            addCriterion("avatar <", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarLessThanOrEqualTo(String value) {
+            addCriterion("avatar <=", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarLike(String value) {
+            addCriterion("avatar like", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarNotLike(String value) {
+            addCriterion("avatar not like", value, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarIn(List<String> values) {
+            addCriterion("avatar in", values, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarNotIn(List<String> values) {
+            addCriterion("avatar not in", values, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarBetween(String value1, String value2) {
+            addCriterion("avatar between", value1, value2, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andAvatarNotBetween(String value1, String value2) {
+            addCriterion("avatar not between", value1, value2, "avatar");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeIsNull() {
+            addCriterion("email_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeIsNotNull() {
+            addCriterion("email_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeEqualTo(String value) {
+            addCriterion("email_code =", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeNotEqualTo(String value) {
+            addCriterion("email_code <>", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeGreaterThan(String value) {
+            addCriterion("email_code >", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("email_code >=", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeLessThan(String value) {
+            addCriterion("email_code <", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeLessThanOrEqualTo(String value) {
+            addCriterion("email_code <=", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeLike(String value) {
+            addCriterion("email_code like", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeNotLike(String value) {
+            addCriterion("email_code not like", value, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeIn(List<String> values) {
+            addCriterion("email_code in", values, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeNotIn(List<String> values) {
+            addCriterion("email_code not in", values, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeBetween(String value1, String value2) {
+            addCriterion("email_code between", value1, value2, "emailCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andEmailCodeNotBetween(String value1, String value2) {
+            addCriterion("email_code not between", value1, value2, "emailCode");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

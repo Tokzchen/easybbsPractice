@@ -2,6 +2,7 @@ package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserInfoExample;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
@@ -55,10 +56,10 @@ public class AccountServiceImpl implements AccountService {
         UserInfoExample exmple = new UserInfoExample();
         exmple.createCriteria().andEmailEqualTo(userInfo.getEmail());
         List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
-        UserInfo realUser =  userInfos.get(0);
-        if(realUser==null){
-            return false;
+        if(userInfos.size()==0){
+            throw new BusinessException("该用户尚未注册");
         }
+        UserInfo realUser =  userInfos.get(0);
         userInfo.setUserId(realUser.getUserId());
         return realUser.getPassword().equalsIgnoreCase(
                 DigestUtils.md5DigestAsHex( userInfo.getPassword().trim()

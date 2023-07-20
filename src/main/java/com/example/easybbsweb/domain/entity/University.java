@@ -1,11 +1,8 @@
 package com.example.easybbsweb.domain.entity;
 
-import com.example.easybbsweb.anotation.VerifyParam;
-import com.example.easybbsweb.utils.VerifyRegexEnum;
-
 public class University {
     private Integer id;
-    @VerifyParam(required = true)
+
     private String uniId;
 
     private String uniName;
@@ -15,7 +12,7 @@ public class University {
     private String province;
 
     private String city;
-    @VerifyParam(regex=VerifyRegexEnum.EMAIL)
+
     private String email;
 
     private String phone;
@@ -24,15 +21,9 @@ public class University {
 
     private String file;
 
+    private String avatar;
+
     private String emailCode;
-
-    public String getEmailCode() {
-        return emailCode;
-    }
-
-    public void setEmailCode(String emailCode) {
-        this.emailCode = emailCode;
-    }
 
     public Integer getId() {
         return id;
@@ -114,20 +105,41 @@ public class University {
         this.file = file;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getEmailCode() {
+        return emailCode;
+    }
+
+    public void setEmailCode(String emailCode) {
+        this.emailCode = emailCode;
+    }
+
     @Override
     public String toString() {
-        return "University{" +
-                "id=" + id +
-                ", uniId='" + uniId + '\'' +
-                ", uniName='" + uniName + '\'' +
-                ", pwd='" + pwd + '\'' +
-                ", province='" + province + '\'' +
-                ", city='" + city + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", verified=" + verified +
-                ", file='" + file + '\'' +
-                ", emailCode='" + emailCode + '\'' +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", uniId=").append(uniId);
+        sb.append(", uniName=").append(uniName);
+        sb.append(", pwd=").append(pwd);
+        sb.append(", province=").append(province);
+        sb.append(", city=").append(city);
+        sb.append(", email=").append(email);
+        sb.append(", phone=").append(phone);
+        sb.append(", verified=").append(verified);
+        sb.append(", file=").append(file);
+        sb.append(", avatar=").append(avatar);
+        sb.append(", emailCode=").append(emailCode);
+        sb.append("]");
+        return sb.toString();
     }
 }

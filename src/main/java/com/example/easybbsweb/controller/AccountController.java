@@ -140,31 +140,10 @@ public class AccountController {
     }
 
 
-    @PostMapping("/uniRegistry")
-    public ResultInfo universityRegistry(@RequestBody  University university,HttpServletRequest req){
-        //先check一下验证码
-        if(university.getEmailCode()==null||university.getEmailCode().equals("")){
-            throw new BusinessException("邮箱验证码不得为空");
-        }
 
-        try {
-            boolean b = CheckCodeUtils.verifyEmailCodeByRedis(req, university.getEmailCode());
-            if(!b){
-                throw new BusinessException("验证码错误");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        boolean b = registryService.registerUniversity(university);
-        if(b){
-            //注册成功的下一步是上传资料，此时已经属于已登录的状态
-            //到这一步我们就算登录成功，因此需要注册token,将token返回给前端
-            String token = TokenUtil.sign(university);
-            return new ResultInfo(true,"注册成功",token);
-        }else{
-            return new ResultInfo(false,"注册失败",null);
-        }
-    }
+
+
+
 
 
 }
