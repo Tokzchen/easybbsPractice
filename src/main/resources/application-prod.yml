@@ -5,7 +5,7 @@ spring:
       port: 6379
       connect-timeout: 10000
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    url: jdbc:mysql://47.120.8.89:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
     username: root
     password: cdz
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,3 +36,6 @@ mybatis:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #    map-underscore-to-camel-case: true
+springdoc:
+  swagger-ui:
+    path: /docs/swagger-ui.html

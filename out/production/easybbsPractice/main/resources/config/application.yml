@@ -1,0 +1,9 @@
+#这个配置文件主要是对返回数据的一些规范进行了规定
+articleConfig:
+  countPerPage: 5
+
+
+
+
+commentConfig:
+  countPerArticle: 25

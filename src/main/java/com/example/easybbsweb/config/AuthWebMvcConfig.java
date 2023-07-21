@@ -55,6 +55,8 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
 
                 //这个路径下直接放行不需要拦截器token验证
                 .excludePathPatterns("/picture/**")
-                .excludePathPatterns("/public/**");//放行动态资源
+                .excludePathPatterns("/public/**")
+                .excludePathPatterns("/forum/**") //todo 调试完毕加入拦截
+                .excludePathPatterns("/swagger-ui/**", "/swagger-resources/**","/webjars/**", "/v3/**", "/swagger-ui.html/**");; // swagger 放行
     }
 }

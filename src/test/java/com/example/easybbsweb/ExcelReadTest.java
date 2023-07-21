@@ -23,10 +23,10 @@ import java.io.IOException;
 @SpringBootTest
 @Slf4j
 public class ExcelReadTest {
-    @Autowired
-    ResourceLoader resourceLoader;
-    @Autowired
-    QuestionMapper questionMapper;
+//    @Autowired
+////    ResourceLoader resourceLoader;
+//    @Autowired
+//    QuestionMapper questionMapper;
 
     @Autowired
     AnswerMapper answerMapper;
