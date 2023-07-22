@@ -55,7 +55,7 @@
             <scope>compile</scope>
         </dependency>
 
-<!--        一些工具类，用来生成验证码，生成随机数等待...-->
+        <!--        一些工具类，用来生成验证码，生成随机数等待...-->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
@@ -84,7 +84,7 @@
             <version>1.2.6</version>
         </dependency>
 
-<!--        ip2Region&#45;&#45;根据ip地址定位城市-->
+        <!--        ip2Region&#45;&#45;根据ip地址定位城市-->
         <dependency>
             <groupId>org.lionsoul</groupId>
             <artifactId>ip2region</artifactId>
@@ -126,6 +126,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+<!--        接口文档  -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -143,7 +154,7 @@
                 </configuration>
             </plugin>
 
-<!--mybatis-generator-->
+            <!--mybatis-generator-->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>

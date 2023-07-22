@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: prod
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    username: 1797213901@qq.com
+    password: hipjxdrfyrtzejde
+    port: 587
