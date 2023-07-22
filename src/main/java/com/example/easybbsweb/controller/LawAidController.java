@@ -7,6 +7,7 @@ import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.utils.TokenUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class LawAidController {
     }
 
     @PostMapping("/verify")
+    @Operation(summary = "上传认证高校资格的文件",description = "返回认证资料的文件夹路径")
     public ResultInfo universityVerify(MultipartFile file, @RequestHeader("token") String token,HttpServletRequest req){
         //处理文件上传逻辑
 

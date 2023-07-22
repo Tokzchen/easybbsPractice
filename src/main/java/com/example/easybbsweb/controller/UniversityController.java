@@ -1,5 +1,7 @@
 package com.example.easybbsweb.controller;
 
+import com.example.easybbsweb.anotation.GlobalInterceptor;
+import com.example.easybbsweb.anotation.VerifyParam;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.exception.BusinessException;
@@ -8,11 +10,15 @@ import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.service.UniversityService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
 import com.example.easybbsweb.utils.TokenUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,6 +34,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/university")
 @Slf4j
+@Tag(name="高校账号相关接口")
 public class UniversityController {
 
     /** 头像文件大小的上限值(1MB) */
@@ -53,6 +60,7 @@ public class UniversityController {
     @Autowired
     UniversityService universityService;
     @PostMapping("/uniRegistry")
+    @Operation(summary = "高校注册",description="至少需要emailCode,pwd(密码),email,注册成功后返回ResultInfo.data(token)")
     public ResultInfo universityRegistry(@RequestBody University university, HttpServletRequest req){
         //先check一下验证码
         if(university.getEmailCode()==null||university.getEmailCode().equals("")){
@@ -77,7 +85,7 @@ public class UniversityController {
             return new ResultInfo(false,"注册失败",null);
         }
     }
-
+@Operation(summary = "高校上传头像",description = "返回头像url")
     @PostMapping("/avatarUpload")
     public ResultInfo universityVerify(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
         //处理文件上传逻辑
@@ -138,5 +146,20 @@ public class UniversityController {
         }
         return new ResultInfo(true,"上传成功",url);
 
+    }
+
+@Operation(summary = "获取高校头像url")
+    @PostMapping("/getAvatar")
+    @GlobalInterceptor(checkParameters = true)
+    public ResultInfo getUniversityAvatar( @RequestHeader("token") String token){
+        //根据token获取高校的id
+        String uniId = TokenUtil.getCurrentUserOrUniId(token);
+        if(!StringUtils.hasText(uniId)){
+            throw new BusinessException("用户不存在或token已失效");
+        }
+        University university1 = new University();
+        university1.setUniId(uniId);
+        String universityAvatarPath = universityService.getUniversityAvatarPath(university1);
+        return new ResultInfo(true,"响应成功",universityAvatarPath);
     }
 }

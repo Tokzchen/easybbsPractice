@@ -25,8 +25,6 @@ public class AccountServiceImpl implements AccountService {
     UserMainMapper userMainMapper;
     @Override
     public boolean resetPwd(UserInfo userInfo, HttpServletRequest req) {
-        String sessionCode = (String) req.getSession().getAttribute("emailCode");
-        String emailCode = userInfo.getEmailCode();
         boolean b = false;
         try {
             b = CheckCodeUtils.verifyEmailCodeByRedis(req, userInfo.getEmailCode());

@@ -5,7 +5,7 @@ spring:
       port: 6379
       connect-timeout: 10000
     mongodb:
-      uri: mongodb://localhost:27017/youfa
+      uri: mongodb://123.60.81.108:27017/youfa
       username: root
       password: root
   datasource:

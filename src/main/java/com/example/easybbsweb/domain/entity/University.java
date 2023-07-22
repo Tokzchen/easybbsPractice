@@ -1,8 +1,11 @@
 package com.example.easybbsweb.domain.entity;
 
+import com.example.easybbsweb.anotation.VerifyParam;
+import com.example.easybbsweb.utils.VerifyRegexEnum;
+
 public class University {
     private Integer id;
-
+    @VerifyParam(required = true)
     private String uniId;
 
     private String uniName;
@@ -12,7 +15,7 @@ public class University {
     private String province;
 
     private String city;
-
+    @VerifyParam(regex = VerifyRegexEnum.EMAIL)
     private String email;
 
     private String phone;

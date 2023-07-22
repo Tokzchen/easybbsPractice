@@ -7,6 +7,7 @@ import com.example.easybbsweb.domain.others.SurveyPair;
 import com.example.easybbsweb.domain.others.SurveyResult;
 import com.example.easybbsweb.service.SurveyService;
 import com.example.easybbsweb.utils.TokenUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ public class SurveyController {
     @Autowired
     SurveyService surveyService;
     @GetMapping("/start")
+    @Operation(summary = "开始测评的接口")
     public ResultInfo startSurvey(@RequestHeader("token")String token){
         String currentUserId = TokenUtil.getCurrentUserOrUniId(token);
         UserInfo userInfo = new UserInfo();
@@ -24,6 +26,7 @@ public class SurveyController {
         return new ResultInfo(true,"响应成功!",surveyPair);
     }
     @PostMapping("/continue")
+    @Operation(summary = "继续测评的接口",description ="至少需要提供userId,ansId" )
     public ResultInfo continueSurvey(@RequestHeader("token") String token,@RequestBody UserInfo userInfo){
         String currentUserId = TokenUtil.getCurrentUserOrUniId(token);
         userInfo.setUserId(Long.parseLong(currentUserId));
@@ -37,6 +40,7 @@ public class SurveyController {
     }
 
     @GetMapping("/result")
+    @Operation(summary = "生成测评内容的接口")
     public ResultInfo getSurveyRecord(@RequestHeader("token") String token){
         String currentUserId=TokenUtil.getCurrentUserOrUniId(token);
         UserInfo userInfo = new UserInfo();

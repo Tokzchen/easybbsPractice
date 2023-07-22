@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
+
 @Service
 public class UniversityServiceImpl implements UniversityService {
 
@@ -26,5 +28,13 @@ public class UniversityServiceImpl implements UniversityService {
         university1.setAvatar(university.getAvatar());
         int i = universityMapper.updateByExampleSelective(university1, universityExample);
         return i==1;
+    }
+
+    @Override
+    public String getUniversityAvatarPath(University university) {
+        UniversityExample universityExample = new UniversityExample();
+        universityExample.createCriteria().andUniIdEqualTo(university.getUniId());
+        List<University> universities = universityMapper.selectByExample(universityExample);
+        return universities.get(0).getAvatar();
     }
 }
