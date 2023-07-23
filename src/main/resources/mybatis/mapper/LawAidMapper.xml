@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.easybbsweb.mapper.LawAidMapper">
   <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.LawAid">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="uni_id" jdbcType="VARCHAR" property="uniId" />
+    <id column="law_aid_id" jdbcType="BIGINT" property="lawAidId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="uni_id" jdbcType="BIGINT" property="uniId" />
     <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -71,7 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, uni_id, area, `file`, create_time
+    law_aid_id, user_id, uni_id, area, `file`, create_time
   </sql>
   <sql id="Blob_Column_List">
     details
@@ -112,11 +112,11 @@
     ,
     <include refid="Blob_Column_List" />
     from law_aid
-    where id = #{id,jdbcType=BIGINT}
+    where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from law_aid
-    where id = #{id,jdbcType=BIGINT}
+    where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.example.easybbsweb.domain.entity.LawAidExample">
     delete from law_aid
@@ -125,18 +125,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.LawAid">
-    insert into law_aid (id, user_id, uni_id, 
+    insert into law_aid (law_aid_id, user_id, uni_id, 
       area, `file`, create_time, 
       details)
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{uniId,jdbcType=VARCHAR}, 
+    values (#{lawAidId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{uniId,jdbcType=BIGINT}, 
       #{area,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{details,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.LawAid">
     insert into law_aid
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="lawAidId != null">
+        law_aid_id,
       </if>
       <if test="userId != null">
         user_id,
@@ -158,14 +158,14 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
+      <if test="lawAidId != null">
+        #{lawAidId,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="uniId != null">
-        #{uniId,jdbcType=VARCHAR},
+        #{uniId,jdbcType=BIGINT},
       </if>
       <if test="area != null">
         #{area,jdbcType=VARCHAR},
@@ -190,14 +190,14 @@
   <update id="updateByExampleSelective" parameterType="map">
     update law_aid
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
+      <if test="record.lawAidId != null">
+        law_aid_id = #{record.lawAidId,jdbcType=BIGINT},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.uniId != null">
-        uni_id = #{record.uniId,jdbcType=VARCHAR},
+        uni_id = #{record.uniId,jdbcType=BIGINT},
       </if>
       <if test="record.area != null">
         area = #{record.area,jdbcType=VARCHAR},
@@ -218,9 +218,9 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update law_aid
-    set id = #{record.id,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=VARCHAR},
-      uni_id = #{record.uniId,jdbcType=VARCHAR},
+    set law_aid_id = #{record.lawAidId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      uni_id = #{record.uniId,jdbcType=BIGINT},
       area = #{record.area,jdbcType=VARCHAR},
       `file` = #{record.file,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -231,9 +231,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update law_aid
-    set id = #{record.id,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=VARCHAR},
-      uni_id = #{record.uniId,jdbcType=VARCHAR},
+    set law_aid_id = #{record.lawAidId,jdbcType=BIGINT},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      uni_id = #{record.uniId,jdbcType=BIGINT},
       area = #{record.area,jdbcType=VARCHAR},
       `file` = #{record.file,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
@@ -245,10 +245,10 @@
     update law_aid
     <set>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="uniId != null">
-        uni_id = #{uniId,jdbcType=VARCHAR},
+        uni_id = #{uniId,jdbcType=BIGINT},
       </if>
       <if test="area != null">
         area = #{area,jdbcType=VARCHAR},
@@ -263,25 +263,25 @@
         details = #{details,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=BIGINT}
+    where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.example.easybbsweb.domain.entity.LawAid">
     update law_aid
-    set user_id = #{userId,jdbcType=VARCHAR},
-      uni_id = #{uniId,jdbcType=VARCHAR},
+    set user_id = #{userId,jdbcType=BIGINT},
+      uni_id = #{uniId,jdbcType=BIGINT},
       area = #{area,jdbcType=VARCHAR},
       `file` = #{file,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       details = #{details,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=BIGINT}
+    where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.LawAid">
     update law_aid
-    set user_id = #{userId,jdbcType=VARCHAR},
-      uni_id = #{uniId,jdbcType=VARCHAR},
+    set user_id = #{userId,jdbcType=BIGINT},
+      uni_id = #{uniId,jdbcType=BIGINT},
       area = #{area,jdbcType=VARCHAR},
       `file` = #{file,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
+    where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
 </mapper>

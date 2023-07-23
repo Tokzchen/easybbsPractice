@@ -8,11 +8,13 @@ import com.example.easybbsweb.domain.others.SurveyResult;
 import com.example.easybbsweb.service.SurveyService;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/survey")
+@Tag(name="证据调查模块业务的接口")
 public class SurveyController {
     @Autowired
     SurveyService surveyService;

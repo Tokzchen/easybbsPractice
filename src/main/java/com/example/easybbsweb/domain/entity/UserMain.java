@@ -7,9 +7,9 @@ public class UserMain {
 
     private Long userId;
 
-    private Integer aidId;
+    private Long uniId;
 
-    private Integer lawyerId;
+    private Long lawyerId;
 
     private Date createTime;
 
@@ -18,6 +18,8 @@ public class UserMain {
     private String checkCode;
 
     private Date lastUpdateTime;
+
+    private String area;
 
     public Integer getId() {
         return id;
@@ -35,19 +37,19 @@ public class UserMain {
         this.userId = userId;
     }
 
-    public Integer getAidId() {
-        return aidId;
+    public Long getUniId() {
+        return uniId;
     }
 
-    public void setAidId(Integer aidId) {
-        this.aidId = aidId;
+    public void setUniId(Long uniId) {
+        this.uniId = uniId;
     }
 
-    public Integer getLawyerId() {
+    public Long getLawyerId() {
         return lawyerId;
     }
 
-    public void setLawyerId(Integer lawyerId) {
+    public void setLawyerId(Long lawyerId) {
         this.lawyerId = lawyerId;
     }
 
@@ -83,6 +85,14 @@ public class UserMain {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -91,12 +101,13 @@ public class UserMain {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
-        sb.append(", aidId=").append(aidId);
+        sb.append(", uniId=").append(uniId);
         sb.append(", lawyerId=").append(lawyerId);
         sb.append(", createTime=").append(createTime);
         sb.append(", emailCode=").append(emailCode);
         sb.append(", checkCode=").append(checkCode);
         sb.append(", lastUpdateTime=").append(lastUpdateTime);
+        sb.append(", area=").append(area);
         sb.append("]");
         return sb.toString();
     }

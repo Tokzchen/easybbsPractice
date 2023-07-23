@@ -126,7 +126,7 @@ public class UniversityController {
             url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityAvatar/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+newName;
             //文件存储成功后要在数据库中保存所存储的文件夹的路径
             University university = new University();
-            university.setUniId(TokenUtil.getCurrentUserOrUniId(token));
+            university.setUniId(Long.parseLong(TokenUtil.getCurrentUserOrUniId(token)));
             //此处的url与资料认证处的不同，具体到文件名，资料认证处是具体到文件夹
             university.setAvatar(url);
             boolean b = universityService.saveUniversityAvatarPath(university);
@@ -151,7 +151,7 @@ public class UniversityController {
             throw new BusinessException("用户不存在或token已失效");
         }
         University university1 = new University();
-        university1.setUniId(uniId);
+        university1.setUniId(Long.parseLong(uniId));
         String universityAvatarPath = universityService.getUniversityAvatarPath(university1);
         return new ResultInfo(true,"响应成功",universityAvatarPath);
     }

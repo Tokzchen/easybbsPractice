@@ -105,63 +105,63 @@ public class LawAidExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andIdIsNull() {
-            addCriterion("id is null");
+        public Criteria andLawAidIdIsNull() {
+            addCriterion("law_aid_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+        public Criteria andLawAidIdIsNotNull() {
+            addCriterion("law_aid_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Long value) {
-            addCriterion("id =", value, "id");
+        public Criteria andLawAidIdEqualTo(Long value) {
+            addCriterion("law_aid_id =", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Long value) {
-            addCriterion("id <>", value, "id");
+        public Criteria andLawAidIdNotEqualTo(Long value) {
+            addCriterion("law_aid_id <>", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Long value) {
-            addCriterion("id >", value, "id");
+        public Criteria andLawAidIdGreaterThan(Long value) {
+            addCriterion("law_aid_id >", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("id >=", value, "id");
+        public Criteria andLawAidIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("law_aid_id >=", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Long value) {
-            addCriterion("id <", value, "id");
+        public Criteria andLawAidIdLessThan(Long value) {
+            addCriterion("law_aid_id <", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Long value) {
-            addCriterion("id <=", value, "id");
+        public Criteria andLawAidIdLessThanOrEqualTo(Long value) {
+            addCriterion("law_aid_id <=", value, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Long> values) {
-            addCriterion("id in", values, "id");
+        public Criteria andLawAidIdIn(List<Long> values) {
+            addCriterion("law_aid_id in", values, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Long> values) {
-            addCriterion("id not in", values, "id");
+        public Criteria andLawAidIdNotIn(List<Long> values) {
+            addCriterion("law_aid_id not in", values, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Long value1, Long value2) {
-            addCriterion("id between", value1, value2, "id");
+        public Criteria andLawAidIdBetween(Long value1, Long value2) {
+            addCriterion("law_aid_id between", value1, value2, "lawAidId");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Long value1, Long value2) {
-            addCriterion("id not between", value1, value2, "id");
+        public Criteria andLawAidIdNotBetween(Long value1, Long value2) {
+            addCriterion("law_aid_id not between", value1, value2, "lawAidId");
             return (Criteria) this;
         }
 
@@ -175,62 +175,52 @@ public class LawAidExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(String value) {
+        public Criteria andUserIdEqualTo(Long value) {
             addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(String value) {
+        public Criteria andUserIdNotEqualTo(Long value) {
             addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(String value) {
+        public Criteria andUserIdGreaterThan(Long value) {
             addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
+        public Criteria andUserIdGreaterThanOrEqualTo(Long value) {
             addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(String value) {
+        public Criteria andUserIdLessThan(Long value) {
             addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(String value) {
+        public Criteria andUserIdLessThanOrEqualTo(Long value) {
             addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLike(String value) {
-            addCriterion("user_id like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdNotLike(String value) {
-            addCriterion("user_id not like", value, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserIdIn(List<String> values) {
+        public Criteria andUserIdIn(List<Long> values) {
             addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<String> values) {
+        public Criteria andUserIdNotIn(List<Long> values) {
             addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(String value1, String value2) {
+        public Criteria andUserIdBetween(Long value1, Long value2) {
             addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(String value1, String value2) {
+        public Criteria andUserIdNotBetween(Long value1, Long value2) {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
@@ -245,62 +235,52 @@ public class LawAidExample {
             return (Criteria) this;
         }
 
-        public Criteria andUniIdEqualTo(String value) {
+        public Criteria andUniIdEqualTo(Long value) {
             addCriterion("uni_id =", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdNotEqualTo(String value) {
+        public Criteria andUniIdNotEqualTo(Long value) {
             addCriterion("uni_id <>", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdGreaterThan(String value) {
+        public Criteria andUniIdGreaterThan(Long value) {
             addCriterion("uni_id >", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdGreaterThanOrEqualTo(String value) {
+        public Criteria andUniIdGreaterThanOrEqualTo(Long value) {
             addCriterion("uni_id >=", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdLessThan(String value) {
+        public Criteria andUniIdLessThan(Long value) {
             addCriterion("uni_id <", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdLessThanOrEqualTo(String value) {
+        public Criteria andUniIdLessThanOrEqualTo(Long value) {
             addCriterion("uni_id <=", value, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdLike(String value) {
-            addCriterion("uni_id like", value, "uniId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUniIdNotLike(String value) {
-            addCriterion("uni_id not like", value, "uniId");
-            return (Criteria) this;
-        }
-
-        public Criteria andUniIdIn(List<String> values) {
+        public Criteria andUniIdIn(List<Long> values) {
             addCriterion("uni_id in", values, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdNotIn(List<String> values) {
+        public Criteria andUniIdNotIn(List<Long> values) {
             addCriterion("uni_id not in", values, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdBetween(String value1, String value2) {
+        public Criteria andUniIdBetween(Long value1, Long value2) {
             addCriterion("uni_id between", value1, value2, "uniId");
             return (Criteria) this;
         }
 
-        public Criteria andUniIdNotBetween(String value1, String value2) {
+        public Criteria andUniIdNotBetween(Long value1, Long value2) {
             addCriterion("uni_id not between", value1, value2, "uniId");
             return (Criteria) this;
         }

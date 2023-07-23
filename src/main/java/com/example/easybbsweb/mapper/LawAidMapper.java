@@ -8,14 +8,14 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-@Mapper
 @Repository
+@Mapper
 public interface LawAidMapper {
     long countByExample(LawAidExample example);
 
     int deleteByExample(LawAidExample example);
 
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long lawAidId);
 
     int insert(LawAid record);
 
@@ -25,7 +25,7 @@ public interface LawAidMapper {
 
     List<LawAid> selectByExample(LawAidExample example);
 
-    LawAid selectByPrimaryKey(Long id);
+    LawAid selectByPrimaryKey(Long lawAidId);
 
     int updateByExampleSelective(@Param("record") LawAid record, @Param("example") LawAidExample example);
 

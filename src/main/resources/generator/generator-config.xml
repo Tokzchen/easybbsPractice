@@ -53,7 +53,9 @@
 <!--        <table tableName="question"/>-->
 <!--        <table tableName="answer" />-->
 <!--        <table tableName="test_record" />-->
-        <table tableName="university" />
+<!--        <table tableName="university" />-->
+        <table tableName="law_aid" />
+        <table tableName="aid_process" />
 
     </context>
 </generatorConfiguration>

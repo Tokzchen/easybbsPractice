@@ -5,9 +5,11 @@ import java.util.Date;
 public class AidProcess {
     private Long id;
 
-    private String userId;
+    private Long userId;
 
-    private String uniId;
+    private Long uniId;
+
+    private Long lawAidId;
 
     private String content;
 
@@ -23,20 +25,28 @@ public class AidProcess {
         this.id = id;
     }
 
-    public String getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public String getUniId() {
+    public Long getUniId() {
         return uniId;
     }
 
-    public void setUniId(String uniId) {
+    public void setUniId(Long uniId) {
         this.uniId = uniId;
+    }
+
+    public Long getLawAidId() {
+        return lawAidId;
+    }
+
+    public void setLawAidId(Long lawAidId) {
+        this.lawAidId = lawAidId;
     }
 
     public String getContent() {
@@ -72,6 +82,7 @@ public class AidProcess {
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
         sb.append(", uniId=").append(uniId);
+        sb.append(", lawAidId=").append(lawAidId);
         sb.append(", content=").append(content);
         sb.append(", createTime=").append(createTime);
         sb.append(", state=").append(state);

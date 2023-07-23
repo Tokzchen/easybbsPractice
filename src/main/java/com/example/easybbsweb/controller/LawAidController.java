@@ -4,18 +4,18 @@ package com.example.easybbsweb.controller;
 
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
+import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -26,6 +26,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/lawAid")
+@Tag(name="法律援助业务的接口")
 public class LawAidController {
 
     @Autowired
@@ -100,7 +101,7 @@ public class LawAidController {
             url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityVerify/"+TokenUtil.getCurrentUserOrUniId(token)+"/";
             //文件存储成功后要在数据库中保存所存储的文件夹的路径
             University university = new University();
-            university.setUniId(TokenUtil.getCurrentUserOrUniId(token));
+            university.setUniId(Long.parseLong(TokenUtil.getCurrentUserOrUniId(token)));
             university.setFile(url);
             boolean b = lawAidService.saveDocumentPath(university);
 
@@ -113,6 +114,24 @@ public class LawAidController {
             throw new RuntimeException(e);
         }
         return new ResultInfo(true,"上传成功",url);
+    }
+
+
+    @PostMapping("/recommend/user")
+    public List<UserInfo> recommendUser(@RequestHeader("token") String token){
+
+        return null;
+
+    }
+
+    @PostMapping("lawAidInfo/user")
+    @Operation(summary = "获取法律援助相关个人信息",description = "")
+    public ResultInfo getUserLawAidInfo(@RequestHeader("token") String token){
+        String currentUserOrUniId = TokenUtil.getCurrentUserOrUniId(token);
+        Long userId=Long.parseLong(currentUserOrUniId);
+
+        LawAidInfoPageUser userLawAidInfo = lawAidService.getUserLawAidInfo(userId);
+        return new ResultInfo(true,"响应成功",userLawAidInfo);
 
     }
 }

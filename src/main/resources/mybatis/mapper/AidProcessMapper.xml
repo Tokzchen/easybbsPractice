@@ -3,8 +3,9 @@
 <mapper namespace="com.example.easybbsweb.mapper.AidProcessMapper">
   <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.AidProcess">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="uni_id" jdbcType="VARCHAR" property="uniId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="uni_id" jdbcType="BIGINT" property="uniId" />
+    <result column="law_aid_id" jdbcType="BIGINT" property="lawAidId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="state" jdbcType="CHAR" property="state" />
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, uni_id, content, create_time, `state`
+    id, user_id, uni_id, law_aid_id, content, create_time, `state`
   </sql>
   <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.AidProcessExample" resultMap="BaseResultMap">
     select
@@ -102,11 +103,11 @@
   </delete>
   <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.AidProcess">
     insert into aid_process (id, user_id, uni_id, 
-      content, create_time, `state`
-      )
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=VARCHAR}, #{uniId,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{state,jdbcType=CHAR}
-      )
+      law_aid_id, content, create_time, 
+      `state`)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{uniId,jdbcType=BIGINT}, 
+      #{lawAidId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.AidProcess">
     insert into aid_process
@@ -119,6 +120,9 @@
       </if>
       <if test="uniId != null">
         uni_id,
+      </if>
+      <if test="lawAidId != null">
+        law_aid_id,
       </if>
       <if test="content != null">
         content,
@@ -135,10 +139,13 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+        #{userId,jdbcType=BIGINT},
       </if>
       <if test="uniId != null">
-        #{uniId,jdbcType=VARCHAR},
+        #{uniId,jdbcType=BIGINT},
+      </if>
+      <if test="lawAidId != null">
+        #{lawAidId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
@@ -164,10 +171,13 @@
         id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=VARCHAR},
+        user_id = #{record.userId,jdbcType=BIGINT},
       </if>
       <if test="record.uniId != null">
-        uni_id = #{record.uniId,jdbcType=VARCHAR},
+        uni_id = #{record.uniId,jdbcType=BIGINT},
+      </if>
+      <if test="record.lawAidId != null">
+        law_aid_id = #{record.lawAidId,jdbcType=BIGINT},
       </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
@@ -186,8 +196,9 @@
   <update id="updateByExample" parameterType="map">
     update aid_process
     set id = #{record.id,jdbcType=BIGINT},
-      user_id = #{record.userId,jdbcType=VARCHAR},
-      uni_id = #{record.uniId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=BIGINT},
+      uni_id = #{record.uniId,jdbcType=BIGINT},
+      law_aid_id = #{record.lawAidId,jdbcType=BIGINT},
       content = #{record.content,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       `state` = #{record.state,jdbcType=CHAR}
@@ -199,10 +210,13 @@
     update aid_process
     <set>
       <if test="userId != null">
-        user_id = #{userId,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=BIGINT},
       </if>
       <if test="uniId != null">
-        uni_id = #{uniId,jdbcType=VARCHAR},
+        uni_id = #{uniId,jdbcType=BIGINT},
+      </if>
+      <if test="lawAidId != null">
+        law_aid_id = #{lawAidId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
@@ -218,8 +232,9 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.AidProcess">
     update aid_process
-    set user_id = #{userId,jdbcType=VARCHAR},
-      uni_id = #{uniId,jdbcType=VARCHAR},
+    set user_id = #{userId,jdbcType=BIGINT},
+      uni_id = #{uniId,jdbcType=BIGINT},
+      law_aid_id = #{lawAidId,jdbcType=BIGINT},
       content = #{content,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       `state` = #{state,jdbcType=CHAR}
