@@ -151,14 +151,32 @@ public class AccountController {
             boolean b2 = universityService.UniversityLogin(university);
             if(b1||b2){
                 String token =b1? TokenUtil.sign(userInfo):TokenUtil.sign(university);
+                //使用Redis进行身份信息缓存
+                RedisUtils.set(token+":identity",b1?"user":"university",10*60*60);
                 return new ResultInfo(true,b1?"user":"university",token);
             }else{
                 return new ResultInfo(false,"用户名或密码错误",null);
             }
+        }
+    }
 
+        @PostMapping("/identity")
+        @Operation(summary = "获取用户身份信息",description = "结果在ResultInfo.data->user/university")
+        public ResultInfo getUserIdentity(@RequestHeader("token") String token ){
+            //正常情况下redis缓存中都会有
+            Object userIdentity = RedisUtils.get(token + ":identity");
+            if(userIdentity==null){
+                //缓存中没有，进行查表
+                Integer integer = accountService.checkUserIdentity(TokenUtil.getCurrentUserOrUniId(token));
+                if(integer==0){
+                    return new ResultInfo(true,"响应成功","user");
+                }else if(integer==1){
+                    return new ResultInfo(true,"响应成功","university");
+                }
+            }
+            return new ResultInfo(true,"响应成功",userIdentity);
         }
 
-    }
 
 
 

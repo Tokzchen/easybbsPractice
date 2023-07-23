@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.easybbsweb.mapper.UniversityMapper">
   <resultMap id="BaseResultMap" type="com.example.easybbsweb.domain.entity.University">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="uni_id" jdbcType="VARCHAR" property="uniId" />
+    <id column="uni_id" jdbcType="BIGINT" property="uniId" />
     <result column="uni_name" jdbcType="VARCHAR" property="uniName" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
     <result column="province" jdbcType="VARCHAR" property="province" />
@@ -74,8 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, uni_id, uni_name, pwd, province, city, email, phone, verified, `file`, avatar, 
-    email_code
+    uni_id, uni_name, pwd, province, city, email, phone, verified, `file`, avatar, email_code
   </sql>
   <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.UniversityExample" resultMap="BaseResultMap">
     select
@@ -91,15 +89,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from university
-    where id = #{id,jdbcType=INTEGER}
+    where uni_id = #{uniId,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from university
-    where id = #{id,jdbcType=INTEGER}
+    where uni_id = #{uniId,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.example.easybbsweb.domain.entity.UniversityExample">
     delete from university
@@ -108,23 +106,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.University">
-    insert into university (id, uni_id, uni_name, 
-      pwd, province, city, 
-      email, phone, verified, 
-      `file`, avatar, email_code
-      )
-    values (#{id,jdbcType=INTEGER}, #{uniId,jdbcType=VARCHAR}, #{uniName,jdbcType=VARCHAR}, 
-      #{pwd,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{verified,jdbcType=TINYINT}, 
-      #{file,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{emailCode,jdbcType=VARCHAR}
-      )
+    insert into university (uni_id, uni_name, pwd, 
+      province, city, email, 
+      phone, verified, `file`, 
+      avatar, email_code)
+    values (#{uniId,jdbcType=BIGINT}, #{uniName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{verified,jdbcType=TINYINT}, #{file,jdbcType=VARCHAR}, 
+      #{avatar,jdbcType=VARCHAR}, #{emailCode,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.University">
     insert into university
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="uniId != null">
         uni_id,
       </if>
@@ -160,11 +153,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="uniId != null">
-        #{uniId,jdbcType=VARCHAR},
+        #{uniId,jdbcType=BIGINT},
       </if>
       <if test="uniName != null">
         #{uniName,jdbcType=VARCHAR},
@@ -207,11 +197,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update university
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
-      </if>
       <if test="record.uniId != null">
-        uni_id = #{record.uniId,jdbcType=VARCHAR},
+        uni_id = #{record.uniId,jdbcType=BIGINT},
       </if>
       <if test="record.uniName != null">
         uni_name = #{record.uniName,jdbcType=VARCHAR},
@@ -250,8 +237,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update university
-    set id = #{record.id,jdbcType=INTEGER},
-      uni_id = #{record.uniId,jdbcType=VARCHAR},
+    set uni_id = #{record.uniId,jdbcType=BIGINT},
       uni_name = #{record.uniName,jdbcType=VARCHAR},
       pwd = #{record.pwd,jdbcType=VARCHAR},
       province = #{record.province,jdbcType=VARCHAR},
@@ -269,9 +255,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.example.easybbsweb.domain.entity.University">
     update university
     <set>
-      <if test="uniId != null">
-        uni_id = #{uniId,jdbcType=VARCHAR},
-      </if>
       <if test="uniName != null">
         uni_name = #{uniName,jdbcType=VARCHAR},
       </if>
@@ -303,12 +286,11 @@
         email_code = #{emailCode,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where uni_id = #{uniId,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.example.easybbsweb.domain.entity.University">
     update university
-    set uni_id = #{uniId,jdbcType=VARCHAR},
-      uni_name = #{uniName,jdbcType=VARCHAR},
+    set uni_name = #{uniName,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
@@ -318,6 +300,6 @@
       `file` = #{file,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       email_code = #{emailCode,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where uni_id = #{uniId,jdbcType=BIGINT}
   </update>
 </mapper>

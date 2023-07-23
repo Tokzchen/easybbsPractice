@@ -1,9 +1,11 @@
 package com.example.easybbsweb.service.impl;
 
+import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserInfoExample;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
+import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.AccountService;
@@ -25,6 +27,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     UserMainMapper userMainMapper;
+
+    @Autowired
+    UniversityMapper universityMapper;
     @Override
     public boolean resetPwd(UserInfo userInfo, HttpServletRequest req) {
         boolean b = false;
@@ -84,6 +89,17 @@ public class AccountServiceImpl implements AccountService {
         UserInfo userInfo = userInfoMapper.selectByExample(exmple).get(0);
 
         return userInfo;
+    }
+
+    @Override
+    public Integer checkUserIdentity(String userOrUniId) {
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(Long.parseLong(userOrUniId));
+        University university = universityMapper.selectByPrimaryKey(Long.parseLong(userOrUniId));
+        if(userInfo==null&&university==null){
+            return -1;
+        }else{
+          return  userInfo!=null?0:1;
+        }
     }
 
 

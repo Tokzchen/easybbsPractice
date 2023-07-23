@@ -1,12 +1,7 @@
 package com.example.easybbsweb.domain.entity;
 
-import com.example.easybbsweb.anotation.VerifyParam;
-import com.example.easybbsweb.utils.VerifyRegexEnum;
-
 public class University {
-    private Integer id;
-    @VerifyParam(required = true)
-    private String uniId;
+    private Long uniId;
 
     private String uniName;
 
@@ -15,7 +10,7 @@ public class University {
     private String province;
 
     private String city;
-    @VerifyParam(regex = VerifyRegexEnum.EMAIL)
+
     private String email;
 
     private String phone;
@@ -28,19 +23,11 @@ public class University {
 
     private String emailCode;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUniId() {
+    public Long getUniId() {
         return uniId;
     }
 
-    public void setUniId(String uniId) {
+    public void setUniId(Long uniId) {
         this.uniId = uniId;
     }
 
@@ -130,7 +117,6 @@ public class University {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", uniId=").append(uniId);
         sb.append(", uniName=").append(uniName);
         sb.append(", pwd=").append(pwd);

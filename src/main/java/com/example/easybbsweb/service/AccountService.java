@@ -14,4 +14,6 @@ public interface AccountService {
 
     UserInfo getUserInfoByUserId(Long userId);
 
+    Integer checkUserIdentity(String userOrUniId);
+
 }

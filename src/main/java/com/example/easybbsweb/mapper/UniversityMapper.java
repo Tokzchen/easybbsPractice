@@ -15,7 +15,7 @@ public interface UniversityMapper {
 
     int deleteByExample(UniversityExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long uniId);
 
     int insert(University record);
 
@@ -23,7 +23,7 @@ public interface UniversityMapper {
 
     List<University> selectByExample(UniversityExample example);
 
-    University selectByPrimaryKey(Integer id);
+    University selectByPrimaryKey(Long uniId);
 
     int updateByExampleSelective(@Param("record") University record, @Param("example") UniversityExample example);
 
