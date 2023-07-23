@@ -12,12 +12,11 @@ import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.service.SendMailService;
+import com.example.easybbsweb.service.UniversityService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
 import com.example.easybbsweb.utils.RedisUtils;
-import com.example.easybbsweb.utils.ResultUtil;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +25,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 @Slf4j
 @RestController
@@ -44,6 +42,9 @@ public class AccountController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    UniversityService universityService;
 
 
     @GetMapping("/checkCode")
@@ -135,16 +136,22 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "普通用户登录接口",description = "至少提供email,password")
+    @Operation(summary = "普通用户与高校的登录接口",description = "至少提供email,password")
     public ResultInfo userLogin(@RequestBody UserInfo userInfo,HttpServletRequest req,HttpServletResponse res){
         boolean b = CheckCodeUtils.verifyCheckCodeByRedis(req,res,userInfo.getCheckCode());
+        University university = new University();
+        university.setEmail(userInfo.getEmail());
+        university.setPwd(userInfo.getPassword());
         if(!b){
             throw new IncorrectInfoException("验证码错误!");
         }else {
+
             boolean b1 = accountService.userLogin(userInfo);
-            if(b1){
-                String token = TokenUtil.sign(userInfo);
-                return new ResultInfo(true,"登录成功",token);
+
+            boolean b2 = universityService.UniversityLogin(university);
+            if(b1||b2){
+                String token =b1? TokenUtil.sign(userInfo):TokenUtil.sign(university);
+                return new ResultInfo(true,b1?"user":"university",token);
             }else{
                 return new ResultInfo(false,"用户名或密码错误",null);
             }

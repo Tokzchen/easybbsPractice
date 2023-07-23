@@ -1,7 +1,5 @@
 package com.example.easybbsweb.controller;
 
-import com.example.easybbsweb.anotation.GlobalInterceptor;
-import com.example.easybbsweb.anotation.VerifyParam;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.exception.BusinessException;
@@ -14,15 +12,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -31,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/university")
 @Slf4j
 @Tag(name="高校账号相关接口")
@@ -85,7 +79,7 @@ public class UniversityController {
             return new ResultInfo(false,"注册失败",null);
         }
     }
-@Operation(summary = "高校上传头像",description = "返回头像url")
+    @Operation(summary = "高校上传头像",description = "返回头像url")
     @PostMapping("/avatarUpload")
     public ResultInfo universityVerify(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
         //处理文件上传逻辑
@@ -129,12 +123,12 @@ public class UniversityController {
         String url="";
         try {
             file.transferTo(new File(dir,newName));
-            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityVerify/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+newName;
+            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityAvatar/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+newName;
             //文件存储成功后要在数据库中保存所存储的文件夹的路径
             University university = new University();
             university.setUniId(TokenUtil.getCurrentUserOrUniId(token));
             //此处的url与资料认证处的不同，具体到文件名，资料认证处是具体到文件夹
-            university.setFile(url);
+            university.setAvatar(url);
             boolean b = universityService.saveUniversityAvatarPath(university);
             if(!b){
                 throw new SystemException("保存高校头像失败");
@@ -148,9 +142,8 @@ public class UniversityController {
 
     }
 
-@Operation(summary = "获取高校头像url")
+    @Operation(summary = "获取高校头像url")
     @PostMapping("/getAvatar")
-    @GlobalInterceptor(checkParameters = true)
     public ResultInfo getUniversityAvatar( @RequestHeader("token") String token){
         //根据token获取高校的id
         String uniId = TokenUtil.getCurrentUserOrUniId(token);

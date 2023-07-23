@@ -52,6 +52,7 @@ public class AuthWebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")//让拦截器进行token验证
                 .excludePathPatterns("/user/**")
                 .excludePathPatterns("/universityVerify/**")
+                .excludePathPatterns("/universityAvatar/**")
 
                 //这个路径下直接放行不需要拦截器token验证
                 .excludePathPatterns("/picture/**")

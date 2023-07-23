@@ -9,6 +9,7 @@ import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -17,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
     @Autowired
     UserInfoMapper userInfoMapper;
@@ -55,7 +57,8 @@ public class AccountServiceImpl implements AccountService {
         exmple.createCriteria().andEmailEqualTo(userInfo.getEmail());
         List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
         if(userInfos.size()==0){
-            throw new BusinessException("该用户尚未注册");
+            log.info("未注册用户{}",userInfo.getEmail());
+            return false;
         }
         UserInfo realUser =  userInfos.get(0);
         userInfo.setUserId(realUser.getUserId());
