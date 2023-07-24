@@ -9,6 +9,7 @@ import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
+import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.service.SendMailService;
@@ -24,10 +25,19 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.ApplicationHome;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import static com.example.easybbsweb.controller.UniversityController.AVATAR_MAX_SIZE;
 
 
 @Slf4j
@@ -45,6 +55,19 @@ public class AccountController {
 
     @Autowired
     UniversityService universityService;
+
+    public static final List<String> AVATAR_TYPES = new ArrayList<String>();
+
+    static {
+        AVATAR_TYPES.add("image/jpeg");
+        AVATAR_TYPES.add("image/jpg");
+        AVATAR_TYPES.add("image/png");
+        AVATAR_TYPES.add("image/bmp");
+        AVATAR_TYPES.add("image/gif");
+        AVATAR_TYPES.add("image/pjpeg");
+        AVATAR_TYPES.add("image/x-png");
+
+    }
 
 
     @GetMapping("/checkCode")
@@ -177,6 +200,97 @@ public class AccountController {
             return new ResultInfo(true,"响应成功",userIdentity);
         }
 
+
+    @Operation(summary = "用户上传上传头像",description = "返回头像url")
+    @PostMapping("/avatarUpload")
+    public ResultInfo userAvatarUpload(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
+        //处理文件上传逻辑
+
+        log.info("客户端尝试上传文件中，连接接口成功...");
+        if(file.isEmpty()){
+            return new ResultInfo(false,"文件不得为空",null);
+        }
+        if(file.getSize()>AVATAR_MAX_SIZE){
+            return new ResultInfo(false,"文件太大啦",null);
+        }
+        String contentType = file.getContentType();
+        // boolean contains(Object o)：当前列表若包含某元素，返回结果为true；若不包含该元素，返回结果为false
+        if (!AVATAR_TYPES.contains(contentType)) {
+            // 是：抛出异常
+            return new ResultInfo(false,"不支持使用该类型的文件作为头像，允许的文件类型：" + AVATAR_TYPES,null);
+        }
+
+        //获取jar包所在目录
+        ApplicationHome h = new ApplicationHome(getClass());
+        File jarF = h.getSource();
+        //在jar包所在目录下生成一个文件夹用来存储上传的图片,子目录就是大学id
+        String parent = jarF.getParentFile().toString()+"/classes/static/userAvatar/"+ TokenUtil.getCurrentUserOrUniId(token)+"/";
+        System.out.println(parent);
+
+        // 保存头像文件的文件夹
+        File dir = new File(parent);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String suffix = "";
+        String originalFilename = file.getOriginalFilename();
+        int beginIndex = originalFilename.lastIndexOf(".");
+        if (beginIndex > 0) {
+            suffix = originalFilename.substring(beginIndex);
+        }
+
+        String newName= UUID.randomUUID().toString()+suffix;
+        System.out.println(newName);
+        String url="";
+        try {
+            file.transferTo(new File(dir,newName));
+            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/userAvatar/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+newName;
+            //文件存储成功后要在数据库中保存所存储的文件夹的路径
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(Long.parseLong(TokenUtil.getCurrentUserOrUniId(token)));
+            //此处的url与资料认证处的不同，具体到文件名，资料认证处是具体到文件夹
+            userInfo.setAvatar(url);
+            boolean b = accountService.saveUserAvatarPath(userInfo);
+            if(!b){
+                throw new SystemException("保存用户头像失败");
+            }else{
+                log.info("保存{}的用户头像到url:{}",TokenUtil.getCurrentUserOrUniId(token),url);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResultInfo(true,"上传成功",url);
+
+    }
+
+    @Operation(summary = "获取用户头像头像url")
+    @PostMapping("/getAvatar")
+    public ResultInfo getUserAvatar( @RequestHeader("token") String token){
+        //根据token获取高校的id
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        if(!StringUtils.hasText(userId)){
+            throw new BusinessException("用户不存在或token已失效");
+        }
+
+        UserInfo userInfoByUserId = accountService.getUserInfoByUserId(Long.parseLong(userId));
+        return new ResultInfo(true,"响应成功",userInfoByUserId.getAvatar());
+    }
+
+
+    @Operation(summary = "获取用户全部信息")
+    @PostMapping("/infos")
+    public ResultInfo getUserInfo( @RequestHeader("token") String token){
+        //根据token获取高校的id
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        if(!StringUtils.hasText(userId)){
+            throw new BusinessException("用户不存在或token已失效");
+        }
+
+        UserInfo userInfoByUserId = accountService.getUserInfoByUserId(Long.parseLong(userId));
+        userInfoByUserId.setPassword(null);
+        return new ResultInfo(true,"响应成功",userInfoByUserId);
+    }
 
 
 

@@ -8,6 +8,7 @@
     <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="state" jdbcType="CHAR" property="state" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.example.easybbsweb.domain.entity.LawAid">
     <result column="details" jdbcType="LONGVARCHAR" property="details" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    law_aid_id, user_id, uni_id, area, `file`, create_time
+    law_aid_id, user_id, uni_id, area, `file`, create_time, `state`
   </sql>
   <sql id="Blob_Column_List">
     details
@@ -127,10 +128,10 @@
   <insert id="insert" parameterType="com.example.easybbsweb.domain.entity.LawAid">
     insert into law_aid (law_aid_id, user_id, uni_id, 
       area, `file`, create_time, 
-      details)
+      `state`, details)
     values (#{lawAidId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{uniId,jdbcType=BIGINT}, 
       #{area,jdbcType=VARCHAR}, #{file,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{details,jdbcType=LONGVARCHAR})
+      #{state,jdbcType=CHAR}, #{details,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.LawAid">
     insert into law_aid
@@ -152,6 +153,9 @@
       </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="state != null">
+        `state`,
       </if>
       <if test="details != null">
         details,
@@ -175,6 +179,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
       </if>
       <if test="details != null">
         #{details,jdbcType=LONGVARCHAR},
@@ -208,6 +215,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.state != null">
+        `state` = #{record.state,jdbcType=CHAR},
+      </if>
       <if test="record.details != null">
         details = #{record.details,jdbcType=LONGVARCHAR},
       </if>
@@ -224,6 +234,7 @@
       area = #{record.area,jdbcType=VARCHAR},
       `file` = #{record.file,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `state` = #{record.state,jdbcType=CHAR},
       details = #{record.details,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -236,7 +247,8 @@
       uni_id = #{record.uniId,jdbcType=BIGINT},
       area = #{record.area,jdbcType=VARCHAR},
       `file` = #{record.file,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      `state` = #{record.state,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -259,6 +271,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="state != null">
+        `state` = #{state,jdbcType=CHAR},
+      </if>
       <if test="details != null">
         details = #{details,jdbcType=LONGVARCHAR},
       </if>
@@ -272,6 +287,7 @@
       area = #{area,jdbcType=VARCHAR},
       `file` = #{file,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
+      `state` = #{state,jdbcType=CHAR},
       details = #{details,jdbcType=LONGVARCHAR}
     where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
@@ -281,7 +297,8 @@
       uni_id = #{uniId,jdbcType=BIGINT},
       area = #{area,jdbcType=VARCHAR},
       `file` = #{file,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      `state` = #{state,jdbcType=CHAR}
     where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
 </mapper>

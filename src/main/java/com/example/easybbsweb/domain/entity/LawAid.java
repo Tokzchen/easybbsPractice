@@ -15,6 +15,8 @@ public class LawAid {
 
     private Date createTime;
 
+    private String state;
+
     private String details;
 
     public Long getLawAidId() {
@@ -65,6 +67,14 @@ public class LawAid {
         this.createTime = createTime;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getDetails() {
         return details;
     }
@@ -85,6 +95,7 @@ public class LawAid {
         sb.append(", area=").append(area);
         sb.append(", file=").append(file);
         sb.append(", createTime=").append(createTime);
+        sb.append(", state=").append(state);
         sb.append(", details=").append(details);
         sb.append("]");
         return sb.toString();

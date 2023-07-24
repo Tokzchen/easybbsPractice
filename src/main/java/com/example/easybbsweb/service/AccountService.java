@@ -16,4 +16,6 @@ public interface AccountService {
 
     Integer checkUserIdentity(String userOrUniId);
 
+    boolean saveUserAvatarPath(UserInfo userInfo);
+
 }

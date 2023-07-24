@@ -5,6 +5,7 @@ import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserInfoExample;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
+import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -78,7 +80,6 @@ public class AccountServiceImpl implements AccountService {
         exmple.createCriteria().andEmailEqualTo(email);
         List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
         UserInfo userInfo =  userInfos.get(0);
-        userInfo.removeSensitiveInfo();
         return userInfo;
     }
 
@@ -100,6 +101,18 @@ public class AccountServiceImpl implements AccountService {
         }else{
           return  userInfo!=null?0:1;
         }
+    }
+
+    @Override
+    public boolean saveUserAvatarPath(UserInfo userInfo) {
+        if(!StringUtils.hasText(userInfo.getAvatar())){
+            throw new SystemException("路径为空");
+        }
+        if(userInfo.getUserId()==null){
+            throw new SystemException("修改用户不得为空");
+        }
+        int i = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+        return i==1;
     }
 
 

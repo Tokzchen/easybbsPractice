@@ -1,10 +1,7 @@
 package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.IdSelector;
-import com.example.easybbsweb.domain.entity.University;
-import com.example.easybbsweb.domain.entity.UniversityExample;
-import com.example.easybbsweb.domain.entity.UserInfo;
-import com.example.easybbsweb.domain.entity.UserInfoExample;
+import com.example.easybbsweb.domain.entity.*;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.mapper.UniversityMapper;
@@ -18,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.IdGenerator;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -48,7 +46,10 @@ public class RegistryServiceImpl implements RegistryService {
             //密码md5加密
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
             Integer integer = userInfoMapper.insertSelective(userInfo);
-            Integer integer1= userMainMapper.insertSelective(userInfo);
+            UserMain userMain = new UserMain();
+            userMain.setUserId(userInfo.getUserId());
+            userMain.setLastUpdateTime(new Date());
+            Integer integer1= userMainMapper.insertSelective(userMain);
             if(integer>0&&integer1>0){
                 log.info("注册成功,新用户id{}",userInfo.getUserId());
                 return true;
@@ -70,7 +71,7 @@ public class RegistryServiceImpl implements RegistryService {
         }
         //修改完整信息，生成账号id
         Long aLong = GenerateIdUtils.generateIdByEntity(IdSelector.USER);
-        university.setUniId(aLong.toString());
+        university.setUniId(aLong);
         int i = universityMapper.insertSelective(university);
         if(i>0){
             return true;

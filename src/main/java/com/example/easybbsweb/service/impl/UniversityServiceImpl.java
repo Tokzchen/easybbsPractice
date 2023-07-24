@@ -26,7 +26,7 @@ public class UniversityServiceImpl implements UniversityService {
         universityExample.createCriteria().andEmailEqualTo(university.getEmail());
         List<University> universities = universityMapper.selectByExample(universityExample);
         if(universities.size()==0){
-            throw new BusinessException("该用户尚未注册");
+            return false;
         }
         University realUser=universities.get(0);
         university.setUniId(realUser.getUniId());

@@ -2,7 +2,7 @@ package com.example.easybbsweb.domain.entity;
 
 import java.util.Date;
 
-public class UserInfo extends UserMain {
+public class UserInfo {
     private Long userId;
 
     private String username;
@@ -29,22 +29,13 @@ public class UserInfo extends UserMain {
 
     private Date lastUpdateTime;
 
-    public Integer getAnsId() {
-        return ansId;
-    }
+    private String emailCode;
 
-    public void setAnsId(Integer ansId) {
-        this.ansId = ansId;
-    }
+    private String checkCode;
 
-    //用于前端的选项返回
+    private String avatar;
+
     private Integer ansId;
-    public void removeSensitiveInfo(){
-        password="";
-        province="";
-        city="";
-        lastLoginIp="";
-    }
 
     public Long getUserId() {
         return userId;
@@ -150,6 +141,38 @@ public class UserInfo extends UserMain {
         this.lastUpdateTime = lastUpdateTime;
     }
 
+    public String getEmailCode() {
+        return emailCode;
+    }
+
+    public void setEmailCode(String emailCode) {
+        this.emailCode = emailCode;
+    }
+
+    public String getCheckCode() {
+        return checkCode;
+    }
+
+    public void setCheckCode(String checkCode) {
+        this.checkCode = checkCode;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Integer getAnsId() {
+        return ansId;
+    }
+
+    public void setAnsId(Integer ansId) {
+        this.ansId = ansId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -169,6 +192,10 @@ public class UserInfo extends UserMain {
         sb.append(", lastLoginIp=").append(lastLoginIp);
         sb.append(", issue=").append(issue);
         sb.append(", lastUpdateTime=").append(lastUpdateTime);
+        sb.append(", emailCode=").append(emailCode);
+        sb.append(", checkCode=").append(checkCode);
+        sb.append(", avatar=").append(avatar);
+        sb.append(", ansId=").append(ansId);
         sb.append("]");
         return sb.toString();
     }

@@ -15,6 +15,10 @@
     <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
     <result column="issue" jdbcType="VARCHAR" property="issue" />
     <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="email_code" jdbcType="VARCHAR" property="emailCode" />
+    <result column="check_code" jdbcType="VARCHAR" property="checkCode" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="ans_id" jdbcType="INTEGER" property="ansId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +80,7 @@
   </sql>
   <sql id="Base_Column_List">
     user_id, username, gender, birthday, email, `password`, phone, province, city, last_login_time, 
-    last_login_ip, issue, last_update_time
+    last_login_ip, issue, last_update_time, email_code, check_code, avatar, ans_id
   </sql>
   <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.UserInfoExample" resultMap="BaseResultMap">
     select
@@ -113,12 +117,14 @@
       birthday, email, `password`, 
       phone, province, city, 
       last_login_time, last_login_ip, issue, 
-      last_update_time)
+      last_update_time, email_code, check_code, 
+      avatar, ans_id)
     values (#{userId,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, 
       #{birthday,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, 
       #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastLoginIp,jdbcType=VARCHAR}, #{issue,jdbcType=VARCHAR}, 
-      #{lastUpdateTime,jdbcType=TIMESTAMP})
+      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{emailCode,jdbcType=VARCHAR}, #{checkCode,jdbcType=VARCHAR}, 
+      #{avatar,jdbcType=VARCHAR}, #{ansId,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.UserInfo">
     insert into user_info
@@ -162,6 +168,18 @@
       <if test="lastUpdateTime != null">
         last_update_time,
       </if>
+      <if test="emailCode != null">
+        email_code,
+      </if>
+      <if test="checkCode != null">
+        check_code,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="ansId != null">
+        ans_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="userId != null">
@@ -202,6 +220,18 @@
       </if>
       <if test="lastUpdateTime != null">
         #{lastUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="emailCode != null">
+        #{emailCode,jdbcType=VARCHAR},
+      </if>
+      <if test="checkCode != null">
+        #{checkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="ansId != null">
+        #{ansId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -253,6 +283,18 @@
       <if test="record.lastUpdateTime != null">
         last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.emailCode != null">
+        email_code = #{record.emailCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkCode != null">
+        check_code = #{record.checkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.avatar != null">
+        avatar = #{record.avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ansId != null">
+        ans_id = #{record.ansId,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -272,7 +314,11 @@
       last_login_time = #{record.lastLoginTime,jdbcType=TIMESTAMP},
       last_login_ip = #{record.lastLoginIp,jdbcType=VARCHAR},
       issue = #{record.issue,jdbcType=VARCHAR},
-      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP}
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      email_code = #{record.emailCode,jdbcType=VARCHAR},
+      check_code = #{record.checkCode,jdbcType=VARCHAR},
+      avatar = #{record.avatar,jdbcType=VARCHAR},
+      ans_id = #{record.ansId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -316,6 +362,18 @@
       <if test="lastUpdateTime != null">
         last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="emailCode != null">
+        email_code = #{emailCode,jdbcType=VARCHAR},
+      </if>
+      <if test="checkCode != null">
+        check_code = #{checkCode,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="ansId != null">
+        ans_id = #{ansId,jdbcType=INTEGER},
+      </if>
     </set>
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
@@ -332,7 +390,11 @@
       last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
       last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
       issue = #{issue,jdbcType=VARCHAR},
-      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP}
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      email_code = #{emailCode,jdbcType=VARCHAR},
+      check_code = #{checkCode,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      ans_id = #{ansId,jdbcType=INTEGER}
     where user_id = #{userId,jdbcType=BIGINT}
   </update>
 </mapper>

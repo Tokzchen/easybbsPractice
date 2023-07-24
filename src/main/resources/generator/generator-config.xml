@@ -48,14 +48,14 @@
         <!--<table tableName="content"/>-->
         <!--<table tableName="user"/>-->
         <!--需要生成的数据库表名-->
-<!--        <table tableName="user_info"/>-->
+        <table tableName="user_info"/>
 <!--        <table tableName="user_main"/>-->
 <!--        <table tableName="question"/>-->
 <!--        <table tableName="answer" />-->
 <!--        <table tableName="test_record" />-->
 <!--        <table tableName="university" />-->
-        <table tableName="law_aid" />
-        <table tableName="aid_process" />
+<!--        <table tableName="law_aid" />-->
+<!--        <table tableName="aid_process" />-->
 
     </context>
 </generatorConfiguration>
