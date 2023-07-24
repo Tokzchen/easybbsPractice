@@ -289,6 +289,7 @@ public class AccountController {
 
         UserInfo userInfoByUserId = accountService.getUserInfoByUserId(Long.parseLong(userId));
         userInfoByUserId.setPassword(null);
+        userInfoByUserId.setEmailCode(null);
         return new ResultInfo(true,"响应成功",userInfoByUserId);
     }
 

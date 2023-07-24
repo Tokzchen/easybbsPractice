@@ -56,11 +56,11 @@ public class LawAidServiceImpl implements LawAidService {
     public LawAidInfoPageUser getUserLawAidInfo(Long userId) {
         //获取1.求助领域，2.关联大学 3.总共求助次数 4.当前求助内容的进度
         LawAidInfoPageUser lawAidInfoPageUser = new LawAidInfoPageUser();
-        //1.获取求助领域，如还没选择则显示 未选择
+        //1.获取求助领域，如还没选择则显示 尚未选择
         UserMainExample userMainExample = new UserMainExample();
         userMainExample.createCriteria().andUserIdEqualTo(userId);
         List<UserMain> userMains = userMainMapper.selectByExample(userMainExample);
-        lawAidInfoPageUser.setCurrentArea(StringUtils.hasText(userMains.get(0).getArea())?userMains.get(0).getArea():"未选择");
+        lawAidInfoPageUser.setCurrentArea(StringUtils.hasText(userMains.get(0).getArea())?userMains.get(0).getArea():"尚未选择");
         //2.获取关联的大学
         if(userMains.get(0).getUniId()!=null){
             University university = universityMapper.selectByPrimaryKey(userMains.get(0).getUniId());
