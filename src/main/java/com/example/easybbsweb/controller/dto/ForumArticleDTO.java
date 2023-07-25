@@ -1,5 +1,6 @@
 package com.example.easybbsweb.controller.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ForumArticleDTO {
+    private String id;
     @NotNull
-    String content;
+    private String title;
     @NotNull
-    String author;
-    Integer visited;
+    private String content;
+    private String token;
+    private Integer visited;
 }

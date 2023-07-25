@@ -99,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
         if(userInfo==null&&university==null){
             return -1;
         }else{
-          return  userInfo!=null?0:1;
+            return  userInfo!=null?0:1;
         }
     }
 

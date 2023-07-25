@@ -1,7 +1,5 @@
 package com.example.easybbsweb;
 
-import com.example.easybbsweb.repository.ForumArticle;
-
 import java.util.Date;
 
 public class Test {

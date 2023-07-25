@@ -83,7 +83,10 @@
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.2.6</version>
         </dependency>
-
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+            </dependency>
         <!--        ip2Region&#45;&#45;根据ip地址定位城市-->
         <dependency>
             <groupId>org.lionsoul</groupId>
@@ -136,7 +139,12 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.1.0</version>
         </dependency>
-
+<!--        对象存储服务-->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.13.0, 7.13.99]</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,4 +1,4 @@
-package com.example.easybbsweb.repository;
+package com.example.easybbsweb.repository.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,8 @@ import java.util.Date;
 public class ForumArticle {
     @Id
     private String id;
-    private String author;
+    private String email;
+    private String title;
     private String content;
     private Date createTime;
     private Integer visited; // 访问量

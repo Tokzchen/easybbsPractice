@@ -7,3 +7,7 @@ spring:
     username: 1797213901@qq.com
     password: hipjxdrfyrtzejde
     port: 587
+qiniu:
+   accessKey: 1xyIa5WiiaGovp-i7-KpMOW11ZkPRrxEw0Ruhyyd
+   secretKey: te9hRcZCcxGkKWHvXu9g4PXumtgOM8mHhnJala7A
+   bucket: youfa-chen

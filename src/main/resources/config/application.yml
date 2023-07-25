@@ -3,7 +3,5 @@ articleConfig:
   countPerPage: 5
 
 
-
-
 commentConfig:
   countPerArticle: 25
