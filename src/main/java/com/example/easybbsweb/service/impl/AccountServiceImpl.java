@@ -87,9 +87,12 @@ public class AccountServiceImpl implements AccountService {
     public UserInfo getUserInfoByUserId(Long userId) {
         UserInfoExample exmple = new UserInfoExample();
         exmple.createCriteria().andUserIdEqualTo(userId);
-        UserInfo userInfo = userInfoMapper.selectByExample(exmple).get(0);
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
+        if(userInfos.size()==0){
+            throw new BusinessException("用户尚未注册");
+        }
 
-        return userInfo;
+        return userInfos.get(0);
     }
 
     @Override
@@ -113,6 +116,13 @@ public class AccountServiceImpl implements AccountService {
         }
         int i = userInfoMapper.updateByPrimaryKeySelective(userInfo);
         return i==1;
+    }
+
+    @Override
+    public List<UserInfo> getAllUser() {
+        //空条件，把所有userInfo查出来
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(null);
+        return userInfos;
     }
 
 

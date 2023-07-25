@@ -1,18 +1,26 @@
 package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.controller.ForumUserController;
+import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.repository.ForumUserRepository;
 import com.example.easybbsweb.repository.entity.ForumUser;
+import com.example.easybbsweb.service.AccountService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ForumUserService {
     @Resource
     ForumUserRepository forumUserRepository;
+
+    @Resource
+    AccountService accountService;
 
     public ForumUser getForumUserByEmail(String email) {
         return forumUserRepository.getForumUserByEmail(email);
@@ -84,10 +92,30 @@ public class ForumUserService {
 
     public List<String> getFollowing(String email) {
         ForumUser forumUser = getForumUserByEmail(email);
+        if(forumUser==null){
+            //未注册用户访问(按理说不会,因为都要获取关注者了，必须是已经注册的),因此只能是未同步mysql和mongo
+            modifyMongoToMysql();
+            forumUser=getForumUserByEmail(email);
+        }
         return forumUser.getFollowing();
     }
     public List<String> getFollowers(String email) {
         ForumUser forumUser = getForumUserByEmail(email);
+        if(forumUser==null){
+            //未注册用户访问(按理说不会，因为都要获取关注者了，必须是已经注册的),因此只能是未同步mysql和mongo
+            modifyMongoToMysql();
+            forumUser=getForumUserByEmail(email);
+        }
         return forumUser.getFollowers();
+    }
+
+    protected void modifyMongoToMysql(){
+        List<UserInfo> allUser = accountService.getAllUser();
+        if(allUser==null||allUser.size()==0){
+            return;
+        }
+        for(UserInfo userInfo:allUser){
+            saveForumUser(userInfo.getEmail());
+        }
     }
 }

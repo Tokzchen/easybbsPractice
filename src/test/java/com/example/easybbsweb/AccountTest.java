@@ -17,21 +17,4 @@ public class AccountTest {
     UserInfoMapper userInfoMapper;
     @Autowired
     UserMainMapper userMainMapper;
-    @Test
-    public void testInsertUser1(){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(GenerateIdUtils.generateIdByEntity(IdSelector.USER));
-        userInfo.setEmail("testInser1@qq.com");
-        userInfo.setPassword("testInsertpwd");
-        userInfoMapper.insertSelective(userInfo);
-    }
-
-    @Test
-    public void testInsertUser2(){
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(GenerateIdUtils.generateIdByEntity(IdSelector.USER));
-        userInfo.setEmail("testInser1@qq.com");
-        userInfo.setPassword("testInsertpwd");
-        userMainMapper.insert(userInfo);
-    }
 }

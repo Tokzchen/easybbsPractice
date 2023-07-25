@@ -8,6 +8,7 @@ import com.example.easybbsweb.mapper.LawAidMapper;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.LawAidService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -18,12 +19,12 @@ import java.util.List;
 @Service
 public class LawAidServiceImpl implements LawAidService {
 
-    @Autowired
+    @Resource
     UniversityMapper universityMapper;
-    @Autowired
+    @Resource
     UserMainMapper userMainMapper;
 
-    @Autowired
+    @Resource
     LawAidMapper lawAidMapper;
 
     @Autowired
@@ -60,9 +61,9 @@ public class LawAidServiceImpl implements LawAidService {
         UserMainExample userMainExample = new UserMainExample();
         userMainExample.createCriteria().andUserIdEqualTo(userId);
         List<UserMain> userMains = userMainMapper.selectByExample(userMainExample);
-        lawAidInfoPageUser.setCurrentArea(StringUtils.hasText(userMains.get(0).getArea())?userMains.get(0).getArea():"尚未选择");
+        lawAidInfoPageUser.setCurrentArea(userMains.size()!=0?userMains.get(0).getArea():"尚未选择");
         //2.获取关联的大学
-        if(userMains.get(0).getUniId()!=null){
+        if(userMains.size()>0&&userMains.get(0).getUniId()!=null){
             University university = universityMapper.selectByPrimaryKey(userMains.get(0).getUniId());
             lawAidInfoPageUser.setUniversity(university);
         }else{
