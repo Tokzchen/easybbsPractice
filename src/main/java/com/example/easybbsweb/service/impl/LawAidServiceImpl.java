@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -61,7 +62,13 @@ public class LawAidServiceImpl implements LawAidService {
         UserMainExample userMainExample = new UserMainExample();
         userMainExample.createCriteria().andUserIdEqualTo(userId);
         List<UserMain> userMains = userMainMapper.selectByExample(userMainExample);
-        lawAidInfoPageUser.setCurrentArea(userMains.size()!=0?userMains.get(0).getArea():"尚未选择");
+        if(userMains.size()==0){
+            UserMain userMain = new UserMain();
+            userMain.setUserId(userId);
+            userMain.setCreateTime(new Date());
+            userMainMapper.insertSelective(userMain);
+        }
+        lawAidInfoPageUser.setCurrentArea(userMains.size()!=0?userMains.get(0).getArea():null);
         //2.获取关联的大学
         if(userMains.size()>0&&userMains.get(0).getUniId()!=null){
             University university = universityMapper.selectByPrimaryKey(userMains.get(0).getUniId());

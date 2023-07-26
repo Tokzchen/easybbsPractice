@@ -18,4 +18,8 @@ public class ResultInfo {
     public static ResultInfo OK() {
         return new ResultInfo(true, "success", null);
     }
+
+    public static ResultInfo Fail(){return new ResultInfo(false,"failed",null);}
+
+    public static ResultInfo Fail(Object json){return new ResultInfo(false,"failed",json);}
 }

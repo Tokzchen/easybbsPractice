@@ -18,7 +18,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class SurveyServiceImpl implements SurveyService {
-    private String surveyStack=":surveyStack";
+    private final String surveyStack=":surveyStack";
     private String surveyCnt=":surveyCnt";
 
     private String surveyRecord=":surveyRecord";
@@ -186,6 +186,14 @@ public class SurveyServiceImpl implements SurveyService {
         returnRecord.setReportContent(record.getReportContent());
         surveyResult.getAdvice().add("此外,您也可以通过优法社区寻求进一步的帮助");
         return surveyResult;
+    }
+
+    @Override
+    public List<Answer> getSurveyArea() {
+        AnswerExample answerExample = new AnswerExample();
+        answerExample.createCriteria().andQueIdEqualTo(0);
+        List<Answer> answers = answerMapper.selectByExample(answerExample);
+        return answers;
     }
 
     /*
