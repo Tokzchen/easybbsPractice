@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -44,9 +45,10 @@ import static com.example.easybbsweb.controller.UniversityController.AVATAR_MAX_
 @RequestMapping(value = "/user")
 @Tag(name = "普通用户账号相关接口")
 public class AccountController {
-    @Autowired
+
+    @Resource
     SendMailService sendMailService;
-    @Autowired
+    @Resource
     RegistryService registryService;
 
     @Autowired
@@ -299,6 +301,16 @@ public class AccountController {
         String userId = TokenUtil.getCurrentUserOrUniId(token);
         userMain.setUserId(Long.parseLong(userId));
         boolean b = accountService.changeUserMainSelectiveByUserId(userMain);
+        return b?ResultInfo.OK():ResultInfo.Fail();
+    }
+
+    @Operation(summary = "修改账号(userinfo)相关的个人信息",description = "修改邮箱密码等不可使用该接口")
+    @PostMapping("/change/infos/acc")
+    public ResultInfo changeUserInfos(@RequestHeader("token")String token,@RequestBody UserInfo userInfo){
+        //修改账号相关的信息
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        userInfo.setUserId(Long.parseLong(userId));
+        boolean b = accountService.changeUserInfoSelectiveByUserId(userInfo);
         return b?ResultInfo.OK():ResultInfo.Fail();
     }
 
