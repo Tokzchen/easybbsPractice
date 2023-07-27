@@ -11,6 +11,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.xwpf.usermodel.TOC;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.data.mongodb.core.MongoAdmin;
+import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,10 +61,18 @@ public class ForumUserController {
         Object json = JSON.toJSON(followers);
         return ResultInfo.OK(json);
     }
-
+    @Operation(summary = "帖子数")
+    @GetMapping("/get/article/count")
+    public ResultInfo getArticlesCount(HttpServletRequest request) {
+        Integer count = forumUserService.getArticlesCount(TokenUtil.getCurrentUserEmailByRequest(request));
+        return ResultInfo.OK(count);
+    }
+    @Resource
+    MongoProperties mongoProperties;
     @Operation(summary = "测试接口：添加用户")
     @PostMapping("/add")
     public ResultInfo addForumUser(@Parameter(description = "用户Email") @RequestParam("email") String email) {
+        System.out.println(mongoProperties.getUsername());
         forumUserService.saveForumUser(email);
         return ResultInfo.OK();
     }

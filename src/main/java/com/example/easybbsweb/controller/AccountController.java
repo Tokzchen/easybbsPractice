@@ -1,8 +1,6 @@
 package com.example.easybbsweb.controller;
 
 import cn.hutool.core.util.RandomUtil;
-import com.example.easybbsweb.anotation.GlobalInterceptor;
-import com.example.easybbsweb.anotation.VerifyParam;
 import com.example.easybbsweb.domain.MailRequest;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;

@@ -1,19 +1,45 @@
 package com.example.easybbsweb;
 
-import com.example.easybbsweb.service.impl.ForumArticleService;
-import com.example.easybbsweb.utils.TokenUtil;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.example.easybbsweb.repository.ForumArticleRepository;
+import com.example.easybbsweb.repository.es.ForumArticleElasticSearchDAO;
+import com.example.easybbsweb.repository.entity.ForumArticle;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 public class ForumTest {
     @Resource
-    ForumArticleService forumArticleService;
-    @Test
-    void func1(){
-//        /
-        TokenUtil.verify("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyT3JVbmlJZCI6IjEwMTY4OTc2NzI5NTY5MjAwMSIsImlzcyI6ImF1dGgwIiwiZXhwIjoxNjkwMDQ4Mzk3LCJlbWFpbCI6IjIxNTU1MDcxNTFAcXEuY29tIn0.rvP4Y-zf6VzNnOuWrVL3WW1S0XYyTS10z23CtjWUjik");
+    ElasticsearchTemplate elasticsearchTemplate;
+    @Resource
+    ForumArticleElasticSearchDAO bookRepository;
+    @Resource
+    MongoTemplate mongoTemplate;
+    @Resource
+    ForumArticleRepository forumArticleRepository;
 
+    @Test
+    void func1() throws IOException {
+        ForumArticle forumArticle = new ForumArticle("1","@","ouo","您吃了嘛",new Date().getTime(),0,1);
+//        bookRepository.saveForumArticle(forumArticle);
+//        List<ForumArticle> a = bookRepository.search("Fresh");
+        System.out.println(mongoTemplate.getCollection("ForumArticle").countDocuments());
+//        System.out.println(a);
+    }
+
+    @Test
+    void func2() throws IOException {
+        SearchResponse<ForumArticle> pages = bookRepository.getPages("fresh", 5, null, null, 1);
+//        System.out.println(pages.hits().);
+        pages.hits().hits().forEach(g->{
+            System.out.println(g);
+        });
     }
 }

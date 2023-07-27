@@ -1,7 +1,7 @@
 package com.example.easybbsweb.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.example.easybbsweb.controller.dto.ForumArticleDTO;
+import com.example.easybbsweb.controller.request.ForumArticleReq;
+import com.example.easybbsweb.controller.response.ForumArticleResp;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.repository.entity.ForumArticle;
 import com.example.easybbsweb.service.impl.ForumArticleService;
@@ -44,7 +44,7 @@ public class ForumController {
     @PostMapping("/save")
     public ResultInfo SaveArticle(
             @Parameter(description = "文章标题和内容", example = "{'title':' xxx','content':'xxx'")
-            @RequestBody @Valid ForumArticleDTO dto, HttpServletRequest request) {
+            @RequestBody @Valid ForumArticleReq dto, HttpServletRequest request) {
         String token = request.getHeader("token");
         String email = TokenUtil.getCurrentEmail(token);
         forumArticleService.saveArticle(dto, email);
@@ -63,27 +63,24 @@ public class ForumController {
     @Operation(summary = "更新文章")
     @PostMapping("/update")
     public ResultInfo UpdateArticleById(
-            @Parameter(description = "代替原来文章新的文章对象") @Valid ForumArticleDTO dto, HttpServletRequest request) {
+            @Parameter(description = "代替原来文章新的文章对象") @Valid ForumArticleReq dto, HttpServletRequest request) {
         String token = request.getHeader("token");
         String email = TokenUtil.getCurrentEmail(token);
         forumArticleService.saveArticle(dto, email);
         return new ResultInfo(true, "ok", null);
     }
 
-    @Operation(summary = "获取一批老文章")
+    @Operation(summary = "获取一批XX文章")
     @GetMapping("/get/pages")
-    public ResultInfo getArticles(@RequestParam("page") @Parameter(description = "页数") Integer page) {
-        List<ForumArticle> pages = forumArticleService.getPage(page);
-        Object data = JSON.toJSON(pages);
-        return new ResultInfo(true, "ok", data);
+    public ResultInfo getArticles(
+            @RequestParam(value = "key",required = false) @Parameter(description = "关键字查询,没有就是全查") String key,
+            @RequestParam(value = "flag",required = false) @Parameter(description = "按照什么字段排序") Integer flag,
+            @RequestParam(value = "id",required = false) @Parameter(description = "最后一条数据的id") String id,
+            @RequestParam(value = "otherValue",required = false) @Parameter(description = "最后一条数据的其他排序属性值") Object otherValue
+    ) {
+        List<ForumArticleResp> data = forumArticleService.getPages(id, otherValue, flag, key);
+        return ResultInfo.OK(data);
     }
 
-    @Operation(summary = "获取一批新的文章")
-    @GetMapping("/get/new/pages")
-    public ResultInfo getNewArticles(@RequestParam("page") @Parameter(description = "页数") Integer page) {
-        List<ForumArticle> pages = forumArticleService.getNewPage(page);
-        Object data = JSON.toJSON(pages);
-        return new ResultInfo(true, "ok", data);
-    }
 
 }

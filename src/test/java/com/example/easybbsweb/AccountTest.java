@@ -32,6 +32,6 @@ public class AccountTest {
         userInfo.setUserId(GenerateIdUtils.generateIdByEntity(IdSelector.USER));
         userInfo.setEmail("testInser1@qq.com");
         userInfo.setPassword("testInsertpwd");
-        userMainMapper.insert(userInfo);
+//        userMainMapper.insert(userInfo);
     }
 }

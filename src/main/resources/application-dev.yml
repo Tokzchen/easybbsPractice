@@ -1,13 +1,13 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
   data:
     redis:
       host: 127.0.0.1
       port: 6379
       connect-timeout: 10000
     mongodb:
-      uri: mongodb://123.60.81.108:27017/youfa
-      username: root
-      password: root
+      uri: mongodb://root:cdz@123.60.81.108:27017/youfa?authSource=admin
   datasource:
     url: jdbc:mysql://47.120.8.89:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
     username: root

@@ -90,4 +90,9 @@ public class ForumUserService {
         ForumUser forumUser = getForumUserByEmail(email);
         return forumUser.getFollowers();
     }
+
+    public Integer getArticlesCount(String email) {
+        ForumUser forumUser = getForumUserByEmail(email);
+        return forumUser.getArticles().size();
+    }
 }

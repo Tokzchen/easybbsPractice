@@ -1,6 +1,5 @@
-package com.example.easybbsweb.controller.dto;
+package com.example.easybbsweb.controller.request;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ForumArticleDTO {
+public class ForumArticleReq {
     private String id;
     @NotNull
     private String title;
