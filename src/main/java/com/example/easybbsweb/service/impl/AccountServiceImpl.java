@@ -1,8 +1,6 @@
 package com.example.easybbsweb.service.impl;
 
-import com.example.easybbsweb.domain.entity.University;
-import com.example.easybbsweb.domain.entity.UserInfo;
-import com.example.easybbsweb.domain.entity.UserInfoExample;
+import com.example.easybbsweb.domain.entity.*;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.exception.SystemException;
@@ -87,9 +85,12 @@ public class AccountServiceImpl implements AccountService {
     public UserInfo getUserInfoByUserId(Long userId) {
         UserInfoExample exmple = new UserInfoExample();
         exmple.createCriteria().andUserIdEqualTo(userId);
-        UserInfo userInfo = userInfoMapper.selectByExample(exmple).get(0);
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(exmple);
+        if(userInfos.size()==0){
+            throw new BusinessException("用户尚未注册");
+        }
 
-        return userInfo;
+        return userInfos.get(0);
     }
 
     @Override
@@ -113,6 +114,34 @@ public class AccountServiceImpl implements AccountService {
         }
         int i = userInfoMapper.updateByPrimaryKeySelective(userInfo);
         return i==1;
+    }
+
+    @Override
+    public List<UserInfo> getAllUser() {
+        //空条件，把所有userInfo查出来
+        List<UserInfo> userInfos = userInfoMapper.selectByExample(null);
+        return userInfos;
+    }
+
+    @Override
+    public boolean changeUserMainSelectiveByUserId(UserMain userMain) {
+        if(userMain.getUserId()==null){
+            return false;
+        }
+        UserMainExample userMainExample = new UserMainExample();
+        userMainExample.createCriteria().andUserIdEqualTo(userMain.getUserId());
+        int i = userMainMapper.updateByExampleSelective(userMain, userMainExample);
+        return i>0;
+    }
+
+    @Override
+    public boolean changeUserInfoSelectiveByUserId(UserInfo userInfo) {
+        if(userInfo.getUserId()==null){
+            return false;
+        }
+        int i = userInfoMapper.updateByPrimaryKeySelective(userInfo);
+
+        return i>0;
     }
 
 

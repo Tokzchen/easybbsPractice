@@ -2,6 +2,7 @@ package com.example.easybbsweb.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.impl.ForumUserService;
 import com.example.easybbsweb.utils.TokenUtil;
 import com.qiniu.util.Json;
@@ -24,6 +25,8 @@ import java.util.List;
 public class ForumUserController {
     @Resource
     ForumUserService forumUserService;
+    @Resource
+    AccountService accountService;
 
     @Operation(summary = "关注")
     @PostMapping("/follow")
@@ -74,6 +77,14 @@ public class ForumUserController {
     public ResultInfo addForumUser(@Parameter(description = "用户Email") @RequestParam("email") String email) {
         System.out.println(mongoProperties.getUsername());
         forumUserService.saveForumUser(email);
+        return ResultInfo.OK();
+    }
+
+    @Operation(summary = "使用用户token同步mongodb")
+    @GetMapping("/add/token")
+    public ResultInfo addForumUserToken(@RequestHeader("token") String token){
+        String currentEmail = TokenUtil.getCurrentEmail(token);
+        forumUserService.saveForumUser(currentEmail);
         return ResultInfo.OK();
     }
 

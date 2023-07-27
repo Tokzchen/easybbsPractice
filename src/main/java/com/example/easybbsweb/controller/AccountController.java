@@ -5,6 +5,7 @@ import com.example.easybbsweb.domain.MailRequest;
 import com.example.easybbsweb.domain.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.entity.UserMain;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.exception.SystemException;
@@ -289,6 +290,16 @@ public class AccountController {
         userInfoByUserId.setPassword(null);
         userInfoByUserId.setEmailCode(null);
         return new ResultInfo(true,"响应成功",userInfoByUserId);
+    }
+
+    @Operation(summary = "修改业务(usermain)相关个人信息",description ="修改邮箱密码等走此接口无法成功" )
+    @PostMapping("/change/infos")
+    public ResultInfo changeUserInfo(@RequestHeader("token") String token, @RequestBody UserMain userMain){
+        //仅修改业务相关信息
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        userMain.setUserId(Long.parseLong(userId));
+        boolean b = accountService.changeUserMainSelectiveByUserId(userMain);
+        return b?ResultInfo.OK():ResultInfo.Fail();
     }
 
 

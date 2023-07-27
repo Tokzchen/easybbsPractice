@@ -1,6 +1,7 @@
 package com.example.easybbsweb.controller;
 
 import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.domain.entity.Answer;
 import com.example.easybbsweb.domain.entity.TestRecord;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.SurveyPair;
@@ -11,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/survey")
@@ -50,4 +53,12 @@ public class SurveyController {
         SurveyResult result= surveyService.generateSurveyResult(userInfo);
         return new ResultInfo(true,"生成报告成功",result);
     }
+
+    @GetMapping("/areas")
+    @Operation(summary = "获得求助领域")
+    public ResultInfo getSurveyArea(){
+        List<Answer> surveyArea = surveyService.getSurveyArea();
+        return ResultInfo.OK(surveyArea);
+    }
+
 }

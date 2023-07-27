@@ -3,7 +3,10 @@ package com.example.easybbsweb.service;
 
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.entity.UserMain;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 public interface AccountService {
     boolean resetPwd(UserInfo userInfo, HttpServletRequest req);
@@ -17,5 +20,11 @@ public interface AccountService {
     Integer checkUserIdentity(String userOrUniId);
 
     boolean saveUserAvatarPath(UserInfo userInfo);
+
+    List<UserInfo> getAllUser();
+
+    boolean changeUserMainSelectiveByUserId(UserMain userMain);
+
+    boolean changeUserInfoSelectiveByUserId(UserInfo userInfo);
 
 }
