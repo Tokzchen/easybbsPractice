@@ -176,7 +176,17 @@ public class AccountController {
             if(b1||b2){
                 String token =b1? TokenUtil.sign(userInfo):TokenUtil.sign(university);
                 //使用Redis进行身份信息缓存
-                RedisUtils.set(token+":identity",b1?"user":"university",10*60*60);
+                if(b1){
+                    UserInfo userInfoByEmail = accountService.getUserInfoByEmail(userInfo.getEmail());
+                    RedisUtils.set(token+":identity","user",10*60*60);
+                    RedisUtils.set(userInfo.getEmail()+":info",userInfoByEmail);
+                    RedisUtils.set(token+":info",userInfoByEmail,10*60*60);
+                }else{
+                    University universityInfoByEmail = universityService.getUniversityInfoByEmail(university);
+                    RedisUtils.set(token+":identity","university",10*60*60);
+                    RedisUtils.set(university.getEmail()+":info",universityInfoByEmail,10*60*60);
+                    RedisUtils.set(token+":info",universityInfoByEmail,10*60*60);
+                }
                 return new ResultInfo(true,b1?"user":"university",token);
             }else{
                 return new ResultInfo(false,"用户名或密码错误",null);
@@ -202,8 +212,9 @@ public class AccountController {
         }
 
 
-    @Operation(summary = "用户上传上传头像",description = "返回头像url")
+    @Operation(summary = "用户上传上传头像",description = "返回头像url,文件保存在服务器，因头像存储已交由七牛云不再推荐使用该接口")
     @PostMapping("/avatarUpload")
+    @Deprecated
     public ResultInfo userAvatarUpload(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
         //处理文件上传逻辑
 
@@ -287,8 +298,11 @@ public class AccountController {
         if(!StringUtils.hasText(userId)){
             throw new BusinessException("用户不存在或token已失效");
         }
-
-        UserInfo userInfoByUserId = accountService.getUserInfoByUserId(Long.parseLong(userId));
+        //查缓存，缓存没有查表
+        UserInfo userInfoByUserId = (UserInfo) RedisUtils.get(token + ":info");
+        if (userInfoByUserId==null) {
+            userInfoByUserId = accountService.getUserInfoByUserId(Long.parseLong(userId));
+        }
         userInfoByUserId.setPassword(null);
         userInfoByUserId.setEmailCode(null);
         return new ResultInfo(true,"响应成功",userInfoByUserId);
@@ -311,6 +325,10 @@ public class AccountController {
         String userId = TokenUtil.getCurrentUserOrUniId(token);
         userInfo.setUserId(Long.parseLong(userId));
         boolean b = accountService.changeUserInfoSelectiveByUserId(userInfo);
+        //更新缓存
+        UserInfo userInfoByUserIdUpdated = accountService.getUserInfoByUserId(Long.parseLong(userId));
+        RedisUtils.set(token+":info",userInfoByUserIdUpdated,10*60*60);
+        RedisUtils.set(userInfoByUserIdUpdated.getEmail()+":info",userInfoByUserIdUpdated,10*60*60);
         return b?ResultInfo.OK():ResultInfo.Fail();
     }
 
