@@ -56,4 +56,35 @@ public class UniversityServiceImpl implements UniversityService {
         List<University> universities = universityMapper.selectByExample(universityExample);
         return universities.get(0).getAvatar();
     }
+
+    @Override
+    public University getUniversityInfoByEmail(University university) {
+        if(!StringUtils.hasText(university.getEmail())){
+            throw new BusinessException("查询大学账号不得为空");
+        }
+        UniversityExample universityExample = new UniversityExample();
+        universityExample.createCriteria().andEmailEqualTo(university.getEmail());
+        List<University> universities = universityMapper.selectByExample(universityExample);
+        if(universities.size()==0){
+            throw new BusinessException("邮箱未注册");
+        }
+        University university1 = universities.get(0);
+        university1.setPwd(null);
+
+        return university1;
+    }
+
+    @Override
+    public University getUniversityInfoByUniId(University university) {
+       if(university.getUniId()==null){
+           throw new BusinessException("查询个体不得为空");
+       }
+
+        University university1 = universityMapper.selectByPrimaryKey(university.getUniId());
+       if(university1==null){
+           throw new BusinessException("邮箱尚未注册");
+       }
+
+       return university1;
+    }
 }
