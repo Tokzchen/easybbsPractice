@@ -13,19 +13,15 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "ForumArticle")
-public class ForumArticle implements Serializable {
+@Document(collection = "ArticleComment")
+public class ArticleComment implements Serializable {
     @Id
     private String id;
     private String email;
-    private String title;
-    private String content;
+    private String content ;
 //    @JsonProperty("create_time")
     private Long createTime;
-    private String category;
-    private Integer visited; // 访问量
-    private Integer like;
-    private List<ArticleComment> comments;
-    // 赞同这篇文章的人
+    private Integer like = 0;
     private Set<String> userWhoLikes;
+    private List<SecondComment> secondComments;
 }

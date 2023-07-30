@@ -1,8 +1,7 @@
 package com.example.easybbsweb.controller;
 
-import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.Answer;
-import com.example.easybbsweb.domain.entity.TestRecord;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.SurveyPair;
 import com.example.easybbsweb.domain.others.SurveyResult;
@@ -58,7 +57,7 @@ public class SurveyController {
     @Operation(summary = "获得求助领域")
     public ResultInfo getSurveyArea(){
         List<Answer> surveyArea = surveyService.getSurveyArea();
-        return ResultInfo.OK(surveyArea);
+        return ResultInfo.Success(surveyArea);
     }
 
 }

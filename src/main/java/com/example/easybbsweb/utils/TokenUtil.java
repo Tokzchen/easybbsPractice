@@ -64,8 +64,8 @@ public class TokenUtil {
      */
     public static boolean verify(String token) {
         try {
-//            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
-//            DecodedJWT jwt = verifier.verify(token);
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).withIssuer("auth0").build();
+            DecodedJWT jwt = verifier.verify(token);
 //            System.err.println("认证通过：");
 //            System.err.println("email: " + jwt.getClaim("email").asString());
 //            System.err.println("userOrUniId: " + jwt.getClaim("userOrUniId").asString());
@@ -93,10 +93,6 @@ public class TokenUtil {
         return jwt.getClaim("userOrUniId").asString();
     }
 
-    public static String getCurrentUserEmailByRequest(HttpServletRequest request) {
-        String token = request.getHeader("token");
-        return getCurrentEmail(token);
-    }
 
 
 }

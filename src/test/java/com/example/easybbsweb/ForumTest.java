@@ -28,15 +28,12 @@ public class ForumTest {
     @Test
     void func1() throws IOException {
         ForumArticle forumArticle = new ForumArticle("1","@","ouo","您吃了嘛",new Date().getTime(),0,1);
-//        bookRepository.saveForumArticle(forumArticle);
-//        List<ForumArticle> a = bookRepository.search("Fresh");
-        System.out.println(mongoTemplate.getCollection("ForumArticle").countDocuments());
-//        System.out.println(a);
+        bookRepository.show("d");
     }
 
     @Test
     void func2() throws IOException {
-        SearchResponse<ForumArticle> pages = bookRepository.getPages("fresh", 5, null, null, 1);
+        SearchResponse<ForumArticle> pages = bookRepository.getPages("fresh", 5, null, null, 3);
 //        System.out.println(pages.hits().);
         pages.hits().hits().forEach(g->{
             System.out.println(g);

@@ -19,7 +19,7 @@ public class ForumUserService {
     }
 
     public void saveForumUser(String email) {
-        forumUserRepository.insert(new ForumUser(email, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+        forumUserRepository.insert(new ForumUser(email, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),new ArrayList<>(),new ArrayList<>(),new ArrayList<>()));
     }
 
     /**
@@ -69,6 +69,61 @@ public class ForumUserService {
         forumUserRepository.save(author);
     }
 
+    /**
+     * 文章被删除 或者 不喜欢
+     *
+     */
+    public void unlikeArticle(String email,String ArticleId){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeArticles().remove(ArticleId);
+        forumUserRepository.save(author);
+    }
+
+    /**
+     *  喜欢文章
+     */
+    public void likeArticle(String email,String ArticleId){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeArticles().add(ArticleId);
+        forumUserRepository.save(author);
+    }
+
+    /**
+     * 评论被删除 或者 不喜欢
+     *
+     */
+    public void unlikeComment(String email,String id){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeComments().remove(id);
+        forumUserRepository.save(author);
+    }
+
+    /**
+     *  喜欢评论
+     */
+    public void likeComment(String email,String id){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeComments().add(id);
+        forumUserRepository.save(author);
+    }
+    /**
+     * 二级评论
+     *
+     */
+    public void unlikeSecondComment(String email,String id){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeSecondComment().remove(id);
+        forumUserRepository.save(author);
+    }
+
+    /**
+     *  二级评论
+     */
+    public void likeSecondComment(String email,String id){
+        ForumUser author = getForumUserByEmail(email);
+        author.getLikeSecondComment().add(id);
+        forumUserRepository.save(author);
+    }
     /**
      * 删除文章
      *

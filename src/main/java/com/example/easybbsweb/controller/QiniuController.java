@@ -1,6 +1,6 @@
 package com.example.easybbsweb.controller;
 
-import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.qiniu.common.QiniuException;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;

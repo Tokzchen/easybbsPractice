@@ -1,6 +1,6 @@
 package com.example.easybbsweb.controller;
 
-import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

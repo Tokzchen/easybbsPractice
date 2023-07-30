@@ -16,4 +16,8 @@ public class ForumUser {
     private List<String> followers;
     private List<String> following;
     private List<String> articles;
+    private List<String> likeArticles;
+    private List<String> likeComments;
+    private List<String> likeSecondComment;
+
 }

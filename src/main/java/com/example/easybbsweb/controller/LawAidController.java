@@ -2,7 +2,7 @@ package com.example.easybbsweb.controller;
 
 
 
-import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;

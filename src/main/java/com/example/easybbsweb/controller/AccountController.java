@@ -2,7 +2,7 @@ package com.example.easybbsweb.controller;
 
 import cn.hutool.core.util.RandomUtil;
 import com.example.easybbsweb.domain.MailRequest;
-import com.example.easybbsweb.domain.ResultInfo;
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserMain;
@@ -299,7 +299,7 @@ public class AccountController {
         String userId = TokenUtil.getCurrentUserOrUniId(token);
         userMain.setUserId(Long.parseLong(userId));
         boolean b = accountService.changeUserMainSelectiveByUserId(userMain);
-        return b?ResultInfo.OK():ResultInfo.Fail();
+        return b?ResultInfo.Success():ResultInfo.Fail();
     }
 
 

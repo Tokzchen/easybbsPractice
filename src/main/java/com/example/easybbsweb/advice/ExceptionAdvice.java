@@ -1,15 +1,18 @@
 package com.example.easybbsweb.advice;
 
+import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
+import com.example.easybbsweb.exception.YouFaException;
 import com.example.easybbsweb.utils.ResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class ExceptionAdvice {
     public static Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
 
@@ -33,6 +36,11 @@ public class ExceptionAdvice {
     public ResultUtil doBusinessException(Exception e) {
         logger.error("业务异常：", e);
         return ResultUtil.fail(-2, e.getMessage());
+    }
+    @ExceptionHandler(YouFaException.class)
+    public ResultInfo youFaException(YouFaException e){
+        logger.error(e.getMsg(),e);
+        return ResultInfo.Fail(e.getMsg());
     }
 
 }
