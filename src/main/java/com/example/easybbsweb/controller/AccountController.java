@@ -308,6 +308,18 @@ public class AccountController {
         return new ResultInfo(true,"响应成功",userInfoByUserId);
     }
 
+    @Operation(summary = "根据邮箱获取用户信息",description = "请求体:{email:\"test@qq.com\"}")
+    @PostMapping("/infos/email")
+    public ResultInfo getUserInfoByEmail(@RequestBody UserInfo userInfo){
+        if(!StringUtils.hasText(userInfo.getEmail())){
+            throw new BusinessException("查询条件为空");
+        }
+        UserInfo userInfoByEmail = accountService.getUserInfoByEmail(userInfo.getEmail());
+        userInfoByEmail.setPassword(null);
+        userInfoByEmail.setEmailCode(null);
+        return ResultInfo.Success(userInfo);
+    }
+
     @Operation(summary = "修改业务(usermain)相关个人信息",description ="修改邮箱密码等走此接口无法成功" )
     @PostMapping("/change/infos")
     public ResultInfo changeUserInfo(@RequestHeader("token") String token, @RequestBody UserMain userMain){

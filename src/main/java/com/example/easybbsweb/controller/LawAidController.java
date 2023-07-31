@@ -117,11 +117,26 @@ public class LawAidController {
     }
 
 
+
+
     @PostMapping("/recommend/user")
     public List<UserInfo> recommendUser(@RequestHeader("token") String token){
 
         return null;
 
+    }
+
+    /**
+     * 推荐逻辑
+     * @param token
+     * @return
+     */
+
+
+    @PostMapping("/recommend/universities")
+    public List<University> recommendUniversities(@RequestHeader("token") String token){
+
+        return null;
     }
 
     @PostMapping("lawAidInfo/user")

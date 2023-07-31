@@ -28,4 +28,7 @@ public class ResultInfo {
     }
     public static ResultInfo Fail(){return new ResultInfo(false,"failed",null);}
 
+
+    public static ResultInfo OK(){return new ResultInfo(true,"ok",null);}
+    public static ResultInfo OK(Object json){return new ResultInfo(true,"ok",json);}
 }
