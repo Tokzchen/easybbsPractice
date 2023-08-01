@@ -120,4 +120,16 @@ public class LawAidServiceImpl implements LawAidService {
 
 
     }
+
+    @Override
+    public void generateIndexOne(Long uniId) {
+        //产生第一个推荐指标的方法
+
+
+    }
+
+    @Override
+    public void generateIndexTwo(Long uniId) {
+
+    }
 }

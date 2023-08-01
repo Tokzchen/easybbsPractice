@@ -128,6 +128,15 @@ public class LawAidController {
 
     /**
      * 推荐逻辑
+     * 指标量：每个领域对应的成单量，高校正在处理单量，距离，近期流程进度单
+     * 思路:
+     * 1.选取同一个省的高校，按照城市间的距离，得到第一个指标量45%
+     * 2.选取高校近期的流程进度单，按照单量进行排行，得到第二个指标量30%
+     * 3.选取高校正在处理的订单数量，按照订单数量再次逆序排行，得到第三个指标量20%
+     * 4.选取高校对应领域的处理胆量进行排行，得到第四个指标量5%
+     * 5.根据上述指标量进行排序
+     * 一次性推荐只会推荐20所，在每一个指标量排行中，名词每往后掉一名，则指标量-5
+     * 若某一个指标量不足20所，则按照100/n的指标大小进行递减
      * @param token
      * @return
      */
@@ -135,7 +144,6 @@ public class LawAidController {
 
     @PostMapping("/recommend/universities")
     public List<University> recommendUniversities(@RequestHeader("token") String token){
-
         return null;
     }
 

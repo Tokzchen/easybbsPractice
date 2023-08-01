@@ -9,4 +9,9 @@ public interface LawAidService {
     public boolean saveDocumentPath(University university);
 
     public LawAidInfoPageUser getUserLawAidInfo(Long uniId);
+
+
+    public void generateIndexOne(Long uniId);
+
+    public void generateIndexTwo(Long uniId);
 }

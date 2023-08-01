@@ -25,18 +25,18 @@ public class ForumTest {
     @Resource
     ForumArticleRepository forumArticleRepository;
 
-    @Test
-    void func1() throws IOException {
-        ForumArticle forumArticle = new ForumArticle("1","@","ouo","您吃了嘛",new Date().getTime(),0,1);
-        bookRepository.show("d");
-    }
-
-    @Test
-    void func2() throws IOException {
-        SearchResponse<ForumArticle> pages = bookRepository.getPages("fresh", 5, null, null, 3);
-//        System.out.println(pages.hits().);
-        pages.hits().hits().forEach(g->{
-            System.out.println(g);
-        });
-    }
+//    @Test
+//    void func1() throws IOException {
+//        ForumArticle forumArticle = new ForumArticle("1","@","ouo","您吃了嘛",new Date().getTime(),0,1);
+//        bookRepository.show("d");
+//    }
+//
+//    @Test
+//    void func2() throws IOException {
+//        SearchResponse<ForumArticle> pages = bookRepository.getPages("fresh", 5, null, null, 3);
+////        System.out.println(pages.hits().);
+//        pages.hits().hits().forEach(g->{
+//            System.out.println(g);
+//        });
+//    }
 }

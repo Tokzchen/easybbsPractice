@@ -320,6 +320,18 @@ public class AccountController {
         return ResultInfo.Success(userInfo);
     }
 
+    @Operation(summary = "根据用户id获取用户信息")
+    @PostMapping("/infos/id")
+    public ResultInfo getUserInfoById(@RequestBody UserInfo userInfo){
+        if(userInfo.getUserId()==null){
+            throw new BusinessException("查询条件为空");
+        }
+        UserInfo userInfoByUserId = accountService.getUserInfoByUserId(userInfo.getUserId());
+        userInfoByUserId.setPassword(null);
+        userInfoByUserId.setEmailCode(null);
+        return ResultInfo.Success(userInfo);
+    }
+
     @Operation(summary = "修改业务(usermain)相关个人信息",description ="修改邮箱密码等走此接口无法成功" )
     @PostMapping("/change/infos")
     public ResultInfo changeUserInfo(@RequestHeader("token") String token, @RequestBody UserMain userMain){
