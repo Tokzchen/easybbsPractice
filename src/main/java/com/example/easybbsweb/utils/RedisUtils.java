@@ -2,7 +2,12 @@ package com.example.easybbsweb.utils;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
@@ -13,8 +18,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * 普通set方法设置的缓存一天后会自动失效
+ * 如果需要持久保存请使用setPersistently
+ */
 @Component
 public class RedisUtils {
+    private static Integer maxLife=60*60*24;
+
+    public static final String GEO_KEY_USER="geo_key_user";
+    public static final String GEO_KEY_UNIVERSITY="geo_key_university";
     private static RedisTemplate<String, Object> redisTemplate;
     public static RedisTemplate<String, Object> getRedisTemplate() {
         return redisTemplate;
@@ -126,10 +140,27 @@ public class RedisUtils {
      * 普通缓存放入
      * @param key   键
      * @param value 值
+     *              最长一天会失效
      * @return true成功 false失败
      */
 
     public static boolean set(String key, Object value) {
+        try {
+            redisTemplate.opsForValue().set(key, value,maxLife,TimeUnit.SECONDS);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 持久化存储
+     * @param key
+     * @param value
+     * @return
+     */
+    public static boolean setPersistently(String key,Object value){
         try {
             redisTemplate.opsForValue().set(key, value);
             return true;
@@ -158,6 +189,27 @@ public class RedisUtils {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public static void addLocation(String userOrUniId, Point point,String geoKey){
+        redisTemplate.opsForGeo().add(geoKey,new RedisGeoCommands.GeoLocation<>(userOrUniId,point));
+    }
+
+    public static GeoResults<RedisGeoCommands.GeoLocation<Object>> nearLocation(Point point, String geoKey){
+        Distance distance = new Distance(1000 * 100 * 3, RedisGeoCommands.DistanceUnit.METERS);
+        Circle circle = new Circle(point, distance);
+        RedisGeoCommands.GeoRadiusCommandArgs geoRadiusCommandArgs = RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs().includeDistance().limit(5);
+        GeoResults<RedisGeoCommands.GeoLocation<Object>> geoResults = redisTemplate.opsForGeo().radius(geoKey, circle, geoRadiusCommandArgs);
+        return geoResults;
+    }
+
+    public static GeoResults<RedisGeoCommands.GeoLocation<Object>> nearLocation(Point point,Integer distance,Integer limit, String geoKey){
+        Distance distanceUse = new Distance(distance, RedisGeoCommands.DistanceUnit.METERS);
+        Circle circle = new Circle(point, distanceUse);
+        RedisGeoCommands.GeoRadiusCommandArgs geoRadiusCommandArgs = RedisGeoCommands.GeoRadiusCommandArgs.newGeoRadiusArgs().includeDistance().limit(limit);
+        GeoResults<RedisGeoCommands.GeoLocation<Object>> geoResults = redisTemplate.opsForGeo().radius(geoKey, circle, geoRadiusCommandArgs);
+        return geoResults;
     }
 
 
