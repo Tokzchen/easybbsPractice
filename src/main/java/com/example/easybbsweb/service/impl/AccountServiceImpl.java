@@ -8,7 +8,9 @@ import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.AccountService;
+import com.example.easybbsweb.service.ForumArticleService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     UniversityMapper universityMapper;
+    @Resource
+    ForumArticleService forumArticleService;
     @Override
     public boolean resetPwd(UserInfo userInfo, HttpServletRequest req) {
         boolean b = false;

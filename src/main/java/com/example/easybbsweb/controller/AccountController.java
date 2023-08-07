@@ -9,16 +9,15 @@ import com.example.easybbsweb.domain.entity.UserMain;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.exception.SystemException;
-import com.example.easybbsweb.service.AccountService;
-import com.example.easybbsweb.service.RegistryService;
-import com.example.easybbsweb.service.SendMailService;
-import com.example.easybbsweb.service.UniversityService;
+import com.example.easybbsweb.service.*;
 import com.example.easybbsweb.utils.CheckCodeUtils;
 import com.example.easybbsweb.utils.RedisUtils;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -56,6 +55,8 @@ public class AccountController {
 
     @Autowired
     UniversityService universityService;
+    @Resource
+    ForumArticleService forumArticleService;
 
     public static final List<String> AVATAR_TYPES = new ArrayList<String>();
 
@@ -157,6 +158,15 @@ public class AccountController {
             return new ResultInfo(false,"修改失败，请稍后重试",null);
         }
 
+    }
+    @Operation(summary = "根据用户id获取用户信息")
+    @GetMapping("/info/id")
+    @ApiResponse(content = @Content(schema = @Schema(implementation = UserInfo.class)))
+    public ResultInfo getUserInfoById(
+            @Parameter(description = "用户id") @RequestParam("id") Long uid
+    ) {
+        UserInfo userInfo = accountService.getUserInfoByUserId(uid);
+        return ResultInfo.Success(userInfo);
     }
 
     @PostMapping("/login")
@@ -320,17 +330,6 @@ public class AccountController {
         return ResultInfo.Success(userInfo);
     }
 
-    @Operation(summary = "根据用户id获取用户信息")
-    @PostMapping("/infos/id")
-    public ResultInfo getUserInfoById(@RequestBody UserInfo userInfo){
-        if(userInfo.getUserId()==null){
-            throw new BusinessException("查询条件为空");
-        }
-        UserInfo userInfoByUserId = accountService.getUserInfoByUserId(userInfo.getUserId());
-        userInfoByUserId.setPassword(null);
-        userInfoByUserId.setEmailCode(null);
-        return ResultInfo.Success(userInfo);
-    }
 
     @Operation(summary = "修改业务(usermain)相关个人信息",description ="修改邮箱密码等走此接口无法成功" )
     @PostMapping("/change/infos")
@@ -353,7 +352,7 @@ public class AccountController {
         UserInfo userInfoByUserIdUpdated = accountService.getUserInfoByUserId(Long.parseLong(userId));
         RedisUtils.set(token+":info",userInfoByUserIdUpdated,10*60*60);
         RedisUtils.set(userInfoByUserIdUpdated.getEmail()+":info",userInfoByUserIdUpdated,10*60*60);
-        return b?ResultInfo.OK():ResultInfo.Fail();
+        return b?ResultInfo.Success():ResultInfo.Fail();
     }
 
 

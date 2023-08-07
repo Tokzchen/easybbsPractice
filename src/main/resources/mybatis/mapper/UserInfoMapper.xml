@@ -241,6 +241,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectBatchIds" resultType="com.example.easybbsweb.domain.entity.UserInfo">
+    SELECT * FROM user_info
+    <if test="ids != null and ids.size() > 0">
+      WHERE user_id IN
+      <foreach collection="ids" item="id" separator="," open="(" close=")">
+        #{id}
+      </foreach>
+    </if>
+  </select>
   <update id="updateByExampleSelective" parameterType="map">
     update user_info
     <set>
