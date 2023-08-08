@@ -11,6 +11,8 @@ public class RabbitMQConstants {
 
     public static final String ES_UPDATE_LIKE_QUEUE = "esUpdateLikeQueue";
     public static final String ES_UPDATE_LIKE_KEY = "esUpdateLikeKey";
+    public static final String LIKE_LIKE_QUEUE = "likeLikeQueue";
+    public static final String LIKE_LIKE_KEY = "likeLikeKey";
 
 
 }

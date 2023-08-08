@@ -30,17 +30,14 @@ public class ForumController {
     ForumArticleService forumArticleService;
     @Resource
     ForumArticleLikesService forumArticleLikesService;
-
-    @Operation(summary = "测试接口", description = "接口描述")
-    @ApiResponse(
-            responseCode = "200",
-            content = @Content(mediaType = "application/zip", schema = @Schema(type = "string", format = "binary"))
-    )
-
-    @GetMapping("/t")
-    public String test(@Parameter(description = "接口参数", required = false, example = "我是参数例子") String s) {
-
-        return "ok";
+    @Operation(summary = "点赞唯一标识")
+    @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = Void.class)))
+    @GetMapping("/identifies")
+    public ResultInfo identifies(
+            @Parameter(description = "生成的唯一标识") @RequestParam("identifies") String identifies
+    ){
+        forumArticleLikesService.identifies(identifies);
+        return ResultInfo.Success();
     }
 
     @Operation(summary = "保存发布的文章")
@@ -117,9 +114,10 @@ public class ForumController {
     @PostMapping("/like")
     public ResultInfo like(
             @Parameter(description = "文章Id") @RequestParam("id") Long articleId,
-            @RequestHeader("token") String token
+            @RequestHeader("token") String token,
+            @Parameter(description = "唯一标识") @RequestParam("identifies") String identifies
     ) {
-        forumArticleLikesService.like(TokenUtil.getCurrentUserId(token), articleId);
+        forumArticleLikesService.sendLike(TokenUtil.getCurrentUserId(token), articleId,true,identifies);
         return ResultInfo.Success();
     }
 
@@ -135,9 +133,10 @@ public class ForumController {
     @PostMapping("/unlike")
     public ResultInfo unLike(
             @Parameter(description = "文章Id") @RequestParam("id") Long articleId,
-            @RequestHeader("token") String token
+            @RequestHeader("token") String token,
+            @Parameter(description = "唯一标识") @RequestParam("identifies") String identifies
     ) {
-        forumArticleLikesService.unLike(TokenUtil.getCurrentUserId(token), articleId);
+        forumArticleLikesService.sendLike(TokenUtil.getCurrentUserId(token), articleId,false,identifies);
         return ResultInfo.Success();
     }
 

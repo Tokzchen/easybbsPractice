@@ -1,4 +1,4 @@
-package com.example.easybbsweb.router;
+package com.example.easybbsweb.router.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class LikeMessage {
+public class LikeMessageES {
     // article_id
     private Long id;
     // true like +1

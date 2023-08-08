@@ -3,6 +3,7 @@ package com.example.easybbsweb.router;
 import com.example.easybbsweb.common.RabbitMQConstants;
 import com.example.easybbsweb.domain.entity.ForumArticle;
 import com.example.easybbsweb.repository.ForumArticleElasticSearchDAO;
+import com.example.easybbsweb.router.message.LikeMessageES;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +25,7 @@ public class ElasticSearchQueueConsumer {
     }
 
     @RabbitListener(queues = RabbitMQConstants.ES_UPDATE_LIKE_QUEUE)
-    public void updateLike(LikeMessage likeMessage){
-        elasticSearchDAO.updateLike(likeMessage.getId(),likeMessage.getLikeCount());
+    public void updateLike(LikeMessageES likeMessageES){
+        elasticSearchDAO.updateLike(likeMessageES.getId(), likeMessageES.getLikeCount());
     }
 }
