@@ -9,12 +9,15 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.concurrent.locks.ReentrantLock;
+
 @Service
 public class ForumArticleSecondCommentLikesServiceImpl implements ForumArticleSecondCommentLikesService {
     @Resource
     ForumArticleSecondCommentLikesMapper likesMapper;
     @Resource
     ForumArticleSecondCommentMapper mapper;
+    ReentrantLock lock = new ReentrantLock();
     @Override
     public boolean checkLike(Long uid, Long scmtId) {
 
@@ -25,17 +28,28 @@ public class ForumArticleSecondCommentLikesServiceImpl implements ForumArticleSe
 
     @Override
     public void Like(Long uid, Long scmtId) {
-        ForumArticleSecondCommentLikes entity = new ForumArticleSecondCommentLikes()
-                .setUid(uid)
-                .setScmtId(scmtId);
-        mapper.updateLikeById(scmtId,1);
-        likesMapper.insert(entity);
+        lock.lock();
+        try {
+            ForumArticleSecondCommentLikes entity = new ForumArticleSecondCommentLikes()
+                    .setUid(uid)
+                    .setScmtId(scmtId);
+            mapper.updateLikeById(scmtId,1);
+            likesMapper.insert(entity);
+        } finally {
+
+            lock.unlock();
+        }
     }
 
     @Override
     public void unLike(Long uid, Long scmtId) {
-        likesMapper.delete(new QueryWrapper<ForumArticleSecondCommentLikes>()
-                .eq("uid", uid).eq("scmtId", scmtId));
-        mapper.updateLikeById(scmtId,-1);
+        lock.lock();
+        try {
+            likesMapper.delete(new QueryWrapper<ForumArticleSecondCommentLikes>()
+                    .eq("uid", uid).eq("scmtId", scmtId));
+            mapper.updateLikeById(scmtId,-1);
+        } finally {
+            lock.unlock();
+        }
     }
 }

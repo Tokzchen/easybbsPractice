@@ -8,7 +8,7 @@ import com.example.easybbsweb.service.ForumArticleCommentLikesService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class ForumArticleCommentLikesServiceImpl implements ForumArticleCommentLikesService {
@@ -16,7 +16,7 @@ public class ForumArticleCommentLikesServiceImpl implements ForumArticleCommentL
     ForumArticleCommentLikesMapper likesMapper;
     @Resource
     ForumArticleCommentMapper mapper;
-
+    ReentrantLock lock = new ReentrantLock();
     @Override
     public boolean checkLike(Long uid, Long cmtId) {
 
@@ -25,20 +25,26 @@ public class ForumArticleCommentLikesServiceImpl implements ForumArticleCommentL
 
     }
 
+
     @Override
     public void like(Long uid, Long cmtId) {
-        ForumArticleCommentLikes entity = new ForumArticleCommentLikes()
-                .setUid(uid)
-                .setCmtId(cmtId);
-        mapper.updateLikeById(cmtId,1);
-        likesMapper.insert(entity);
+
+
+            ForumArticleCommentLikes entity = new ForumArticleCommentLikes()
+                    .setUid(uid)
+                    .setCmtId(cmtId);
+            mapper.updateLikeById(cmtId,1);
+            likesMapper.insert(entity);
+
     }
 
     @Override
     public void unLike(Long uid, Long cmtId) {
-        likesMapper.delete(new QueryWrapper<ForumArticleCommentLikes>()
-                .eq("uid", uid).eq("cmtId", cmtId));
-        mapper.updateLikeById(cmtId,-1);
+
+            likesMapper.delete(new QueryWrapper<ForumArticleCommentLikes>()
+                    .eq("uid", uid).eq("cmtId", cmtId));
+            mapper.updateLikeById(cmtId,-1);
+
 
     }
 }
