@@ -1,11 +1,12 @@
 package com.example.easybbsweb.config;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
+
+import com.example.easybbsweb.domain.entity.ForumArticle;
 import org.apache.http.HttpHost;
+import org.elasticsearch.client.ElasticsearchClient;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,23 +14,9 @@ import org.springframework.context.annotation.Configuration;
 public class ElasticSearchConfig
 {
     @Bean
-    public RestClient getRestClient() {
-        RestClient restClient = RestClient.builder(
-                new HttpHost("123.60.81.108", 9200)).build();
-        return restClient;
-    }
-
-    @Bean
-    public ElasticsearchTransport getElasticsearchTransport() {
-        return new RestClientTransport(
-                getRestClient(), new JacksonJsonpMapper());
-    }
-
-
-    @Bean
-    public ElasticsearchClient getElasticsearchClient(){
-        ElasticsearchClient client = new ElasticsearchClient(getElasticsearchTransport());
-        return client;
+    public RestHighLevelClient getRestClient() {
+        RestClientBuilder builder = RestClient.builder(new HttpHost("123.60.81.108", 9200, "http"));
+        return new RestHighLevelClient(builder);
     }
 
 }

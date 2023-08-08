@@ -7,6 +7,7 @@ import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
+import com.example.easybbsweb.service.ForumArticleService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
 import jakarta.annotation.Resource;
@@ -31,7 +32,7 @@ public class RegistryServiceImpl implements RegistryService {
     private UniversityMapper universityMapper;
 
     @Resource
-    private ForumUserService forumUserService;
+    private ForumArticleService forumArticleService;
     public void checkUser(UserInfo userInfo) throws Exception{
         UserInfoExample example = new UserInfoExample();
         example.createCriteria().andEmailEqualTo(userInfo.getEmail());
@@ -54,7 +55,6 @@ public class RegistryServiceImpl implements RegistryService {
             userMain.setUserId(userInfo.getUserId());
             userMain.setLastUpdateTime(new Date());
             Integer integer1= userMainMapper.insertSelective(userMain);
-            forumUserService.saveForumUser(userInfo.getEmail()); // forum User 表
             if(integer>0&&integer1>0){
                 log.info("注册成功,新用户id{}",userInfo.getUserId());
                 return true;

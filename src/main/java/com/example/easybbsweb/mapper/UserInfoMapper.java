@@ -1,21 +1,24 @@
 package com.example.easybbsweb.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserInfoExample;
 import java.util.List;
 
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-@Repository
-public interface UserInfoMapper {
+public interface UserInfoMapper  {
     long countByExample(UserInfoExample example);
 
     int deleteByExample(UserInfoExample example);
 
     int deleteByPrimaryKey(Long userId);
+
+    List<UserInfo> selectBatchIds(List<Long> ids);
 
     int insert(UserInfo record);
 

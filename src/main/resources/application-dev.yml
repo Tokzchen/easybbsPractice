@@ -7,11 +7,7 @@ spring:
       port: 6379
       connect-timeout: 10000
       password: cdz
-    mongodb:
-      uri: mongodb://root:cdz@123.60.81.108:27017/youfa?authSource=admin
   datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://47.120.8.89:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
     username: root
     password: cdz
@@ -73,6 +69,9 @@ spring:
     username: 1797213901@qq.com
     password: hipjxdrfyrtzejde
     port: 587
+  rabbitmq:
+    host: 123.60.81.108
+    port: 5672
 server:
   port: 7071
   servlet:

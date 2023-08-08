@@ -1,7 +1,6 @@
 package com.example.easybbsweb.controller.request.forum;
 
-import com.example.easybbsweb.repository.entity.ArticleComment;
-import com.example.easybbsweb.repository.entity.SecondComment;
+import com.example.easybbsweb.domain.entity.ForumArticleComment;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,6 +23,6 @@ public class ForumArticleReq {
     private Integer visited;
     private Integer like;
     private Long createTime;
-    private List<ArticleComment> comments;
+    private List<ForumArticleComment> comments;
     private Set<String> userWhoLikes;
 }

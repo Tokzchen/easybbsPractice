@@ -1,8 +1,20 @@
 package com.example.easybbsweb.service;
 
-import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.easybbsweb.controller.response.forum.CommentResp;
+import com.example.easybbsweb.domain.entity.ForumArticleComment;
 
-@Service
-public class ForumArticleCommentService {
-    
+import java.util.List;
+
+
+public interface ForumArticleCommentService extends IService<ForumArticleComment> {
+    public CommentResp publish(Long uid, CommentResp forumArticle);
+
+    public void update(ForumArticleComment forumArticle);
+    public void deleteById(Long id);
+
+
+    List<ForumArticleComment> getPage(Long articleId, long from, long to);
+
+    List<ForumArticleComment> getByArticleId(Long articleId);
 }

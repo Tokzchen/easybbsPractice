@@ -1,5 +1,8 @@
 package com.example.easybbsweb.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserMain;
 import com.example.easybbsweb.domain.entity.UserMainExample;
 import java.util.List;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserMainMapper {
     long countByExample(UserMainExample example);
+
+    List<UserInfo> selectBatchByIds(List<Long> ids);
 
     int deleteByExample(UserMainExample example);
 

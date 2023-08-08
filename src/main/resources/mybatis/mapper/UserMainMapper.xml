@@ -181,6 +181,9 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
+  <select id="selectBatchByIds" resultType="com.example.easybbsweb.domain.entity.UserInfo">
+
+    </select>
   <update id="updateByExampleSelective" parameterType="map">
     update user_main
     <set>

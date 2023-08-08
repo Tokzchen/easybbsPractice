@@ -92,6 +92,10 @@ public class TokenUtil {
         DecodedJWT jwt = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build().verify(token);
         return jwt.getClaim("userOrUniId").asString();
     }
+    public static Long getCurrentUserId(String token) {
+        DecodedJWT jwt = JWT.require(Algorithm.HMAC256(TOKEN_SECRET)).build().verify(token);
+        return Long.parseLong(jwt.getClaim("userOrUniId").asString());
+    }
 
 
 
