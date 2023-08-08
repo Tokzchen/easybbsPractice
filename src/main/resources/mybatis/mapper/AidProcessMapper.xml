@@ -240,4 +240,11 @@
       `state` = #{state,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectLatelyUniversity" resultType="com.example.easybbsweb.domain.entity.AidProcess">
+      select count(*) as cnt, uni_id
+      from aid_process
+      where  ABS(DATEDIFF(NOW(), create_time)) &lt;=#{cnt}
+      group by uni_id order by cnt
+  </select>
 </mapper>

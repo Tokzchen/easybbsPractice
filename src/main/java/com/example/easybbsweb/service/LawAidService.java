@@ -2,16 +2,17 @@ package com.example.easybbsweb.service;
 
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 public interface LawAidService {
-    public boolean saveDocumentPath(University university);
+     boolean saveDocumentPath(University university);
 
-    public LawAidInfoPageUser getUserLawAidInfo(Long uniId);
+     LawAidInfoPageUser getUserLawAidInfo(Long uniId);
 
 
-    public void generateIndexOne(Long uniId);
-
-    public void generateIndexTwo(Long uniId);
+     List<University> generateAndRecommendUniversities(Long userId, Point point);
 }

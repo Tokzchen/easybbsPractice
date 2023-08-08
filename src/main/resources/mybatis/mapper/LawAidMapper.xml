@@ -301,4 +301,12 @@
       `state` = #{state,jdbcType=CHAR}
     where law_aid_id = #{lawAidId,jdbcType=BIGINT}
   </update>
+
+  <select id="selectLatelyUniversity" resultType="com.example.easybbsweb.domain.entity.LawAid">
+    select uni_id ,count(*) as cnt from law_aid
+    where  ABS(DATEDIFF(NOW(), create_time)) &lt;=#{cnt}
+    group by uni_id
+    order by cnt;
+
+  </select>
 </mapper>

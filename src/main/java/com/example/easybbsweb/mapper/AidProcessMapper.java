@@ -32,4 +32,6 @@ public interface AidProcessMapper {
     int updateByPrimaryKeySelective(AidProcess record);
 
     int updateByPrimaryKey(AidProcess record);
+
+    List<AidProcess> selectLatelyUniversity(Integer cnt);
 }

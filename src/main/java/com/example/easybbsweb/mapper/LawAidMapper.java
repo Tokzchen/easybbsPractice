@@ -38,4 +38,6 @@ public interface LawAidMapper {
     int updateByPrimaryKeyWithBLOBs(LawAid record);
 
     int updateByPrimaryKey(LawAid record);
+
+    List<LawAid> selectLatelyUniversity(Integer cnt);
 }
