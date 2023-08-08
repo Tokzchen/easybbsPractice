@@ -1,7 +1,6 @@
 package com.example.easybbsweb.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.example.easybbsweb.controller.response.forum.SecondCommentResp;
 import com.example.easybbsweb.domain.entity.ForumArticleSecondComment;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

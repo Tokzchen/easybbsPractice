@@ -20,16 +20,28 @@ import org.springframework.data.geo.GeoResult;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class LawAidServiceImpl implements LawAidService {
     private static final Integer MAX_NEARBY_UNIVERSITY_DISTANCE=100;
     private static final Integer MAX_RECOMMEND_UNIVERSITY_CNT=20;
+
+    private static final Integer LOW_ACTIVE_STANDARD_CNT=10;
+    private static final Integer LOW_ACTIVE_UPDATE_HOURS=48;
+
+    private static final Integer MED_ACTIVE_STANDARD_CNT=25;
+    private static final Integer MED_ACTIVE_UPDATE_HOURS=24;
+
+    private static final Integer HIGH_ACTIVE_UPDATE_HOURS=12;
+
 
     @Resource
     UniversityMapper universityMapper;
@@ -47,6 +59,9 @@ public class LawAidServiceImpl implements LawAidService {
     @Resource
             //这里有个bug这个版本的druid注入Datesource失败，只能注入这个类
     DruidDataSourceWrapper datasource;
+
+    @Autowired
+    ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
 
     @Override
@@ -130,10 +145,7 @@ public class LawAidServiceImpl implements LawAidService {
 
             }
         });
-
         lawAidInfoPageUser.setProgress(aidProcesses);
-
-
         return lawAidInfoPageUser;
 
 
@@ -146,17 +158,38 @@ public class LawAidServiceImpl implements LawAidService {
                 return i;
             }
         }
-        list.add(new UniversityPair(uniId,new AtomicInteger(deltaCnt)));
+        list.add(new UniversityPair(uniId,new AtomicInteger(deltaCnt),null));
         return -1;
 
     }
 
     @Override
-    public List<University> generateAndRecommendUniversities(Long userId, Point point) {
+    public List<UniversityPair> generateAndRecommendUniversities(Long userId, Point point) {
         //使用vector进行处理，单个方法线程安全，UniversityPair.cnt是AtomicInteger
         Vector<UniversityPair> universityList = new Vector<>();
-        generateIndexOneForUser(userId,point,universityList);
-        return null;
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        threadPoolTaskExecutor.submit(new Thread(()->{
+            generateIndexOneForUser(userId,point,universityList);
+            countDownLatch.countDown();
+        }));
+        threadPoolTaskExecutor.submit(new Thread(() -> {
+            generateIndexTwoForUser(universityList);
+            countDownLatch.countDown();
+        }));
+
+        try {
+            countDownLatch.await(); // 等待所有线程完成
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        //对universityList进行排序处理
+        universityList.sort(new Comparator<UniversityPair>() {
+            @Override
+            public int compare(UniversityPair o1, UniversityPair o2) {
+                return o1.getCnt().intValue()-o2.getCnt().intValue();
+            }
+        });
+        return universityList;
     }
 
    //产生推荐业务的第一个指标:位置信息
@@ -183,8 +216,9 @@ public class LawAidServiceImpl implements LawAidService {
                 int pre = universityPair.getCnt().intValue();
                 int newValue=totalPoint-(i*decrePerUni);
                 //原子类AtomicInteger，通过乐观锁CAS实现了原子操作
-                while (universityPair.getCnt().compareAndSet(pre, newValue)){
-                    universityPair.getCnt().compareAndSet(pre, newValue);
+                while (!universityPair.getCnt().compareAndSet(pre, newValue)){
+                    pre = universityPair.getCnt().intValue();
+                    newValue=pre+totalPoint-(i*decrePerUni);
                 }
                 }else{
                 //不存在则该步已经完成
@@ -192,11 +226,11 @@ public class LawAidServiceImpl implements LawAidService {
             }
         }
     }
-    //产生第二个指标-近期的订单量，这个指标可以使用缓存进行处理
+    //产生第二个指标-近期的订单量(活跃度)，这个指标可以使用缓存进行处理
     //缓存过期时间策略:监控lawAid订单表，根据插入频率动态调整
-    protected void generateIndexTwoForUser(Long userId){
-        Object o = RedisUtils.get("lawAid:index2");
-        if(o==null){
+    protected void generateIndexTwoForUser(Vector<UniversityPair> list){
+        List<UniversityPair> activenessOfUniversity = (List<UniversityPair>) RedisUtils.get("lawAid:index2");
+        if(activenessOfUniversity==null){
             //缓存过期
             //首先通过druid的sql监控查看数据库的更新状态
             //上一次缓存的更新时间
@@ -206,6 +240,7 @@ public class LawAidServiceImpl implements LawAidService {
             };
             Integer updateCnt=0;
             Date lastUpdateTime = (Date) RedisUtils.get("lawAid:index2:lastUpdateTime");
+            RedisUtils.setPersistently("lawAid:index2:lastUpdateTime",new Date());
             List<Map<String, Object>> sqlStatDataList = DruidStatManagerFacade.getInstance().getSqlStatDataList(datasource);
             for(Map<String,Object> map:sqlStatDataList){
                 String sql = (String) map.get("SQL");
@@ -214,24 +249,89 @@ public class LawAidServiceImpl implements LawAidService {
                     updateCnt++;
                 }
             }
-            //根据updateCnt进行不同的缓存时长设置->
-
+            //获取活跃度前20的高校
+             activenessOfUniversity = generateIndexTwoForUserMainLogic();
+            //根据updateCnt进行缓存过期时间的设置
+            if(updateCnt<=LOW_ACTIVE_STANDARD_CNT){
+                RedisUtils.set("lawAid:index2",activenessOfUniversity,60*60*LOW_ACTIVE_UPDATE_HOURS);
+            }else if(updateCnt>LOW_ACTIVE_STANDARD_CNT&&updateCnt<MED_ACTIVE_STANDARD_CNT){
+                RedisUtils.set("lawAid:index2",activenessOfUniversity,60*60*MED_ACTIVE_UPDATE_HOURS);
+            }else if(updateCnt>MED_ACTIVE_STANDARD_CNT){
+                RedisUtils.set("lawAid:index2",activenessOfUniversity,60*60*HIGH_ACTIVE_UPDATE_HOURS);
+            }
+        }
+        if(activenessOfUniversity.size()==0){
+            return;
+        }
+        int totalCnt=80;
+        int decrePerUni=totalCnt/activenessOfUniversity.size();
+        for(int i=0;i<activenessOfUniversity.size();i++){
+            int index = checkAndAddIfAbsentEasy(list, activenessOfUniversity.get(i).getUniId(), totalCnt - (decrePerUni * i));
+            if(index>-1){
+                int pre = list.get(index).getCnt().intValue();
+                int newValue=totalCnt - (decrePerUni * i);
+                while (!list.get(index).getCnt().compareAndSet(pre,newValue)){
+                     pre = list.get(index).getCnt().intValue();
+                     newValue=pre+totalCnt - (decrePerUni * i);
+                }
+            }
         }
 
     }
+
+    protected int checkAndAddIfAbsentEasy(List<UniversityPair> list,Long uniId,Integer delta){
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getUniId().equals(uniId)){
+                return i;
+            }
+        }
+        UniversityPair universityPair = new UniversityPair();
+        universityPair.setUniId(uniId);
+        universityPair.setEasyCnt(delta);
+        list.add(universityPair);
+        return -1;
+    }
 //法律援助第二个指标量的主逻辑:进行查表获取aid_process以及lawAid订单量，进行
     protected List<UniversityPair> generateIndexTwoForUserMainLogic(){
-        ArrayList<University> universities = new ArrayList<>();
-        List<AidProcess> aidProcesses = aidProcessMapper.selectLatelyUniversity(30);
+        ArrayList<UniversityPair> universityPairs = new ArrayList<>();
         List<LawAid> lawAids = lawAidMapper.selectLatelyUniversity(30);
-        //最近30天的活跃院校
-        int i=0;
-        for(AidProcess a:aidProcesses){
-            University university = new University();
+        List<AidProcess> aidProcesses = aidProcessMapper.selectLatelyUniversity(30);
+        if(lawAids.size()>0){
+            int totalSize1=80;
+            int decrePerUni=totalSize1/lawAids.size();
+            for(int i=0;i<lawAids.size();i++){
+                int exist = checkAndAddIfAbsentEasy(universityPairs, lawAids.get(i).getUniId(), totalSize1 - (i * decrePerUni));
+                if(exist>-1){
+                    Integer easyCnt = universityPairs.get(exist).getEasyCnt();
+                    universityPairs.get(exist).setEasyCnt(easyCnt+totalSize1 - (i * decrePerUni));
+                }
+            }
 
         }
+        if(aidProcesses.size()>0){
+            int totalSize2=65;
+            int decrePerUni1=totalSize2/aidProcesses.size();
+            for(int i=0;i<lawAids.size();i++){
+                int exist = checkAndAddIfAbsentEasy(universityPairs, aidProcesses.get(i).getUniId(), totalSize2 - (i * decrePerUni1));
+                if(exist>-1){
+                    Integer easyCnt = universityPairs.get(exist).getEasyCnt();
+                    universityPairs.get(exist).setEasyCnt(easyCnt+totalSize2 - (i * decrePerUni1));
+                }
+            }
 
-        return null;
+        }
+        //对pair进行排序
+        universityPairs.sort(new Comparator<UniversityPair>() {
+            @Override
+            public int compare(UniversityPair o1, UniversityPair o2) {
+                return o1.getEasyCnt()-o2.getEasyCnt();
+            }
+        });
+
+        return universityPairs.size()>MAX_RECOMMEND_UNIVERSITY_CNT
+                ?
+                universityPairs.subList(0,19)
+                :universityPairs;
     }
 
     protected boolean isContains(String[] sqlList,String sql){

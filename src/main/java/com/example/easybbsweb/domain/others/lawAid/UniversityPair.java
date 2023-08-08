@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UniversityPair {
     Long uniId;
     AtomicInteger cnt;
+    Integer easyCnt;
 
     @Override
     public boolean equals(Object o) {

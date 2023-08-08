@@ -2,6 +2,7 @@ package com.example.easybbsweb.service;
 
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
+import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +15,5 @@ public interface LawAidService {
      LawAidInfoPageUser getUserLawAidInfo(Long uniId);
 
 
-     List<University> generateAndRecommendUniversities(Long userId, Point point);
+     List<UniversityPair> generateAndRecommendUniversities(Long userId, Point point);
 }
