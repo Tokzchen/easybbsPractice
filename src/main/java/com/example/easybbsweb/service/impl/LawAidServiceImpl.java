@@ -6,15 +6,14 @@ import com.example.easybbsweb.domain.entity.*;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.BusinessException;
-import com.example.easybbsweb.mapper.AidProcessMapper;
-import com.example.easybbsweb.mapper.LawAidMapper;
-import com.example.easybbsweb.mapper.UniversityMapper;
-import com.example.easybbsweb.mapper.UserMainMapper;
+import com.example.easybbsweb.mapper.*;
 import com.example.easybbsweb.service.IbsService;
 import com.example.easybbsweb.service.LawAidService;
+import com.example.easybbsweb.service.SurveyService;
 import com.example.easybbsweb.utils.RedisUtils;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResult;
 import org.springframework.data.geo.GeoResults;
@@ -62,6 +61,9 @@ public class LawAidServiceImpl implements LawAidService {
 
     @Autowired
     ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Resource
+    SurveyService surveyService;
 
 
     @Override
@@ -234,21 +236,7 @@ public class LawAidServiceImpl implements LawAidService {
             //缓存过期
             //首先通过druid的sql监控查看数据库的更新状态
             //上一次缓存的更新时间
-            String[] relatedSqlList={
-                    "insert into law_aid",
-                    "insert into aid_process"
-            };
-            Integer updateCnt=0;
-            Date lastUpdateTime = (Date) RedisUtils.get("lawAid:index2:lastUpdateTime");
-            RedisUtils.setPersistently("lawAid:index2:lastUpdateTime",new Date());
-            List<Map<String, Object>> sqlStatDataList = DruidStatManagerFacade.getInstance().getSqlStatDataList(datasource);
-            for(Map<String,Object> map:sqlStatDataList){
-                String sql = (String) map.get("SQL");
-                Date maxTimespanOccurTime = (Date) map.get("MaxTimespanOccurTime");
-                if(maxTimespanOccurTime.after(lastUpdateTime)&&isContains(relatedSqlList,sql)){
-                    updateCnt++;
-                }
-            }
+            int updateCnt = getUniversityActiveNess();
             //获取活跃度前20的高校
              activenessOfUniversity = generateIndexTwoForUserMainLogic();
             //根据updateCnt进行缓存过期时间的设置
@@ -277,6 +265,25 @@ public class LawAidServiceImpl implements LawAidService {
             }
         }
 
+    }
+
+    protected int getUniversityActiveNess(){
+        String[] relatedSqlList={
+                "insert into law_aid",
+                "insert into aid_process"
+        };
+        Integer updateCnt=0;
+        Date lastUpdateTime = (Date) RedisUtils.get("lawAid:index2:lastUpdateTime");
+        RedisUtils.setPersistently("lawAid:index2:lastUpdateTime",new Date());
+        List<Map<String, Object>> sqlStatDataList = DruidStatManagerFacade.getInstance().getSqlStatDataList(datasource);
+        for(Map<String,Object> map:sqlStatDataList){
+            String sql = (String) map.get("SQL");
+            Date maxTimespanOccurTime = (Date) map.get("MaxTimespanOccurTime");
+            if(maxTimespanOccurTime.after(lastUpdateTime)&&isContains(relatedSqlList,sql)){
+                updateCnt++;
+            }
+        }
+        return updateCnt;
     }
 
     protected int checkAndAddIfAbsentEasy(List<UniversityPair> list,Long uniId,Integer delta){
@@ -343,6 +350,14 @@ public class LawAidServiceImpl implements LawAidService {
             }
         }
         return false;
+    }
+
+
+    protected void generateIndexThreeForUser(Vector<UniversityPair> list,String area){
+        //指标三，查询高校历史记录中该领域的单量
+        List<Answer> surveyArea = surveyService.getSurveyArea();
+
+
     }
 
 
