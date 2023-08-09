@@ -36,6 +36,10 @@ public class RabbitMQConfig {
     public Queue esDeleteQueue() {
         return new Queue(RabbitMQConstants.ES_DELETE_QUEUE);
     }
+    @Bean
+    public Queue likeLikeQueue() {
+        return new Queue(RabbitMQConstants.LIKE_LIKE_QUEUE);
+    }
 
     // 将队列绑定到交换器，并指定路由键
     @Bean

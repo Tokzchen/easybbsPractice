@@ -63,6 +63,8 @@ spring:
         allow: 127.0.0.1
         # IP黑名单（共同存在时，deny优先于allow）
         deny:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   mail:
     default-encoding: UTF-8
     host: smtp.qq.com
@@ -78,7 +80,7 @@ spring:
         max-size: 30
         core-size: 10
         queue-capacity: 20
-        allow-core-thread-timeout: true
+        allow-core-thread-timeout: false
 
 
 server:
