@@ -40,4 +40,6 @@ public interface LawAidMapper {
     int updateByPrimaryKey(LawAid record);
 
     List<LawAid> selectLatelyUniversity(Integer cnt);
+
+    List<LawAid> selectSpecificUniCnt(String area);
 }

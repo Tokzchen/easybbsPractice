@@ -8,11 +8,10 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class UniversityPair {
     Long uniId;
-    AtomicInteger cnt;
+    AtomicInteger cnt ;
     Integer easyCnt;
 
     @Override
@@ -26,5 +25,9 @@ public class UniversityPair {
     @Override
     public int hashCode() {
         return Objects.hash(uniId);
+    }
+
+    public UniversityPair(){
+        cnt=new AtomicInteger(0);
     }
 }

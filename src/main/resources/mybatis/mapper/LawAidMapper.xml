@@ -306,7 +306,13 @@
     select uni_id ,count(*) as cnt from law_aid
     where  ABS(DATEDIFF(NOW(), create_time)) &lt;=#{cnt}
     group by uni_id
-    order by cnt;
+    order by cnt desc ;
+  </select>
 
+  <select id="selectSpecificUniCnt" resultType="com.example.easybbsweb.domain.entity.LawAid">
+    select uni_id,count(*) as cnt from law_aid
+    where area=#{area}
+    group by uni_id
+    order by cnt desc ;
   </select>
 </mapper>

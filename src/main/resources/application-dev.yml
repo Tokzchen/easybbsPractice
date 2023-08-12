@@ -94,9 +94,8 @@ server:
     session:
       timeout: PT30M
 
-#mybatis-plus:
-#  configuration:
-#    map-underscore-to-camel-case: true 默认开启的
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
 mybatis:
   config-location: classpath:mybatis/mybatis_config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
