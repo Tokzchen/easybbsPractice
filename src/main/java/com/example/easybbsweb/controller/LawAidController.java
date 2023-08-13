@@ -6,15 +6,21 @@ import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
+import com.example.easybbsweb.domain.others.Location;
+import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.LawAidService;
+import com.example.easybbsweb.service.UniversityService;
+import com.example.easybbsweb.utils.RedisUtils;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
+import org.springframework.data.geo.Point;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,8 +35,16 @@ import java.util.UUID;
 @Tag(name="法律援助业务的接口")
 public class LawAidController {
 
-    @Autowired
+    @Resource
     LawAidService lawAidService;
+
+    @Resource
+    UniversityService universityService;
+
+
+
+
+
     /**
      * 该接口是高校认证接口
      * 其次要保证该资料是本高校上传的，所以除了附件之外，前端还需要传入token来确保是原本的高校
@@ -144,7 +158,13 @@ public class LawAidController {
 
     @PostMapping("/recommend/universities")
     public List<University> recommendUniversities(@RequestHeader("token") String token){
-        return null;
+        //必选项:位置信息，可选项:求助领域
+        UserInfo userInfo = (UserInfo) RedisUtils.get(token + ":info");
+        Location lo = (Location) RedisUtils.get(userInfo.getUserId() + ":location");
+        LawAidInfoPageUser la = lawAidService.getUserLawAidInfo(userInfo.getUserId());
+        List<UniversityPair> universityPairs = lawAidService.generateAndRecommendUniversities(userInfo.getUserId(), new Point(lo.getLng(), lo.getLat()), la.getCurrentArea());
+        List<University> universityInfoByUniIdList = universityService.getUniversityInfoByUniIdList(universityPairs);
+        return universityInfoByUniIdList;
     }
 
     @PostMapping("lawAidInfo/user")
@@ -155,7 +175,6 @@ public class LawAidController {
 
         LawAidInfoPageUser userLawAidInfo = lawAidService.getUserLawAidInfo(userId);
         return new ResultInfo(true,"响应成功",userLawAidInfo);
-
     }
 
 

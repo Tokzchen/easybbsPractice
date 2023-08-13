@@ -302,4 +302,26 @@
       email_code = #{emailCode,jdbcType=VARCHAR}
     where uni_id = #{uniId,jdbcType=BIGINT}
   </update>
+
+
+  <select id="selectUniversityByIdList" resultType="com.example.easybbsweb.domain.entity.University">
+    select
+    <include refid="Base_Column_List" />
+    from university
+    <where>
+            uni_id in
+      <foreach collection="list" item="node" open="(" close=")" separator=",">
+            #{node.uniId}
+      </foreach>
+    </where>
+    order by FIND_IN_SET(uni_id,
+    <foreach collection="list"
+             item="node"
+             open="'"
+             close="'"
+             separator=",">
+        ${node.uniId}
+        </foreach>
+    )
+  </select>
 </mapper>

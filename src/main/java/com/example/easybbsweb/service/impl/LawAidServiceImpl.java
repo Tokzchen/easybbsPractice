@@ -94,6 +94,11 @@ public class LawAidServiceImpl implements LawAidService {
 
     @Override
     public LawAidInfoPageUser getUserLawAidInfo(Long userId) {
+        //查用户缓存
+        LawAidInfoPageUser cache = (LawAidInfoPageUser) RedisUtils.get(userId + ":lawAidInfo");
+        if(cache!=null){
+            return cache;
+        }
         //获取1.求助领域，2.关联大学 3.总共求助次数 4.当前求助内容的进度
         LawAidInfoPageUser lawAidInfoPageUser = new LawAidInfoPageUser();
         //1.获取求助领域，如还没选择则显示 尚未选择
@@ -151,6 +156,7 @@ public class LawAidServiceImpl implements LawAidService {
             }
         });
         lawAidInfoPageUser.setProgress(aidProcesses);
+        RedisUtils.set(userId+":lawAidInfo",lawAidInfoPageUser);
         return lawAidInfoPageUser;
 
 
