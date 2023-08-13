@@ -42,7 +42,7 @@ public class ForumArticleCommentLikesServiceImpl implements ForumArticleCommentL
     public void unLike(Long uid, Long cmtId) {
 
             likesMapper.delete(new QueryWrapper<ForumArticleCommentLikes>()
-                    .eq("uid", uid).eq("cmtId", cmtId));
+                    .eq("uid", uid).eq("cmt_id", cmtId));
             mapper.updateLikeById(cmtId,-1);
 
 
