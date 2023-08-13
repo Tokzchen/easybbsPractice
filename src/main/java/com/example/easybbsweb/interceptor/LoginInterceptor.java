@@ -18,7 +18,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token"); //前端vue将token添加在请求头中
 
         if(token==null){
-            log.info("token is null intercepted");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             try{
@@ -38,7 +37,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         else{
-            log.info("tokenIsNotNull...");
             boolean result = TokenUtil.verify(token);
             if(result){
                 return true;//放行

@@ -35,6 +35,8 @@ public class LocationController {
         }else{
             return ResultInfo.Fail();
         }
+        //缓存
+        RedisUtils.set(userOrUniId+":location",location);
         return ResultInfo.OK();
     }
 

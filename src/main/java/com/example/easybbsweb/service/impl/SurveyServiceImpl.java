@@ -190,10 +190,17 @@ public class SurveyServiceImpl implements SurveyService {
 
     @Override
     public List<Answer> getSurveyArea() {
-        AnswerExample answerExample = new AnswerExample();
-        answerExample.createCriteria().andQueIdEqualTo(0);
-        List<Answer> answers = answerMapper.selectByExample(answerExample);
-        return answers;
+        List<Answer> surveyArea = (List<Answer>) RedisUtils.get("surveyArea");
+        //低活跃度高热度key，过期时长一点
+        if(surveyArea==null){
+            AnswerExample answerExample = new AnswerExample();
+            answerExample.createCriteria().andQueIdEqualTo(0);
+            List<Answer> answers = answerMapper.selectByExample(answerExample);
+            RedisUtils.set("surveyArea",surveyArea,60*60*24);
+            surveyArea=answers;
+
+        }
+        return surveyArea;
     }
 
     /*

@@ -4,6 +4,7 @@ import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UniversityExample;
 import java.util.List;
 
+import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -32,4 +33,6 @@ public interface UniversityMapper {
     int updateByPrimaryKeySelective(University record);
 
     int updateByPrimaryKey(University record);
+
+    List<University> selectUniversityByIdList(List<UniversityPair> uniIdList);
 }

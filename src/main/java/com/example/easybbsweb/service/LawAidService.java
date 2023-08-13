@@ -15,5 +15,5 @@ public interface LawAidService {
      LawAidInfoPageUser getUserLawAidInfo(Long uniId);
 
 
-     List<UniversityPair> generateAndRecommendUniversities(Long userId, Point point);
+     List<UniversityPair> generateAndRecommendUniversities(Long userId, Point point,String area);
 }

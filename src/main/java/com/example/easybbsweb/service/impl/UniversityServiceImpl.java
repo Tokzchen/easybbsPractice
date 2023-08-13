@@ -2,6 +2,7 @@ package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UniversityExample;
+import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.mapper.UniversityMapper;
@@ -86,5 +87,11 @@ public class UniversityServiceImpl implements UniversityService {
        }
 
        return university1;
+    }
+
+    @Override
+    public List<University> getUniversityInfoByUniIdList(List<UniversityPair> uniIdList) {
+        List<University> universities = universityMapper.selectUniversityByIdList(uniIdList);
+        return universities;
     }
 }

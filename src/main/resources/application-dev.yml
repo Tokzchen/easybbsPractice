@@ -100,8 +100,15 @@ server:
 mybatis:
   config-location: classpath:mybatis/mybatis_config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
+springdoc:
+  swagger-ui:
+#    path: /docs/swagger.html
+#    disable-swagger-default-url: true
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true
+#  http://localhost:7071/context-path/swagger-ui.html
+
 logging:
   level:
     com.hexadecimal: debug
-mybatis-plus:
-  mapper-locations: classpath:mybatis/mapper/*.xml
