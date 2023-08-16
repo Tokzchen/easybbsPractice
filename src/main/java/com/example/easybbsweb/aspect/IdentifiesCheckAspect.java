@@ -2,6 +2,7 @@ package com.example.easybbsweb.aspect;
 
 import com.example.easybbsweb.anotation.IdentifiesCheck;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -10,6 +11,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Aspect
 @Component
+@Slf4j
 public class IdentifiesCheckAspect {
     @Resource
     RedisTemplate<String, String> redisTemplate;
@@ -44,7 +47,7 @@ public class IdentifiesCheckAspect {
         try {
             lock.lock();
             val = redisTemplate.opsForValue().get(key);
-
+            log.debug("尝试删除锁");
             String script = "if redis.call('exists' , KEYS[1])==0 " +
                     " then return 0 " +//==0表示不存在，锁空闲，不删除锁
                     " elseif redis.call('get' , KEYS[1])== ARGV[1] " +//有锁且是自己的锁（是不是自己的通过uuid）

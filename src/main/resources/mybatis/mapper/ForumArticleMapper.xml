@@ -6,4 +6,8 @@
         SET `like` = `like` + #{increment}
         WHERE id = #{articleId}
     </update>
+    <select id="t">
+
+            select  * from forum_article where id = '#{list.id}'
+    </select>
 </mapper>
