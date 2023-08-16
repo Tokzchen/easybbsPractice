@@ -11,6 +11,8 @@ import com.example.easybbsweb.mapper.*;
 import com.example.easybbsweb.service.IbsService;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.service.SurveyService;
+import com.example.easybbsweb.service.UniversityService;
+import com.example.easybbsweb.utils.RedisGenerateIdUtils;
 import com.example.easybbsweb.utils.RedisUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +50,8 @@ public class LawAidServiceImpl implements LawAidService {
     @Resource
     UniversityMapper universityMapper;
     @Resource
+    UniversityService universityService;
+    @Resource
     UserMainMapper userMainMapper;
 
     @Resource
@@ -67,6 +71,8 @@ public class LawAidServiceImpl implements LawAidService {
 
     @Resource
     SurveyService surveyService;
+    @Resource
+    RedisGenerateIdUtils redisGenerateIdUtils;
 
 
     @Override
@@ -210,7 +216,47 @@ public class LawAidServiceImpl implements LawAidService {
         return universityList;
     }
 
-   //产生推荐业务的第一个指标:位置信息
+    @Override
+    public boolean userApplyUniLawAid(UserInfo user, University university) {
+        //同一时间内不能同时向3所大学申请法律援助，若其中一所通过了法律援助的申请，则其他两所会自动撤销
+        //法律援助业务只能由高校发起结束，用户发起确认
+        //首先还得查是否已经有了该用户与目标高校是否已经有法律援助的订单了，并且订单的状态不是结束
+        LawAidExample lawAidExample = new LawAidExample();
+        lawAidExample.createCriteria()
+                .andUserIdEqualTo(user.getUserId())
+                .andUniIdEqualTo(university.getUniId())
+                .andStateNotEqualTo("2");//结束状态
+        List<LawAid> lawAids = lawAidMapper.selectByExample(lawAidExample);
+        if(lawAids.size()!=0){
+            throw  new BusinessException("您已经申请了该高校，援助结束前不能重复申请");
+        }
+        long incr = RedisUtils.incr(user.getUserId() + ":lawAid:apply:cnt", 1);
+        if(incr>3){
+            RedisUtils.decr(user.getUserId() + ":lawAid:apply:cnt", 1);
+            return false;
+        }
+        LawAidInfoPageUser lai = getUserLawAidInfo(user.getUserId());
+        LawAid la = new LawAid();
+        la.setArea(lai==null||lai.getCurrentArea()==null?"未选择":lai.getCurrentArea());
+        la.setUserId(user.getUserId());
+        la.setUniId(university.getUniId());
+        la.setState("1");
+        long lawAidId = redisGenerateIdUtils.nextId(RedisGenerateIdUtils.LAW_AID);
+        la.setLawAidId(lawAidId);
+        AidProcess ap = new AidProcess();
+        ap.setUserId(user.getUserId());
+        ap.setUniId(university.getUniId());
+        ap.setLawAidId(lawAidId);
+        ap.setCreateTime(new Date());
+        ap.setState("1");//012 失败成功处理中，3 其他
+        University universityInfoByUniId = universityService.getUniversityInfoByUniId(university);
+        ap.setContent("高校"+universityInfoByUniId.getUniId()+"法律援助申请成功");
+        lawAidMapper.insert(la);
+        aidProcessMapper.insert(ap);
+        return true;
+    }
+
+    //产生推荐业务的第一个指标:位置信息
     public void generateIndexOneForUser(Long userId,Point point,Vector<UniversityPair> list){
         //获取用户附近的大学位置信息
         GeoResults<RedisGeoCommands.GeoLocation<Object>> nearbyUniversityInfo = ibsService.getNearbyUniversityInfo(point, MAX_NEARBY_UNIVERSITY_DISTANCE, MAX_RECOMMEND_UNIVERSITY_CNT);

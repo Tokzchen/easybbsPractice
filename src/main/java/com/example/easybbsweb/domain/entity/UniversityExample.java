@@ -853,6 +853,146 @@ public class UniversityExample {
             addCriterion("email_code not between", value1, value2, "emailCode");
             return (Criteria) this;
         }
+
+        public Criteria andLawLevelIsNull() {
+            addCriterion("law_level is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelIsNotNull() {
+            addCriterion("law_level is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelEqualTo(String value) {
+            addCriterion("law_level =", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelNotEqualTo(String value) {
+            addCriterion("law_level <>", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelGreaterThan(String value) {
+            addCriterion("law_level >", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelGreaterThanOrEqualTo(String value) {
+            addCriterion("law_level >=", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelLessThan(String value) {
+            addCriterion("law_level <", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelLessThanOrEqualTo(String value) {
+            addCriterion("law_level <=", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelLike(String value) {
+            addCriterion("law_level like", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelNotLike(String value) {
+            addCriterion("law_level not like", value, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelIn(List<String> values) {
+            addCriterion("law_level in", values, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelNotIn(List<String> values) {
+            addCriterion("law_level not in", values, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelBetween(String value1, String value2) {
+            addCriterion("law_level between", value1, value2, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andLawLevelNotBetween(String value1, String value2) {
+            addCriterion("law_level not between", value1, value2, "lawLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteIsNull() {
+            addCriterion("website is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteIsNotNull() {
+            addCriterion("website is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteEqualTo(String value) {
+            addCriterion("website =", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteNotEqualTo(String value) {
+            addCriterion("website <>", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteGreaterThan(String value) {
+            addCriterion("website >", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteGreaterThanOrEqualTo(String value) {
+            addCriterion("website >=", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteLessThan(String value) {
+            addCriterion("website <", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteLessThanOrEqualTo(String value) {
+            addCriterion("website <=", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteLike(String value) {
+            addCriterion("website like", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteNotLike(String value) {
+            addCriterion("website not like", value, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteIn(List<String> values) {
+            addCriterion("website in", values, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteNotIn(List<String> values) {
+            addCriterion("website not in", values, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteBetween(String value1, String value2) {
+            addCriterion("website between", value1, value2, "website");
+            return (Criteria) this;
+        }
+
+        public Criteria andWebsiteNotBetween(String value1, String value2) {
+            addCriterion("website not between", value1, value2, "website");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

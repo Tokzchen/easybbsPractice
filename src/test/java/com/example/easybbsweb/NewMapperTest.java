@@ -2,6 +2,7 @@ package com.example.easybbsweb;
 
 import com.example.easybbsweb.domain.entity.AidProcess;
 import com.example.easybbsweb.domain.entity.LawAid;
+import com.example.easybbsweb.domain.entity.LawAidExample;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.mapper.AidProcessMapper;
@@ -60,6 +61,17 @@ public class NewMapperTest {
         rlist.forEach(r->{
             System.out.println(r);
         });
+    }
+
+    @Test
+    void func4(){
+        LawAidExample lawAidExample = new LawAidExample();
+        lawAidExample.createCriteria()
+                .andUserIdEqualTo(11235L)
+                .andUniIdEqualTo(11121L)
+                .andStateNotEqualTo("2");//结束状态
+        List<LawAid> lawAids = lawAidMapper.selectByExample(lawAidExample);
+        System.out.println(lawAids);
     }
 
 }

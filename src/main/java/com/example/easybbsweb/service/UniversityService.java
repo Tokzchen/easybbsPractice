@@ -12,6 +12,8 @@ public interface UniversityService {
 
     University getUniversityInfoByEmail(University university);
 
+    University getUniInfoById(University university);
+
     University getUniversityInfoByUniId(University university);
 
     List<University> getUniversityInfoByUniIdList(List<UniversityPair> uniIdList);

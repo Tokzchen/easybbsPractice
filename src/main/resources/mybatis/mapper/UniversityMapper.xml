@@ -13,6 +13,8 @@
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="email_code" jdbcType="VARCHAR" property="emailCode" />
+    <result column="law_level" jdbcType="VARCHAR" property="lawLevel" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uni_id, uni_name, pwd, province, city, email, phone, verified, `file`, avatar, email_code
+    uni_id, uni_name, pwd, province, city, email, phone, verified, `file`, avatar, email_code, 
+    law_level, website
   </sql>
   <select id="selectByExample" parameterType="com.example.easybbsweb.domain.entity.UniversityExample" resultMap="BaseResultMap">
     select
@@ -109,11 +112,13 @@
     insert into university (uni_id, uni_name, pwd, 
       province, city, email, 
       phone, verified, `file`, 
-      avatar, email_code)
+      avatar, email_code, law_level, 
+      website)
     values (#{uniId,jdbcType=BIGINT}, #{uniName,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
       #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{verified,jdbcType=TINYINT}, #{file,jdbcType=VARCHAR}, 
-      #{avatar,jdbcType=VARCHAR}, #{emailCode,jdbcType=VARCHAR})
+      #{avatar,jdbcType=VARCHAR}, #{emailCode,jdbcType=VARCHAR}, #{lawLevel,jdbcType=VARCHAR}, 
+      #{website,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.example.easybbsweb.domain.entity.University">
     insert into university
@@ -151,6 +156,12 @@
       <if test="emailCode != null">
         email_code,
       </if>
+      <if test="lawLevel != null">
+        law_level,
+      </if>
+      <if test="website != null">
+        website,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="uniId != null">
@@ -185,6 +196,12 @@
       </if>
       <if test="emailCode != null">
         #{emailCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lawLevel != null">
+        #{lawLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        #{website,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -230,6 +247,12 @@
       <if test="record.emailCode != null">
         email_code = #{record.emailCode,jdbcType=VARCHAR},
       </if>
+      <if test="record.lawLevel != null">
+        law_level = #{record.lawLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.website != null">
+        website = #{record.website,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -247,7 +270,9 @@
       verified = #{record.verified,jdbcType=TINYINT},
       `file` = #{record.file,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
-      email_code = #{record.emailCode,jdbcType=VARCHAR}
+      email_code = #{record.emailCode,jdbcType=VARCHAR},
+      law_level = #{record.lawLevel,jdbcType=VARCHAR},
+      website = #{record.website,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -285,6 +310,12 @@
       <if test="emailCode != null">
         email_code = #{emailCode,jdbcType=VARCHAR},
       </if>
+      <if test="lawLevel != null">
+        law_level = #{lawLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="website != null">
+        website = #{website,jdbcType=VARCHAR},
+      </if>
     </set>
     where uni_id = #{uniId,jdbcType=BIGINT}
   </update>
@@ -299,7 +330,9 @@
       verified = #{verified,jdbcType=TINYINT},
       `file` = #{file,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
-      email_code = #{emailCode,jdbcType=VARCHAR}
+      email_code = #{emailCode,jdbcType=VARCHAR},
+      law_level = #{lawLevel,jdbcType=VARCHAR},
+      website = #{website,jdbcType=VARCHAR}
     where uni_id = #{uniId,jdbcType=BIGINT}
   </update>
 
@@ -309,9 +342,9 @@
     <include refid="Base_Column_List" />
     from university
     <where>
-            uni_id in
+      uni_id in
       <foreach collection="list" item="node" open="(" close=")" separator=",">
-            #{node.uniId}
+        #{node.uniId}
       </foreach>
     </where>
     order by FIND_IN_SET(uni_id,
@@ -320,8 +353,9 @@
              open="'"
              close="'"
              separator=",">
-        ${node.uniId}
-        </foreach>
+      ${node.uniId}
+    </foreach>
     )
   </select>
+
 </mapper>
