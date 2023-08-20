@@ -8,7 +8,7 @@ spring:
       connect-timeout: 10000
       password: cdz
   datasource:
-    url: jdbc:mysql://47.120.8.89:3306/youfa?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    url: jdbc:mysql://47.120.8.89:3306/youfa?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
     username: root
     password: cdz
     druid:
@@ -94,14 +94,11 @@ server:
     session:
       timeout: PT30M
 
-#mybatis-plus:
-#  configuration:
-#    map-underscore-to-camel-case: true 默认开启的
+mybatis-plus:
+  mapper-locations: classpath:mybatis/mapper/*.xml
 mybatis:
   config-location: classpath:mybatis/mybatis_config.xml
   mapper-locations: classpath:mybatis/mapper/*.xml
-springdoc:
-  swagger-ui:
 #    path: /docs/swagger.html
 #    disable-swagger-default-url: true
 #  configuration:
@@ -111,4 +108,5 @@ springdoc:
 
 logging:
   level:
+    com.example.easybbsweb.service.impl.ForumArticleLikesServiceImpl: debug
     com.hexadecimal: debug

@@ -32,7 +32,7 @@ public class ForumController {
     ForumArticleLikesService forumArticleLikesService;
     @Operation(summary = "点赞唯一标识")
     @ApiResponse(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,schema = @Schema(implementation = Void.class)))
-    @GetMapping("/identifies")
+    @PostMapping("/identifies")
     public ResultInfo identifies(
             @Parameter(description = "生成的唯一标识") @RequestParam("identifies") String identifies
     ){
