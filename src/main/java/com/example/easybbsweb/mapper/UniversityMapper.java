@@ -5,12 +5,8 @@ import com.example.easybbsweb.domain.entity.UniversityExample;
 import java.util.List;
 
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
-@Mapper
 public interface UniversityMapper {
     long countByExample(UniversityExample example);
 

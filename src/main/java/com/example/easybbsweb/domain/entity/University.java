@@ -23,6 +23,10 @@ public class University {
 
     private String emailCode;
 
+    private String lawLevel;
+
+    private String website;
+
     public Long getUniId() {
         return uniId;
     }
@@ -111,6 +115,22 @@ public class University {
         this.emailCode = emailCode;
     }
 
+    public String getLawLevel() {
+        return lawLevel;
+    }
+
+    public void setLawLevel(String lawLevel) {
+        this.lawLevel = lawLevel;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -128,6 +148,8 @@ public class University {
         sb.append(", file=").append(file);
         sb.append(", avatar=").append(avatar);
         sb.append(", emailCode=").append(emailCode);
+        sb.append(", lawLevel=").append(lawLevel);
+        sb.append(", website=").append(website);
         sb.append("]");
         return sb.toString();
     }

@@ -10,6 +10,7 @@ import com.example.easybbsweb.mapper.UserMainMapper;
 import com.example.easybbsweb.service.ForumArticleService;
 import com.example.easybbsweb.service.RegistryService;
 import com.example.easybbsweb.utils.GenerateIdUtils;
+import com.example.easybbsweb.utils.RedisGenerateIdUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class RegistryServiceImpl implements RegistryService {
     private UniversityMapper universityMapper;
 
     @Resource
+    RedisGenerateIdUtils redisGenerateIdUtils;
+
+    @Resource
     private ForumArticleService forumArticleService;
     public void checkUser(UserInfo userInfo) throws Exception{
         UserInfoExample example = new UserInfoExample();
@@ -46,7 +50,7 @@ public class RegistryServiceImpl implements RegistryService {
     public boolean registerUser(UserInfo userInfo)  {
         try {
             checkUser(userInfo);
-            userInfo.setUserId(GenerateIdUtils.generateIdByEntity(IdSelector.USER));
+            userInfo.setUserId(redisGenerateIdUtils.nextId(RedisGenerateIdUtils.USER));
             log.info("生成用户id{}",userInfo.getUserId());
             //密码md5加密
             userInfo.setPassword(DigestUtils.md5DigestAsHex(userInfo.getPassword().trim().getBytes()));
@@ -75,7 +79,7 @@ public class RegistryServiceImpl implements RegistryService {
             throw new BusinessException("该邮箱已被注册");
         }
         //修改完整信息，生成账号id
-        Long aLong = GenerateIdUtils.generateIdByEntity(IdSelector.USER);
+        long aLong = redisGenerateIdUtils.nextId(RedisGenerateIdUtils.UNIVERSITY);
         university.setUniId(aLong);
         int i = universityMapper.insertSelective(university);
         if(i>0){

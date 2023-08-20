@@ -7,6 +7,7 @@ import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.service.UniversityService;
+import com.example.easybbsweb.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -73,6 +74,18 @@ public class UniversityServiceImpl implements UniversityService {
         university1.setPwd(null);
 
         return university1;
+    }
+
+    @Override
+    public University getUniInfoById(University university) {
+        University uniInfo = (University) RedisUtils.get(university.getUniId() + ":info");
+        if(uniInfo!=null){
+            return uniInfo;
+        }else{
+            University university1 = universityMapper.selectByPrimaryKey(university.getUniId());
+            RedisUtils.set(university.getUniId()+":info",university1);
+            return university1;
+        }
     }
 
     @Override

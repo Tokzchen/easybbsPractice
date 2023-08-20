@@ -48,4 +48,9 @@ public class RedisLocationTest {
 //        GeoResults<RedisGeoCommands.GeoLocation<Object>> test_user_geo = RedisUtils.nearLocation(new Point(113.388302, 23.06095), 80 * 1000, 2, RedisUtils.GEO_KEY_USER);
 //        System.out.println(test_user_geo);
     }
+
+    @Test
+    void func3(){;
+        RedisUtils.del("11235:lawAid:apply:cnt");
+    }
 }

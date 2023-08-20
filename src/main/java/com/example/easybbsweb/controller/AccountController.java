@@ -191,11 +191,13 @@ public class AccountController {
                     RedisUtils.set(token+":identity","user",10*60*60);
                     RedisUtils.set(userInfo.getEmail()+":info",userInfoByEmail);
                     RedisUtils.set(token+":info",userInfoByEmail,10*60*60);
+                    RedisUtils.set(userInfoByEmail.getUserId()+":info",userInfoByEmail);
                 }else{
                     University universityInfoByEmail = universityService.getUniversityInfoByEmail(university);
                     RedisUtils.set(token+":identity","university",10*60*60);
                     RedisUtils.set(university.getEmail()+":info",universityInfoByEmail,10*60*60);
                     RedisUtils.set(token+":info",universityInfoByEmail,10*60*60);
+                    RedisUtils.set(universityInfoByEmail.getUniId()+":info",universityInfoByEmail);
                 }
                 return new ResultInfo(true,b1?"user":"university",token);
             }else{

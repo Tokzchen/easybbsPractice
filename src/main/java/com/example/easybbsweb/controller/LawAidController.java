@@ -8,6 +8,7 @@ import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
 import com.example.easybbsweb.domain.others.Location;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
+import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.service.UniversityService;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.data.geo.Point;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -175,6 +177,17 @@ public class LawAidController {
 
         LawAidInfoPageUser userLawAidInfo = lawAidService.getUserLawAidInfo(userId);
         return new ResultInfo(true,"响应成功",userLawAidInfo);
+    }
+
+    @PostMapping("/apply/university")
+    @Operation(summary = "用户向高校提交法律援助申请",description = "")
+    public ResultInfo userApplyUniLawAid(@RequestHeader("token") String token,@RequestBody University university){
+        if(university.getUniId()==null){
+            throw new BusinessException("错误");
+        }
+        UserInfo user = (UserInfo) RedisUtils.get(token + ":info");
+        boolean flag = lawAidService.userApplyUniLawAid(user, university);
+        return flag?ResultInfo.Success():ResultInfo.Fail();
     }
 
 
