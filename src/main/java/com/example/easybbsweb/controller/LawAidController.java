@@ -5,8 +5,10 @@ package com.example.easybbsweb.controller;
 import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.entity.dto.UserDTO2;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
 import com.example.easybbsweb.domain.others.Location;
+import com.example.easybbsweb.domain.others.lawAid.LawAidInfoPageUni;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
@@ -188,6 +190,26 @@ public class LawAidController {
         UserInfo user = (UserInfo) RedisUtils.get(token + ":info");
         boolean flag = lawAidService.userApplyUniLawAid(user, university);
         return flag?ResultInfo.Success():ResultInfo.Fail();
+    }
+
+    @PostMapping("/university/accept")
+    @Operation(summary = "高校同意某个用户的法律援助申请",description = "")
+    public ResultInfo uniAcceptLawAid(@RequestBody UserDTO2 user){
+       boolean b =  lawAidService.uniAcceptLawAid(user);
+       return b?ResultInfo.OK():ResultInfo.Fail();
+    }
+
+    @GetMapping("/university/info")
+    @Operation(summary = "高校获取当前法律援助的信息", description = "")
+    public ResultInfo uniGetLawAidInfo(@RequestHeader("token") String token){
+        //验证身份
+        String id = (String) RedisUtils.get(token + ":identity");
+        if(! id.equals("university")){
+            return ResultInfo.Fail();
+        }
+        String uniId = TokenUtil.getCurrentUserOrUniId(token);
+        LawAidInfoPageUni uniLawAidInfo = lawAidService.getUniLawAidInfo(Long.parseLong(uniId));
+        return ResultInfo.Success(uniLawAidInfo);
     }
 
 

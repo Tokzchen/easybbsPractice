@@ -1,13 +1,14 @@
 package com.example.easybbsweb;
 
-import com.example.easybbsweb.domain.entity.AidProcess;
-import com.example.easybbsweb.domain.entity.LawAid;
-import com.example.easybbsweb.domain.entity.LawAidExample;
-import com.example.easybbsweb.domain.entity.University;
+import com.example.easybbsweb.domain.entity.*;
+import com.example.easybbsweb.domain.entity.dto.UserDTO1;
+import com.example.easybbsweb.domain.others.lawAid.LawAidInfoPageUni;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.mapper.AidProcessMapper;
 import com.example.easybbsweb.mapper.LawAidMapper;
 import com.example.easybbsweb.mapper.UniversityMapper;
+import com.example.easybbsweb.mapper.UserInfoMapper;
+import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.service.UniversityService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,12 @@ public class NewMapperTest {
 
     @Resource
     UniversityService universityService;
+
+    @Resource
+    UserInfoMapper userInfoMapper;
+
+    @Resource
+    LawAidService lawAidService;
 
 
     @Test
@@ -72,6 +79,14 @@ public class NewMapperTest {
                 .andStateNotEqualTo("2");//结束状态
         List<LawAid> lawAids = lawAidMapper.selectByExample(lawAidExample);
         System.out.println(lawAids);
+    }
+
+
+    @Test
+    void func5(){
+        LawAidInfoPageUni uniLawAidInfo = lawAidService.getUniLawAidInfo(11121);
+        System.out.println(uniLawAidInfo);
+
     }
 
 }

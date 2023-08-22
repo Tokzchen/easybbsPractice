@@ -17,4 +17,6 @@ public interface UniversityService {
     University getUniversityInfoByUniId(University university);
 
     List<University> getUniversityInfoByUniIdList(List<UniversityPair> uniIdList);
+
+    boolean updateUniversityInfoSelectiveByPrimaryKey(University university);
 }

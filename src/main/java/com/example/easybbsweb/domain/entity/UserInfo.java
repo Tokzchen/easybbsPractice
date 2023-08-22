@@ -173,30 +173,27 @@ public class UserInfo {
         this.ansId = ansId;
     }
 
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", userId=").append(userId);
-        sb.append(", username=").append(username);
-        sb.append(", gender=").append(gender);
-        sb.append(", birthday=").append(birthday);
-        sb.append(", email=").append(email);
-        sb.append(", password=").append(password);
-        sb.append(", phone=").append(phone);
-        sb.append(", province=").append(province);
-        sb.append(", city=").append(city);
-        sb.append(", lastLoginTime=").append(lastLoginTime);
-        sb.append(", lastLoginIp=").append(lastLoginIp);
-        sb.append(", issue=").append(issue);
-        sb.append(", lastUpdateTime=").append(lastUpdateTime);
-        sb.append(", emailCode=").append(emailCode);
-        sb.append(", checkCode=").append(checkCode);
-        sb.append(", avatar=").append(avatar);
-        sb.append(", ansId=").append(ansId);
-        sb.append("]");
-        return sb.toString();
+        return "UserInfo{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", gender='" + gender + '\'' +
+                ", birthday=" + birthday +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", lastLoginTime=" + lastLoginTime +
+                ", lastLoginIp='" + lastLoginIp + '\'' +
+                ", issue='" + issue + '\'' +
+                ", lastUpdateTime=" + lastUpdateTime +
+                ", emailCode='" + emailCode + '\'' +
+                ", checkCode='" + checkCode + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", ansId=" + ansId +
+                '}';
     }
 }

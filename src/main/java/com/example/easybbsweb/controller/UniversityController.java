@@ -79,6 +79,69 @@ public class UniversityController {
         }
     }
     @Operation(summary = "高校上传头像",description = "返回头像url")
+    @PostMapping("/avatarUpload1")
+    public ResultInfo universityVerify1(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
+        //处理文件上传逻辑
+
+        log.info("客户端尝试上传文件中，连接接口成功...");
+        if(file.isEmpty()){
+            return new ResultInfo(false,"文件不得为空",null);
+        }
+        if(file.getSize()>AVATAR_MAX_SIZE){
+            return new ResultInfo(false,"文件太大啦",null);
+        }
+        String contentType = file.getContentType();
+        // boolean contains(Object o)：当前列表若包含某元素，返回结果为true；若不包含该元素，返回结果为false
+        if (!AVATAR_TYPES.contains(contentType)) {
+            // 是：抛出异常
+            return new ResultInfo(false,"不支持使用该类型的文件作为头像，允许的文件类型：" + AVATAR_TYPES,null);
+        }
+
+        //获取jar包所在目录
+        ApplicationHome h = new ApplicationHome(getClass());
+        File jarF = h.getSource();
+        //在jar包所在目录下生成一个文件夹用来存储上传的图片,子目录就是大学id
+        String parent = jarF.getParentFile().toString()+"/classes/static/universityAvatar/"+ TokenUtil.getCurrentUserOrUniId(token)+"/";
+        System.out.println(parent);
+
+        // 保存头像文件的文件夹
+        File dir = new File(parent);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String suffix = "";
+        String originalFilename = file.getOriginalFilename();
+        int beginIndex = originalFilename.lastIndexOf(".");
+        if (beginIndex > 0) {
+            suffix = originalFilename.substring(beginIndex);
+        }
+
+        String newName= UUID.randomUUID().toString()+suffix;
+        System.out.println(newName);
+        String url="";
+        try {
+            file.transferTo(new File(dir,newName));
+            url=req.getScheme()+"://"+ req.getServerName()+":"+req.getServerPort()+"/api/universityAvatar/"+TokenUtil.getCurrentUserOrUniId(token)+"/"+newName;
+            //文件存储成功后要在数据库中保存所存储的文件夹的路径
+            University university = new University();
+            university.setUniId(Long.parseLong(TokenUtil.getCurrentUserOrUniId(token)));
+            //此处的url与资料认证处的不同，具体到文件名，资料认证处是具体到文件夹
+            university.setAvatar(url);
+            boolean b = universityService.saveUniversityAvatarPath(university);
+            if(!b){
+                throw new SystemException("保存高校头像失败");
+            }else{
+                log.info("保存{}的高校头像到url:{}",TokenUtil.getCurrentUserOrUniId(token),url);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return new ResultInfo(true,"上传成功",url);
+
+    }
+
+    @Operation(summary = "高校上传头像",description = "返回头像url")
     @PostMapping("/avatarUpload")
     public ResultInfo universityVerify(MultipartFile file, @RequestHeader("token") String token, HttpServletRequest req){
         //处理文件上传逻辑
@@ -153,5 +216,23 @@ public class UniversityController {
         university1.setUniId(Long.parseLong(uniId));
         String universityAvatarPath = universityService.getUniversityAvatarPath(university1);
         return new ResultInfo(true,"响应成功",universityAvatarPath);
+    }
+
+    @Operation(summary = "高校获取个人呢信息的接口")
+    @GetMapping("/infos")
+    public ResultInfo getUniInfo(@RequestHeader("token") String token){
+        University university = new University();
+        university.setUniId(Long.parseLong(TokenUtil.getCurrentUserOrUniId(token)));
+        University universityInfoByUniId = universityService.getUniversityInfoByUniId(university);
+        return ResultInfo.Success(universityInfoByUniId);
+    }
+
+    @Operation(summary = "修改高校个人信息")
+    @PostMapping("/infos/change/uni")
+    public ResultInfo changeUniInfoSelective(@RequestBody University university,@RequestHeader("token")String token){
+        String userOrUniId = TokenUtil.getCurrentUserOrUniId(token);
+        university.setUniId(Long.parseLong(userOrUniId));
+        boolean b = universityService.updateUniversityInfoSelectiveByPrimaryKey(university);
+        return b?ResultInfo.Success():ResultInfo.Fail();
     }
 }

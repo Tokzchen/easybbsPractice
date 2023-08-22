@@ -3,7 +3,10 @@ package com.example.easybbsweb.service.impl;
 import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceWrapper;
 import com.alibaba.druid.stat.DruidStatManagerFacade;
 import com.example.easybbsweb.domain.entity.*;
+import com.example.easybbsweb.domain.entity.dto.UserDTO2;
+import com.example.easybbsweb.domain.entity.dto.UserJoin;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
+import com.example.easybbsweb.domain.others.lawAid.LawAidInfoPageUni;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
@@ -31,6 +34,7 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -53,6 +57,9 @@ public class LawAidServiceImpl implements LawAidService {
     UniversityService universityService;
     @Resource
     UserMainMapper userMainMapper;
+
+    @Resource
+    UserInfoMapper userInfoMapper;
 
     @Resource
     LawAidMapper lawAidMapper;
@@ -218,6 +225,11 @@ public class LawAidServiceImpl implements LawAidService {
 
     @Override
     public boolean userApplyUniLawAid(UserInfo user, University university) {
+        Boolean confirmed = (Boolean) RedisUtils.get(user.getUserId() + ":lawAid:apply:confirm");
+        if(confirmed.equals(Boolean.TRUE)){
+            //已经有高校在处理这个用户
+            throw new BusinessException("已有高校与您在沟通，不可同时沟通多个高校");
+        }
         //同一时间内不能同时向3所大学申请法律援助，若其中一所通过了法律援助的申请，则其他两所会自动撤销
         //法律援助业务只能由高校发起结束，用户发起确认
         //首先还得查是否已经有了该用户与目标高校是否已经有法律援助的订单了，并且订单的状态不是结束
@@ -254,6 +266,50 @@ public class LawAidServiceImpl implements LawAidService {
         lawAidMapper.insert(la);
         aidProcessMapper.insert(ap);
         return true;
+    }
+
+    @Override
+    public LawAidInfoPageUni getUniLawAidInfo(long uniId) {
+        LawAidInfoPageUni lawAidInfoPageUni = new LawAidInfoPageUni();
+        //获取当前正在处理的法律援助
+        List<UserDTO2> userDTO2s = userInfoMapper.selectUserLawAidInfoConfirmed(uniId);
+        //获取当前已经申请但还没确认的法律援助
+        List<UserDTO2> userDTO2s1 = userInfoMapper.selectUserLawAidInfoToConfirm(uniId);
+        //获取历史总法律援助单量（已完成）
+        LawAidExample lawAidExample = new LawAidExample();
+        lawAidExample.createCriteria().andUniIdEqualTo(uniId);
+        List<LawAid> lawAids = lawAidMapper.selectByExample(lawAidExample);
+        //推荐用户
+        lawAidInfoPageUni.setUsersToConfirm(userDTO2s1);
+        lawAidInfoPageUni.setUserConfirmed(userDTO2s);
+        lawAidInfoPageUni.setTotalLawAids(lawAids);
+        return lawAidInfoPageUni;
+
+    }
+
+    @Override
+    public boolean uniAcceptLawAid(UserDTO2 user) {
+        Boolean confirmed = (Boolean) RedisUtils.get(user.getUserId() + ":lawAid:apply:confirm");
+        if(confirmed!=null&&confirmed.equals(Boolean.TRUE)){
+            //别的高校已经抢先一步
+            return false;
+        }else{
+            //确认申请，撤消对其他高校的申请
+            RedisUtils.set(user.getUserId()+":lawAid:apply:confirm",Boolean.TRUE);
+            LawAidExample lawAidExample = new LawAidExample();
+            lawAidExample.or().andUserIdEqualTo(user.getUserId())
+                    .andStateNotEqualTo("2")
+                    .andUniIdNotEqualTo(user.getUniId());
+            int i = lawAidMapper.deleteByExample(lawAidExample);
+            //回复cnt
+            RedisUtils.decr(user.getUserId()+":lawAid:apply:cnt",i);
+            //修改数据库
+            LawAid lawAid = new LawAid();
+            lawAid.setLawAidId(user.getLawAidId());
+            lawAid.setState("0");
+            int i1 = lawAidMapper.updateByPrimaryKeySelective(lawAid);
+            return i1>0;
+        }
     }
 
     //产生推荐业务的第一个指标:位置信息

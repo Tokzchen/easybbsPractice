@@ -8,6 +8,7 @@ import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.service.UniversityService;
 import com.example.easybbsweb.utils.RedisUtils;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -19,7 +20,7 @@ import java.util.List;
 @Service
 public class UniversityServiceImpl implements UniversityService {
 
-    @Autowired
+    @Resource
     UniversityMapper universityMapper;
 
     @Override
@@ -106,5 +107,14 @@ public class UniversityServiceImpl implements UniversityService {
     public List<University> getUniversityInfoByUniIdList(List<UniversityPair> uniIdList) {
         List<University> universities = universityMapper.selectUniversityByIdList(uniIdList);
         return universities;
+    }
+
+    @Override
+    public boolean updateUniversityInfoSelectiveByPrimaryKey(University university) {
+        //敏感信息脱敏
+        university.setPwd(null);
+        university.setEmail(null);
+        int i = universityMapper.updateByPrimaryKeySelective(university);
+        return i>0;
     }
 }
