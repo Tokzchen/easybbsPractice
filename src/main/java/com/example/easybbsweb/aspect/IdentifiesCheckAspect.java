@@ -36,6 +36,7 @@ public class IdentifiesCheckAspect {
 
     @Around("pt()")
     public Object IdentifiesCheck(ProceedingJoinPoint joinPoint) {
+        log.debug("到达切面");
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         IdentifiesCheck annotation = signature.getMethod().getAnnotation(IdentifiesCheck.class);
         String prefix = annotation.value(); // 获取前缀

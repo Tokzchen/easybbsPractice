@@ -84,4 +84,14 @@ public class RabbitMQConfig {
                 null
         );
     }
+    @Bean
+    public Binding likeLikeBinding() {
+        return new Binding(
+                RabbitMQConstants.LIKE_LIKE_QUEUE,
+                Binding.DestinationType.QUEUE,
+                RabbitMQConstants.ES_EXCHANGE,
+                RabbitMQConstants.LIKE_LIKE_KEY,
+                null
+        );
+    }
 }

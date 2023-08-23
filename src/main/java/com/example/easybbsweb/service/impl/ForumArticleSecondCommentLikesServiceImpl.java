@@ -46,7 +46,7 @@ public class ForumArticleSecondCommentLikesServiceImpl implements ForumArticleSe
         lock.lock();
         try {
             likesMapper.delete(new QueryWrapper<ForumArticleSecondCommentLikes>()
-                    .eq("uid", uid).eq("scmtId", scmtId));
+                    .eq("uid", uid).eq("scmt_Id", scmtId));
             mapper.updateLikeById(scmtId,-1);
         } finally {
             lock.unlock();
