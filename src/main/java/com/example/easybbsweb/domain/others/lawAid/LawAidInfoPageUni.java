@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LawAidInfoPageUni {
+    Long uniId;
+    String uniName;
     List<LawAid>  totalLawAids;
     List<UserDTO2> usersToConfirm;
     List<UserDTO2> userConfirmed;

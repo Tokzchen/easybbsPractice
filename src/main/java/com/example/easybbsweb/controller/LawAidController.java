@@ -176,9 +176,16 @@ public class LawAidController {
     public ResultInfo getUserLawAidInfo(@RequestHeader("token") String token){
         String currentUserOrUniId = TokenUtil.getCurrentUserOrUniId(token);
         Long userId=Long.parseLong(currentUserOrUniId);
-
         LawAidInfoPageUser userLawAidInfo = lawAidService.getUserLawAidInfo(userId);
         return new ResultInfo(true,"响应成功",userLawAidInfo);
+    }
+
+    @GetMapping("/lawAidInfo/user/{id}")
+    @Operation(summary = "不适用token而使用id获取法律援助信息",description = "")
+    public ResultInfo getUserLawAidInfoById(@PathVariable(value = "id",required = true) String userId){
+        long id = Long.parseLong(userId);
+        LawAidInfoPageUser userLawAidInfo = lawAidService.getUserLawAidInfo(id);
+        return ResultInfo.OK(userLawAidInfo);
     }
 
     @PostMapping("/apply/university")

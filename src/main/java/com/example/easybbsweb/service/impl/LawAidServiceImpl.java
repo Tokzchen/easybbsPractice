@@ -271,6 +271,10 @@ public class LawAidServiceImpl implements LawAidService {
     @Override
     public LawAidInfoPageUni getUniLawAidInfo(long uniId) {
         LawAidInfoPageUni lawAidInfoPageUni = new LawAidInfoPageUni();
+        //在获取高校名字
+        University university = universityMapper.selectByPrimaryKey(uniId);
+        lawAidInfoPageUni.setUniId(uniId);
+        lawAidInfoPageUni.setUniName(university.getUniName());
         //获取当前正在处理的法律援助
         List<UserDTO2> userDTO2s = userInfoMapper.selectUserLawAidInfoConfirmed(uniId);
         //获取当前已经申请但还没确认的法律援助
@@ -307,8 +311,22 @@ public class LawAidServiceImpl implements LawAidService {
             LawAid lawAid = new LawAid();
             lawAid.setLawAidId(user.getLawAidId());
             lawAid.setState("0");
+            //修改用户关联高校
+            UserMainExample userMainExample = new UserMainExample();
+            userMainExample.createCriteria().andUserIdEqualTo(user.getUserId());
+            UserMain userMain = new UserMain();
+            userMain.setUniId(user.getUniId());
+            //添加法律援助进度信息
+            AidProcess aidProcess = new AidProcess();
+            aidProcess.setLawAidId(user.getLawAidId());
+            aidProcess.setUniId(user.getUniId());
+            aidProcess.setUserId(user.getUserId());
+            aidProcess.setCreateTime(new Date());
+            aidProcess.setContent("高校"+user.getUniId()+"已同意法律援助申请，将于近期与用户联系.");
+            int i3 = aidProcessMapper.insertSelective(aidProcess);
+            int i2 = userMainMapper.updateByExampleSelective(userMain, userMainExample);
             int i1 = lawAidMapper.updateByPrimaryKeySelective(lawAid);
-            return i1>0;
+            return i1>0&&i2>0&&i3>0;
         }
     }
 
