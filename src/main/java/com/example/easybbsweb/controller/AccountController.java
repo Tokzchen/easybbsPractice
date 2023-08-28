@@ -6,6 +6,7 @@ import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserMain;
+import com.example.easybbsweb.domain.entity.dto.YoufaMailDTO;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.exception.SystemException;
@@ -23,6 +24,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.util.StringUtils;
@@ -355,6 +357,25 @@ public class AccountController {
         RedisUtils.set(token+":info",userInfoByUserIdUpdated,10*60*60);
         RedisUtils.set(userInfoByUserIdUpdated.getEmail()+":info",userInfoByUserIdUpdated,10*60*60);
         return b?ResultInfo.Success():ResultInfo.Fail();
+    }
+
+
+    @Operation(summary = "获取邮件",description = "")
+    @GetMapping("/get/mails")
+    public ResultInfo getUserMail(@RequestHeader("token")String token){
+        //获取账户邮件
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        YoufaMailDTO userMails = accountService.getUserMails(Long.parseLong(userId));
+        return ResultInfo.Success(userMails);
+    }
+
+
+    @Operation(summary = "查看邮件，表示已阅")
+    @GetMapping("/check/mails/{id}")
+    public ResultInfo checkEmail(@PathVariable("id")Long id,@RequestHeader("token")String token){
+        String userId = TokenUtil.getCurrentUserOrUniId(token);
+        boolean b = accountService.checkMail(Long.parseLong(userId), id);
+        return b?ResultInfo.OK():ResultInfo.Fail();
     }
 
 

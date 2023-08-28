@@ -14,10 +14,13 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(request.getMethod().equals("OPTIONS")) {
             return true;
         }
+        String requestURI = request.getRequestURI();
+        log.info("客户端请求的url{}",requestURI);
         response.setCharacterEncoding("utf-8");
         String token = request.getHeader("token"); //前端vue将token添加在请求头中
 
         if(token==null){
+            log.info("被拦截拉1");
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             try{
@@ -41,6 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             if(result){
                 return true;//放行
             }else{
+                log.info("被拦截拉");
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json; charset=utf-8");
                 try{

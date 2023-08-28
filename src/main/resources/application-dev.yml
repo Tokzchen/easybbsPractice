@@ -82,7 +82,6 @@ spring:
         queue-capacity: 20
         allow-core-thread-timeout: false
 
-
 server:
   port: 7071
   servlet:

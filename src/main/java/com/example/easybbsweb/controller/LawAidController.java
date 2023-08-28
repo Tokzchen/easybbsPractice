@@ -5,15 +5,18 @@ package com.example.easybbsweb.controller;
 import com.example.easybbsweb.controller.response.ResultInfo;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
+import com.example.easybbsweb.domain.entity.YoufaMail;
 import com.example.easybbsweb.domain.entity.dto.UserDTO2;
 import com.example.easybbsweb.domain.others.LawAidInfoPageUser;
 import com.example.easybbsweb.domain.others.Location;
+import com.example.easybbsweb.domain.others.MailConstant;
 import com.example.easybbsweb.domain.others.lawAid.LawAidInfoPageUni;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.SystemException;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.service.UniversityService;
+import com.example.easybbsweb.service.YoufaMailService;
 import com.example.easybbsweb.utils.RedisUtils;
 import com.example.easybbsweb.utils.TokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +47,9 @@ public class LawAidController {
 
     @Resource
     UniversityService universityService;
+
+    @Resource
+    YoufaMailService youfaMailService;
 
 
 
@@ -217,6 +223,15 @@ public class LawAidController {
         String uniId = TokenUtil.getCurrentUserOrUniId(token);
         LawAidInfoPageUni uniLawAidInfo = lawAidService.getUniLawAidInfo(Long.parseLong(uniId));
         return ResultInfo.Success(uniLawAidInfo);
+    }
+
+    @PostMapping("/remind/user")
+    @Operation(summary="给用户通知",description = "")
+    public ResultInfo noticeUser(@RequestBody YoufaMail youfaMail){
+        //系统通知：
+        youfaMail.setSender(MailConstant.SYSTEM_SENDER);
+        boolean b = youfaMailService.sendOneMail(youfaMail);
+        return b?ResultInfo.OK():ResultInfo.Fail();
     }
 
 

@@ -4,6 +4,7 @@ package com.example.easybbsweb.service;
 import com.example.easybbsweb.domain.entity.University;
 import com.example.easybbsweb.domain.entity.UserInfo;
 import com.example.easybbsweb.domain.entity.UserMain;
+import com.example.easybbsweb.domain.entity.dto.YoufaMailDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
@@ -27,4 +28,7 @@ public interface AccountService {
 
     boolean changeUserInfoSelectiveByUserId(UserInfo userInfo);
 
+    YoufaMailDTO getUserMails(Long parseLong);
+
+    boolean checkMail(Long userId, Long mailId);
 }

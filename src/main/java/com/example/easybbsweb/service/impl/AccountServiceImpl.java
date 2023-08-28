@@ -1,12 +1,15 @@
 package com.example.easybbsweb.service.impl;
 
 import com.example.easybbsweb.domain.entity.*;
+import com.example.easybbsweb.domain.entity.dto.YoufaMailDTO;
 import com.example.easybbsweb.exception.BusinessException;
 import com.example.easybbsweb.exception.IncorrectInfoException;
 import com.example.easybbsweb.exception.SystemException;
+import com.example.easybbsweb.exception.YouFaException;
 import com.example.easybbsweb.mapper.UniversityMapper;
 import com.example.easybbsweb.mapper.UserInfoMapper;
 import com.example.easybbsweb.mapper.UserMainMapper;
+import com.example.easybbsweb.mapper.YoufaMailMapper;
 import com.example.easybbsweb.service.AccountService;
 import com.example.easybbsweb.service.ForumArticleService;
 import com.example.easybbsweb.utils.CheckCodeUtils;
@@ -34,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
     UniversityMapper universityMapper;
     @Resource
     ForumArticleService forumArticleService;
+
+    @Resource
+    YoufaMailMapper youfaMailMapper;
     @Override
     public boolean resetPwd(UserInfo userInfo, HttpServletRequest req) {
         boolean b = false;
@@ -148,5 +154,28 @@ public class AccountServiceImpl implements AccountService {
         return i>0;
     }
 
+    @Override
+    public YoufaMailDTO getUserMails(Long parseLong) {
+        if (parseLong == null) {
+            throw new BusinessException("错误");
+        }
+        List<YoufaMail> userMails = youfaMailMapper.getUserMails(parseLong);
+        //检查是否有未查看的邮件
+        YoufaMailDTO youfaMailDTO = new YoufaMailDTO(false, userMails);
+        if (userMails.size() > 0 && userMails.get(0).getChecked().equals("0")) {
+            youfaMailDTO.setHasUnchecked(true);
+        }
+        return youfaMailDTO;
 
+    }
+
+    @Override
+    public boolean checkMail(Long userId, Long mailId) {
+        YoufaMailExample youfaMailExample = new YoufaMailExample();
+        youfaMailExample.or().andIdEqualTo(mailId).andReceiverEqualTo(userId);
+        YoufaMail youfaMail = new YoufaMail();
+        youfaMail.setChecked("1");
+        int i = youfaMailMapper.updateByExampleSelective(youfaMail, youfaMailExample);
+        return i==1;
+    }
 }

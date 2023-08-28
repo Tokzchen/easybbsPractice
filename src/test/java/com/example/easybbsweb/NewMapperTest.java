@@ -4,10 +4,7 @@ import com.example.easybbsweb.domain.entity.*;
 import com.example.easybbsweb.domain.entity.dto.UserDTO1;
 import com.example.easybbsweb.domain.others.lawAid.LawAidInfoPageUni;
 import com.example.easybbsweb.domain.others.lawAid.UniversityPair;
-import com.example.easybbsweb.mapper.AidProcessMapper;
-import com.example.easybbsweb.mapper.LawAidMapper;
-import com.example.easybbsweb.mapper.UniversityMapper;
-import com.example.easybbsweb.mapper.UserInfoMapper;
+import com.example.easybbsweb.mapper.*;
 import com.example.easybbsweb.service.LawAidService;
 import com.example.easybbsweb.service.UniversityService;
 import jakarta.annotation.Resource;
@@ -17,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NewMapperTest {
     @Resource
     AidProcessMapper aidProcessMapper;
@@ -35,6 +32,9 @@ public class NewMapperTest {
 
     @Resource
     LawAidService lawAidService;
+
+    @Resource
+    YoufaMailMapper youfaMailMapper;
 
 
     @Test
@@ -87,6 +87,12 @@ public class NewMapperTest {
         LawAidInfoPageUni uniLawAidInfo = lawAidService.getUniLawAidInfo(11121);
         System.out.println(uniLawAidInfo);
 
+    }
+
+    @Test
+    void func6(){
+        List<YoufaMail> userMails = youfaMailMapper.getUserMails(11235l);
+        System.out.println(userMails);
     }
 
 }
